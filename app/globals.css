@@ -3,25 +3,38 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+	--foreground-rgb: 0, 0, 0;
+	--background-start-rgb: 214, 219, 220;
+	--background-end-rgb: 255, 255, 255;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+	:root {
+		--foreground-rgb: 255, 255, 255;
+		--background-start-rgb: 0, 0, 0;
+		--background-end-rgb: 0, 0, 0;
+	}
+}
+
+@font-face {
+	font-family: 'DynaPuff';
+	src: url('../fonts/DynaPuff-VariableFont_wdth,wght.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff_Condensed-Bold.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff_Condensed-Medium.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff_Condensed-Regular.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff_Condensed-SemiBold.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff_SemiCondensed-Bold.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff_SemiCondensed-Medium.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff_SemiCondensed-Regular.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff_SemiCondensed-SemiBold.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff-Bold.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff-Medium.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff-Regular.ttf') format('truetype'),
+		url('../fonts/static/DynaPuff-SemiBold.ttf') format('truetype');
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+	color: rgb(var(--foreground-rgb));
+	background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
+		rgb(var(--background-start-rgb));
 }
