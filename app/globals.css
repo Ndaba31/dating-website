@@ -28,3 +28,7 @@ body {
 	color: rgb(var(--foreground-rgb));
 	background: var(--background-app);
 }
+
+.relative:hover > p {
+	opacity: 1;
+}
