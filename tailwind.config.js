@@ -8,7 +8,8 @@ module.exports = {
 	theme: {
 		extend: {
 			fontFamily: {
-				puff: ['DynaPuff', 'sans-serif'],
+				dancingScript: ['DancingScript', 'cursive'],
+				questrial: 'Questrial',
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

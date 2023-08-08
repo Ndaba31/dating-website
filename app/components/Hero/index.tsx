@@ -1,11 +1,27 @@
+// components/HeroSection.tsx
+import Image from 'next/image';
+
 const Hero = () => {
     return (
-        <div
-            className="flex items-end w-full h-screen bg-gradient-to-tr from-red-900 via-red-600 to-red-400"
-        >
-            <h1 className="text-4xl sm:text-4xl md:text-6xl lg:text-7xl px-4 py-2">
-                Unleash your desires with Tycoon’s Pact.
-            </h1>
+        <div className="relative">
+            {/* Background Hero Image */}
+            <Image
+                src="/home-asset.jpeg"
+                alt="Hero Background"
+                layout="fill"
+                objectFit="cover"
+                priority
+            />
+
+            {/* Overlay Image */}
+            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2">
+                <Image
+                    src="/pumpkin.png"
+                    alt="Pumpkin Logo"
+                    width={200} // Adjust the width as needed
+                    height={200} // Adjust the height as needed
+                />
+            </div>
         </div>
     );
 };

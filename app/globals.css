@@ -3,32 +3,39 @@
 @tailwind utilities;
 
 :root {
-	--foreground-rgb: 255, 255, 255;
-	--background-app: #390099;
+	--curved-border-bottom: 200px 80px;
+	--theme-orange: #ff7518;
+	--theme-lightgrey: #e0e0db;
+	--theme-darkgrey: #2a2829;
+	--theme-lightblack: #10100e;
+	--theme-dark: #000000;
 }
 
 @font-face {
-	font-family: 'DynaPuff';
-	src: url('../fonts/DynaPuff-VariableFont_wdth,wght.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff_Condensed-Bold.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff_Condensed-Medium.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff_Condensed-Regular.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff_Condensed-SemiBold.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff_SemiCondensed-Bold.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff_SemiCondensed-Medium.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff_SemiCondensed-Regular.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff_SemiCondensed-SemiBold.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff-Bold.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff-Medium.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff-Regular.ttf') format('truetype'),
-		url('../fonts/static/DynaPuff-SemiBold.ttf') format('truetype');
+	font-family: 'Dancing Script', cursive;
+	src: url('../fonts/DancingScript-VariableFont_wght.ttf') format('truetype'),
+		url('../fonts/static/DancingScript-Bold.ttf') format('truetype'),
+		url('../fonts/static/DancingScript-Medium.ttf') format('truetype'),
+		url('../fonts/static/DancingScript-Regular.ttf') format('truetype'),
+		url('../fonts/static/DancingScript-SemiBold.ttf') format('truetype');
 }
 
 body {
-	color: rgb(var(--foreground-rgb));
-	background: var(--background-app);
+	color: var(--theme-orange);
+	background: var(--theme-lightblack);
 }
 
-.relative:hover > p {
-	opacity: 1;
+.font-cursive {
+	font-family: cursive;
 }
+
+/*
+.font-dance {
+	font-family: 'Dancing Script', cursive;
+	src: url('../fonts/DancingScript-VariableFont_wght.ttf') format('truetype'),
+		url('../fonts/static/DancingScript-Bold.ttf') format('truetype'),
+		url('../fonts/static/DancingScript-Medium.ttf') format('truetype'),
+		url('../fonts/static/DancingScript-Regular.ttf') format('truetype'),
+		url('../fonts/static/DancingScript-SemiBold.ttf') format('truetype');
+}
+*/
