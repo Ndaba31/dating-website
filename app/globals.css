@@ -29,6 +29,26 @@ body {
 	font-family: cursive;
 }
 
+.text-themed-orange {
+	color: var(--theme-orange);
+}
+
+.bg-themed-orange {
+	background-color: var(--theme-lightblack);
+}
+
+.border-btm-curved:after {
+	content: '';
+	border-bottom-left-radius: var(--curved-border-bottom) !important;
+	border-bottom-right-radius: var(--curved-border-bottom) !important;
+}
+
+.pic-overlay {
+	background-color: black;
+	opacity: 0.9;
+	z-index: 2;
+}
+
 /*
 .font-dance {
 	font-family: 'Dancing Script', cursive;
