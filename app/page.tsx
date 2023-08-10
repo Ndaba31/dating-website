@@ -3,6 +3,7 @@ import Hero from './components/Hero'
 import PumpkinInfo from './components/PumpkinInfo'
 import CardDiscover from './components/CardDiscover';
 import DiscoverMore from './components/DiscoverMore';
+import Footer from './components/Footer';
 
 const peopleData = [
   {
@@ -98,6 +99,7 @@ export default function Home() {
         />
       ))}
       <DiscoverMore cards={discoverCards} />
+      <Footer />
     </main>
   )
 }

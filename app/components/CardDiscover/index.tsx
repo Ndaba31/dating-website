@@ -12,8 +12,8 @@ const CardDiscover: React.FC<CardProps> = ({ imgSrc, name, link }) => {
             <Image
                 src={imgSrc}
                 alt={name}
-                width={350} // Adjust width as needed
-                height={500} // Adjust height as needed
+                width={350}
+                height={500}
                 quality={100}
                 className='rounded-3xl'
             />
