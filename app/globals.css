@@ -37,6 +37,10 @@ body {
 	background-color: var(--theme-lightblack);
 }
 
+.bg-themed-lightgrey {
+	background-color: var(--theme-lightgrey);
+}
+
 .border-btm-curved:after {
 	content: '';
 	border-bottom-left-radius: var(--curved-border-bottom) !important;
