@@ -21,8 +21,6 @@ const DiscoverMore: React.FC<DiscoverMoreProps> = ({ cards }) => {
                 {cardRows.map((row, rowIndex) => (
                     <div key={rowIndex} className="flex flex-col sm:flex-row justify-center md:mt-4 sm:mt-2">
                         {row.map((card, cardIndex) => {
-                            count = cardIndex === 1 ? 1 : count + 3;
-
                             return (
                                 <div
                                     key={cardIndex}
