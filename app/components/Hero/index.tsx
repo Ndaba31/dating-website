@@ -1,5 +1,6 @@
 // components/HeroSection.tsx
 import Image from 'next/legacy/image';
+import Navbar from '../Navbar';
 
 const Hero = () => {
     return (
@@ -24,6 +25,7 @@ const Hero = () => {
                     priority
                 />
             </div>
+            <Navbar />
         </div>
     );
 };

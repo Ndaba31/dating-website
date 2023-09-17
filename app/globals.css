@@ -53,6 +53,10 @@ body {
 	z-index: 2;
 }
 
+.sticky {
+	position: sticky;
+}
+
 /*
 .font-dance {
 	font-family: 'Dancing Script', cursive;
