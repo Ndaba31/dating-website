@@ -2,6 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 const Navbar = () => {
     const [showDropdown, setShowDropdown] = useState(false);
@@ -30,12 +31,12 @@ const Navbar = () => {
                         </a>
                         {showDropdown && (
                             <div className="absolute right-0 mt-2 py-2 w-48 bg-white border shadow-lg rounded-lg">
-                                <a href="/login" className="block px-4 py-2 text-gray-800 hover:bg-blue-100">
+                                <Link href='/login' className="block px-4 py-2 text-gray-800 hover:bg-blue-100">
                                     Login
-                                </a>
-                                <a href="/signup" className="block px-4 py-2 text-gray-800 hover:bg-blue-100">
+                                </Link>
+                                <Link href='/signup' className="block px-4 py-2 text-gray-800 hover:bg-blue-100">
                                     Sign Up
-                                </a>
+                                </Link>
                             </div>
                         )}
                     </li>
