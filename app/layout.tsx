@@ -1,4 +1,5 @@
 import Navbar from './components/Navbar'
+import { AppContextProvider } from './context/appContext'
 import './globals.css'
 import type { Metadata } from 'next'
 
@@ -16,7 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-puff">
-        {children}
+        <AppContextProvider>
+          {children}
+        </AppContextProvider>
       </body>
     </html>
   )
