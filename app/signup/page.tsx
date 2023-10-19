@@ -3,6 +3,8 @@ import React from 'react';
 import Image from 'next/legacy/image';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
+import { useAppContext } from '../context/appContext';
+import { useRouter } from 'next/navigation';
 
 interface FormData {
     name: string;
@@ -13,28 +15,30 @@ interface FormData {
 
 const Signup = () => {
     const { handleSubmit, control, reset, setError, formState: { errors } } = useForm<FormData>();
+    const { busy, setBusy, setIsAuth } = useAppContext();
+    const router = useRouter();
 
-    const onSubmit: SubmitHandler<FormData> = (data: FormData) => {
+    const onSubmit: SubmitHandler<FormData> = async ({ name, email, password, password2 }: FormData) => {
         // Handle form submission here
-        if (data.name.length < 4 || !data.name.includes(" ")) {
+        if (name.length < 4 || !name.includes(" ")) {
             setError('name', {
                 type: "minLength",
                 message: "Please include name and surname"
             })
         }
-        else if (!data.email.includes('@') || !data.email.includes('.')) {
+        else if (!email.includes('@') || !email.includes('.')) {
             setError('email', {
                 type: "custom",
                 message: "Email should contain '@' and '.' symbols"
             })
         }
-        else if (data.password.length < 8) {
+        else if (password.length < 8) {
             setError('password', {
                 type: "minLength",
                 message: "Password should be 8 characters or more"
             })
         }
-        else if (data.password !== data.password2) {
+        else if (password !== password2) {
             setError('password2', {
                 type: "custom",
                 message: "Passwords do not match",
@@ -42,8 +46,25 @@ const Signup = () => {
                 shouldFocus: true
             })
         } else {
-            console.log(data);
-            reset()
+            setBusy(true);
+            const res = await fetch("api/auth/users", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password,
+                }),
+            }).then((res) => res.json());
+
+            console.log(res);
+            setBusy(false);
+            setIsAuth(true);
+            router.push("/")
+
+            //reset()
         }
     };
 
@@ -178,6 +199,8 @@ const Signup = () => {
                         <div className="mb-6 w-full text-center">
                             <button
                                 type="submit"
+                                disabled={busy}
+                                style={{ opacity: busy ? 0.5 : 1 }}
                                 className="bg-[#FE7418] text-white py-2 px-4 m-auto rounded-lg hover:border-2 hover:border-[#FE7418] hover:bg-white hover:text-[#FE7418]"
                             >
                                 Sign Up

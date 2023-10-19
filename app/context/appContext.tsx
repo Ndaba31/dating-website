@@ -1,9 +1,16 @@
+'use client'
 // First, create a context
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface AppContextProps {
   loading: boolean;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  dbError: string;
+  setDbError: React.Dispatch<React.SetStateAction<string>>;
+  isAuth: boolean;
+  setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+  busy: boolean;
+  setBusy: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -15,9 +22,18 @@ interface AppContextProviderProps {
 
 export function AppContextProvider({ children }: AppContextProviderProps) {
   const [loading, setLoading] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [dbError, setDbError] = useState("");
+
 
   return (
-    <AppContext.Provider value={{ loading, setLoading }}>
+    <AppContext.Provider value={{
+      loading, setLoading,
+      dbError, setDbError,
+      isAuth, setIsAuth,
+      busy, setBusy
+    }}>
       {children}
     </AppContext.Provider>
   );

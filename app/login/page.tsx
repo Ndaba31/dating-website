@@ -3,6 +3,9 @@ import React from 'react';
 import Image from 'next/legacy/image';
 import Link from 'next/link';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { signIn } from 'next-auth/react'
+import { useAppContext } from '../context/appContext';
+import { useRouter } from 'next/navigation';
 
 interface FormDataLogin {
     emailLogin: string;
@@ -11,22 +14,40 @@ interface FormDataLogin {
 
 const Login = () => {
     const { handleSubmit, control, reset, setError, formState: { errors } } = useForm<FormDataLogin>();
+    const { dbError, setDbError, setIsAuth, setBusy, busy } = useAppContext();
+    const router = useRouter();
 
-    const onSubmitLogin: SubmitHandler<FormDataLogin> = (data: FormDataLogin) => {
-        if (data.emailLogin.length < 1) {
+    const onSubmitLogin: SubmitHandler<FormDataLogin> = async ({ emailLogin, passwordLogin }: FormDataLogin) => {
+        if (emailLogin.length < 1) {
             setError('emailLogin', {
                 type: "minLength",
                 message: "Email field is required"
             })
         }
-        else if (data.passwordLogin.length < 1) {
+        else if (passwordLogin.length < 1) {
             setError('passwordLogin', {
                 type: "minLength",
                 message: "Password field is required"
             })
         } else {
-            console.log(data);
-            reset()
+            setBusy(true);
+            const res = await signIn("credentials", {
+                emailLogin,
+                passwordLogin,
+                redirect: false
+            })
+
+            setBusy(false);
+
+            if (res?.error) {
+                return setDbError(res.error);
+            }
+
+            setDbError("");
+            setIsAuth(true)
+            router.push("/")
+
+            //reset()
         }
     }
 
@@ -118,10 +139,17 @@ const Login = () => {
                             <div className="mb-6 w-full text-center">
                                 <button
                                     type="submit"
+                                    disabled={busy}
+                                    style={{ opacity: busy ? 0.5 : 1 }}
                                     className="bg-[#FE7418] text-white py-2 px-4 m-auto rounded-lg hover:border-2 hover:border-[#FE7418] hover:bg-white hover:text-[#FE7418]"
                                 >
                                     Login
                                 </button>
+                                {
+                                    dbError && (
+                                        <p className="text-[#fff847] mt-2">{dbError}</p>
+                                    )
+                                }
                             </div>
                         </form>
                     </div>

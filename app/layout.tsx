@@ -1,7 +1,7 @@
-import Navbar from './components/Navbar'
 import { AppContextProvider } from './context/appContext'
 import './globals.css'
 import type { Metadata } from 'next'
+import AuthProvider from './context/AuthProvider'
 
 
 export const metadata: Metadata = {
@@ -17,9 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="font-puff">
-        <AppContextProvider>
-          {children}
-        </AppContextProvider>
+        <AuthProvider>
+          <AppContextProvider>
+            {children}
+          </AppContextProvider>
+        </AuthProvider>
       </body>
     </html>
   )
