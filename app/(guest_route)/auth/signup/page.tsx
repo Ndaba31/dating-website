@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/legacy/image';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
-import { useAppContext } from '../context/appContext';
+import { useAppContext } from '../../../context/appContext';
 import { useRouter } from 'next/navigation';
 
 interface FormData {
@@ -15,8 +15,9 @@ interface FormData {
 
 const Signup = () => {
     const { handleSubmit, control, reset, setError, formState: { errors } } = useForm<FormData>();
-    const { busy, setBusy, setIsAuth } = useAppContext();
+    const { busy, setBusy, setIsAuth, dbError, setDbError, success, setSuccess } = useAppContext();
     const router = useRouter();
+    setDbError("");
 
     const onSubmit: SubmitHandler<FormData> = async ({ name, email, password, password2 }: FormData) => {
         // Handle form submission here
@@ -57,14 +58,11 @@ const Signup = () => {
                     email,
                     password,
                 }),
-            }).then((res) => res.json());
+            }).then((res) => { setSuccess("Account created successfully"); res.json(); });
 
-            console.log(res);
             setBusy(false);
             setIsAuth(true);
-            router.push("/")
-
-            //reset()
+            router.replace("/login")
         }
     };
 
@@ -205,6 +203,11 @@ const Signup = () => {
                             >
                                 Sign Up
                             </button>
+                            {
+                                dbError && (
+                                    <p className="text-[#fff847] mt-2">{dbError}</p>
+                                )
+                            }
                         </div>
                     </form>
                     <div className="m-auto">

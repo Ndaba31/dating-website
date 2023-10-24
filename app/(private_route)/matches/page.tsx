@@ -1,18 +1,16 @@
-import React from 'react'
-import { peopleData } from '../page'
-import PumpkinInfo from '../components/PumpkinInfo'
-import Footer from '../components/Footer'
+
+import Footer from '@/app/components/Footer'
+import PumpkinInfo from '@/app/components/PumpkinInfo'
+import { peopleData } from '@/app/page'
 import { Metadata } from 'next'
-import Navbar from '../components/Navbar'
 
 export const metadata: Metadata = {
-    title: 'Redroom',
+    title: 'Pumpkins',
 }
 
-const RedPumpkin = () => {
+const Matches = () => {
     return (
         <main>
-            <Navbar />
             {
                 peopleData.map(({ name, bio, imgSrc, hickies, pumpkins, instagram, profile }, index) => (
                     <PumpkinInfo
@@ -33,4 +31,4 @@ const RedPumpkin = () => {
     )
 }
 
-export default RedPumpkin
+export default Matches

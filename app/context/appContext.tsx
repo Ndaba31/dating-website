@@ -3,8 +3,8 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface AppContextProps {
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  success: string;
+  setSuccess: React.Dispatch<React.SetStateAction<string>>;
   dbError: string;
   setDbError: React.Dispatch<React.SetStateAction<string>>;
   isAuth: boolean;
@@ -21,7 +21,7 @@ interface AppContextProviderProps {
 }
 
 export function AppContextProvider({ children }: AppContextProviderProps) {
-  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
   const [isAuth, setIsAuth] = useState(false);
   const [busy, setBusy] = useState(false);
   const [dbError, setDbError] = useState("");
@@ -29,10 +29,10 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
 
   return (
     <AppContext.Provider value={{
-      loading, setLoading,
+      success, setSuccess,
       dbError, setDbError,
       isAuth, setIsAuth,
-      busy, setBusy
+      busy, setBusy,
     }}>
       {children}
     </AppContext.Provider>

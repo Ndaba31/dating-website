@@ -4,7 +4,7 @@ import Image from 'next/legacy/image';
 import Link from 'next/link';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react'
-import { useAppContext } from '../context/appContext';
+import { useAppContext } from '../../../context/appContext';
 import { useRouter } from 'next/navigation';
 
 interface FormDataLogin {
@@ -14,8 +14,9 @@ interface FormDataLogin {
 
 const Login = () => {
     const { handleSubmit, control, reset, setError, formState: { errors } } = useForm<FormDataLogin>();
-    const { dbError, setDbError, setIsAuth, setBusy, busy } = useAppContext();
+    const { dbError, setDbError, setIsAuth, setBusy, busy, success } = useAppContext();
     const router = useRouter();
+    setDbError("");
 
     const onSubmitLogin: SubmitHandler<FormDataLogin> = async ({ emailLogin, passwordLogin }: FormDataLogin) => {
         if (emailLogin.length < 1) {
@@ -45,7 +46,7 @@ const Login = () => {
 
             setDbError("");
             setIsAuth(true)
-            router.push("/")
+            router.replace("../")
 
             //reset()
         }
@@ -83,6 +84,11 @@ const Login = () => {
                         </h2>
                         <form onSubmit={handleSubmit(onSubmitLogin)}>
                             <div className="my-4">
+                                {
+                                    success && (
+                                        <p className='text-center text-white bg-green-500 p-2'>{success}</p>
+                                    )
+                                }
                                 <label htmlFor="email" className="block text-white">
                                     Email/Username
                                 </label>

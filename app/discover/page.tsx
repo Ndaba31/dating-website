@@ -1,10 +1,11 @@
-import Footer from "../components/Footer"
-import PumpkinInfo from "../components/PumpkinInfo"
-import { peopleData } from "../page"
+
+import Footer from '@/app/components/Footer'
+import PumpkinInfo from '@/app/components/PumpkinInfo'
+import { peopleData } from '@/app/page'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-    title: 'Pumpkins',
+    title: 'Discover',
 }
 
 const Matches = () => {

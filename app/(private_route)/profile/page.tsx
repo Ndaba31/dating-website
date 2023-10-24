@@ -1,6 +1,7 @@
-import { peopleData } from "../page"
-import PumpkinInfo from "../components/PumpkinInfo"
-import Footer from "../components/Footer"
+
+import Footer from '@/app/components/Footer'
+import PumpkinInfo from '@/app/components/PumpkinInfo'
+import { peopleData } from '@/app/page'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {

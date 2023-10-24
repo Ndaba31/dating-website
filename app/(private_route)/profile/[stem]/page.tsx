@@ -1,6 +1,7 @@
+
 import Footer from '@/app/components/Footer'
 import PumpkinInfo from '@/app/components/PumpkinInfo'
-import { peopleData } from "../../page"
+import { peopleData } from '@/app/page'
 import React from 'react'
 
 const Page = ({ params }: { params: { stem: string } }) => {
