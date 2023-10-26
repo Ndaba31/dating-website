@@ -14,7 +14,7 @@ interface FormDataLogin {
 
 const Login = () => {
     const { handleSubmit, control, reset, setError, formState: { errors } } = useForm<FormDataLogin>();
-    const { dbError, setDbError, setIsAuth, setBusy, busy, success } = useAppContext();
+    const { dbError, setDbError, setIsAuth, setBusy, busy, success, setSidebar } = useAppContext();
     const router = useRouter();
     setDbError("");
 
@@ -46,6 +46,7 @@ const Login = () => {
 
             setDbError("");
             setIsAuth(true)
+            setSidebar(false);
             router.replace("../")
 
             //reset()
@@ -134,12 +135,18 @@ const Login = () => {
                                     <p className="text-[#fff847]">{errors.passwordLogin.message}</p>
                                 )}
                             </div>
-                            <div className="mb-4">
+                            <div className="mb-4 space-y-4 flex flex-col">
                                 <Link
-                                    href='/signup'
+                                    href='/auth/signup'
                                     className="text-white hover:underline hover:text-indigo-500"
                                 >
-                                    Don&apos;t have an account? Sign Up
+                                    &#x2022; Don&apos;t have an account? Sign Up
+                                </Link>
+                                <Link
+                                    href='/'
+                                    className="text-white hover:underline hover:text-indigo-500"
+                                >
+                                    &#x2022; Take me back to home page
                                 </Link>
                             </div>
                             <div className="mb-6 w-full text-center">

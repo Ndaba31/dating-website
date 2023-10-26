@@ -11,6 +11,8 @@ interface AppContextProps {
   setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
   busy: boolean;
   setBusy: React.Dispatch<React.SetStateAction<boolean>>;
+  sidebar: boolean;
+  setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AppContext = createContext<AppContextProps | undefined>(undefined);
@@ -24,6 +26,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
   const [success, setSuccess] = useState("");
   const [isAuth, setIsAuth] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [sidebar, setSidebar] = useState(false);
   const [dbError, setDbError] = useState("");
 
 
@@ -33,6 +36,7 @@ export function AppContextProvider({ children }: AppContextProviderProps) {
       dbError, setDbError,
       isAuth, setIsAuth,
       busy, setBusy,
+      sidebar, setSidebar,
     }}>
       {children}
     </AppContext.Provider>

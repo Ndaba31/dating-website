@@ -186,12 +186,18 @@ const Signup = () => {
                             />
                             <p className="text-[#fff847]">{errors.password2?.message}</p>
                         </div>
-                        <div className="mb-4">
+                        <div className="mb-4 space-y-4 flex flex-col">
                             <Link
-                                href="/login"
+                                href='/auth/login'
                                 className="text-white hover:underline hover:text-indigo-500"
                             >
-                                Already have an account? Login
+                                &#x2022; Already have an account? Login
+                            </Link>
+                            <Link
+                                href='/'
+                                className="text-white hover:underline hover:text-indigo-500"
+                            >
+                                &#x2022; Take me back to home page
                             </Link>
                         </div>
                         <div className="mb-6 w-full text-center">
