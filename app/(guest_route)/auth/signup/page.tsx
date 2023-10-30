@@ -48,7 +48,7 @@ const Signup = () => {
             })
         } else {
             setBusy(true);
-            const res = await fetch("api/auth/users", {
+            const res = await fetch("../api/auth/users", {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -62,7 +62,7 @@ const Signup = () => {
 
             setBusy(false);
             setIsAuth(true);
-            router.replace("/login")
+            router.replace("/auth/login")
         }
     };
 

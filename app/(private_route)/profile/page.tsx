@@ -1,5 +1,6 @@
 
 import Footer from '@/app/components/Footer'
+import Navbar from '@/app/components/Navbar'
 import PumpkinInfo from '@/app/components/PumpkinInfo'
 import { peopleData } from '@/app/page'
 import { Metadata } from 'next'
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
 const Profile = () => {
     return (
         <main>
+            <Navbar />
             <PumpkinInfo
                 page='profile'
                 name={peopleData[5].name}

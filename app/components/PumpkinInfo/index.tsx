@@ -1,6 +1,7 @@
 import { FaInstagram } from 'react-icons/fa';
 import Image from 'next/legacy/image';
 import Link from 'next/link';
+import Navbar from '../Navbar';
 
 interface PumpkinInfoProps {
     name: string;
