@@ -2,6 +2,7 @@
 import Footer from '@/app/components/Footer'
 import Navbar from '@/app/components/Navbar'
 import PumpkinInfo from '@/app/components/PumpkinInfo'
+import Details from '@/app/components/PumpkinInfo/Details'
 import { peopleData } from '@/app/page'
 import { Metadata } from 'next'
 
@@ -23,6 +24,7 @@ const Profile = () => {
                 instagram={peopleData[5].instagram}
                 profile={peopleData[5].profile}
             />
+            <Details />
             <Footer />
         </main>
     )
