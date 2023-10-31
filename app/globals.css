@@ -21,8 +21,40 @@
 }
 
 body {
-	color: var(--theme-orange);
-	background: var(--theme-lightblack);
+	color: white;
+	background: linear-gradient(to right, #fc4041, #411554);
+}
+
+h1 {
+	font-size: 64pt;
+}
+
+h2 {
+	font-size: 56pt;
+}
+
+h3 {
+	font-size: 48pt;
+}
+
+h4 {
+	font-size: 40pt;
+}
+
+h5 {
+	font-size: 32pt;
+}
+
+h6 {
+	font-size: 24pt;
+}
+
+/* .image-blurred-edge {
+	box-shadow: 0 0 8px 8px #191925;
+} */
+
+.image-blurred-edge-inset {
+	box-shadow: 0 0 8px 32px #191925 inset;
 }
 
 .font-cursive {
