@@ -6,7 +6,15 @@ const Home = () => {
   return (
     <main>
       <Navbar />
-      <Hero />
+      <Hero
+        img='/lady.webp'
+        altImg='Pumpkin Hero Image'
+        btnText='Register Now'
+        btnType='link'
+        heading='Pumpkin'
+        subHeading='Where true love meets fortune'
+        reverse={false}
+      />
     </main>
   )
 }

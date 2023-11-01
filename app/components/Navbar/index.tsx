@@ -1,10 +1,17 @@
 'use client'
+import { useDateContext } from '@/app/context/dateContext'
 import { faCircleUser } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Link from 'next/link'
 import React from 'react'
+import Sidebar from '../Sidebar'
 
 const Navbar = () => {
+    const { sidebar, setSidebar } = useDateContext();
+
+    if (sidebar)
+        return <Sidebar />
+
     return (
         <header className='fixed backdrop-blur-xl z-10  top-0 w-full'>
             <nav className='flex justify-between items-center py-4 px-16'>
@@ -15,7 +22,7 @@ const Navbar = () => {
                     <Link href='/' className='text-3xl'>Pumpkin</Link>
                 </div>
                 <div className="flex items-center space-x-4">
-                    <button onClick={() => { console.log('Ndaba'); }} className='md:hidden'>
+                    <button onClick={() => { setSidebar(!sidebar) }} className='md:hidden'>
                         <FontAwesomeIcon icon={faCircleUser} size='xl' />
                     </button>
                     <Link href='login' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Login</Link>
