@@ -19,7 +19,7 @@ interface DateContextProviderProps {
 
 export function DateContextProvider({ children }: DateContextProviderProps) {
 	const [sidebar, setSidebar] = useState(false);
-	const [user, setUser] = useState({ firstName: "", lastName: "", email: "", password: "", stem: "" });
+	const [user, setUser] = useState({ firstName: "Nosiphephelo", lastName: "Ndabandaba", email: "my@mail.com", password: "12345", stem: "holy_baddie" });
 
 	return (
 		<DateContext.Provider
