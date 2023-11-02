@@ -1,6 +1,7 @@
 'use client'
 import { useDateContext } from '@/app/context/dateContext';
-import User from '@/app/interfaces/User';
+import { users } from '@/app/data';
+import User, { UserExtended } from '@/app/interfaces/User';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -29,8 +30,18 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: P
         pumpkins: 0,
         hickies: 0
     })
+    const [loginFormData, setLoginFormData] = useState<User>({
+        firstName: "",
+        lastName: "",
+        email: "",
+        stem: "",
+        password: "",
+        dateJoined: new Date(),
+        pumpkins: 0,
+        hickies: 0
+    })
 
-    const { setUser } = useDateContext();
+    const { setUser, user, setUserExtended } = useDateContext();
     const router = useRouter()
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,9 +56,27 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: P
         router.replace("/questionnaire/1")
     }
 
+    const handleLoginChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
+        setLoginFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+    };
+
+    const submitLogin = (e: any) => {
+        e.preventDefault();
+        console.log(loginFormData);
+        const person: UserExtended | undefined = users.find(({ user }) => user.email === loginFormData.email)
+
+        if (person !== undefined) {
+            setUser(person.user);
+            setUserExtended(person);
+
+            router.push('/')
+        }
+    }
+
     return (
         <div className={`bg-gradient-to-r from-[#200B33] via-[#19171C] to=[#19276B] min-h-screen flex flex-col-reverse items-center w-full ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'}`}>
-            <div className={`w-full bg-opacity-70 p-8 text-center ${btnType === 'submit' ? 'md:1/2' : 'md:w-[40%]'}`}>
+            <div className={`w-full bg-opacity-70 p-8 text-center ${btnType === 'submit' || btnType === 'login' ? 'md:1/2' : 'md:w-[40%]'}`}>
                 <h1 className="text-4xl text-white font-bold">{heading}</h1>
                 <p className="text-lg text-white font-cursive mb-4">{subHeading}</p>
                 {
@@ -91,6 +120,31 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: P
                                 </div>
                             </div>
                             <button type={btnType} className="bg-[#A238FF] text-white py-2 px-4 rounded-lg">
+                                {btnText}
+                            </button>
+                        </form>
+                    )
+                }
+                {
+                    btnType === "login" && (
+                        <form onSubmit={submitLogin} className='items-center flex flex-col'>
+                            <input
+                                type='email'
+                                id='email'
+                                name='email'
+                                className='bg-transparent border-b-2 w-1/2 p-2 my-4'
+                                value={loginFormData.email}
+                                onChange={handleLoginChange}
+                            />
+                            <input
+                                type='password'
+                                id='password'
+                                name='password'
+                                className='bg-transparent border-b-2 w-1/2 p-2 my-4'
+                                value={loginFormData.password}
+                                onChange={handleLoginChange}
+                            />
+                            <button type='submit' className="bg-[#A238FF] text-white py-2 px-4 rounded-lg">
                                 {btnText}
                             </button>
                         </form>
