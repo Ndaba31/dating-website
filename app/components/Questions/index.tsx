@@ -63,7 +63,7 @@ const Question = ({ count, total, question, options, type, inpName, btnFunction,
                     count < total ? (
                         <Link href={`${count + 1}`} className='hover:opacity-70'>Skip</Link>
                     ) : (
-                        <Link href='/' className='hover:opacity-70'>Skip</Link>
+                        <Link href='/discover' className='hover:opacity-70'>Skip</Link>
                     )
                 }
             </div>

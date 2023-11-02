@@ -58,6 +58,20 @@ export const users: UserExtended[] = [
 		city: 'Matsapha',
 		relationship_status: 'In a relationship',
 		religion: 'Christian',
+		posts: [
+			{
+				media: 'linda.jpeg',
+			},
+			{
+				media: 'linda.jpeg',
+			},
+			{
+				media: 'linda.jpeg',
+			},
+			{
+				media: 'linda.jpeg',
+			},
+		],
 	},
 	{
 		user: {
@@ -99,5 +113,19 @@ export const users: UserExtended[] = [
 		city: 'Fairview',
 		relationship_status: "It's complicated",
 		religion: 'Christian',
+		posts: [
+			{
+				media: 'lisa.jpeg',
+			},
+			{
+				media: 'lisa.jpeg',
+			},
+			{
+				media: 'lisa.jpeg',
+			},
+			{
+				media: 'lisa.jpeg',
+			},
+		],
 	},
 ];

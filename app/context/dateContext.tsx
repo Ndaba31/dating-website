@@ -11,6 +11,8 @@ interface DateContextProps {
 	setUser: React.Dispatch<React.SetStateAction<User>>;
 	userExtended: UserExtended;
 	setUserExtended: React.Dispatch<React.SetStateAction<UserExtended>>;
+	isAuth: boolean;
+	setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DateContext = createContext<DateContextProps | undefined>(undefined);
@@ -51,6 +53,7 @@ export function DateContextProvider({ children }: DateContextProviderProps) {
 		relationship_status: 'In a relationship',
 		religion: 'Christian'
 	})
+	const [isAuth, setIsAuth] = useState(false)
 
 	return (
 		<DateContext.Provider
@@ -61,6 +64,8 @@ export function DateContextProvider({ children }: DateContextProviderProps) {
 				setUser,
 				userExtended,
 				setUserExtended,
+				isAuth,
+				setIsAuth
 			}}
 		>
 			{children}

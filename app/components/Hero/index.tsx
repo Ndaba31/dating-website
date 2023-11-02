@@ -18,7 +18,7 @@ interface Props {
     reverse: boolean;
 }
 
-const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: Props) => {
+const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse, link }: Props) => {
     const [password2, setPassword2] = useState("")
     const [formData, setFormData] = useState<User>({
         firstName: "",
@@ -41,7 +41,7 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: P
         hickies: 0
     })
 
-    const { setUser, user, setUserExtended } = useDateContext();
+    const { setUser, setIsAuth, setUserExtended } = useDateContext();
     const router = useRouter()
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +53,7 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: P
         e.preventDefault();
         console.log(formData, password2);
         setUser(formData)
+        setIsAuth(true)
         router.replace("/questionnaire/1")
     }
 
@@ -69,8 +70,8 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: P
         if (person !== undefined) {
             setUser(person.user);
             setUserExtended(person);
-
-            router.push('/')
+            setIsAuth(true);
+            router.push('/discover')
         }
     }
 
@@ -81,7 +82,7 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: P
                 <p className="text-lg text-white font-cursive mb-4">{subHeading}</p>
                 {
                     btnType === "link" && (
-                        <Link href='signup' className="bg-[#A238FF] text-white py-2 px-4 rounded-lg">
+                        <Link href={link === undefined ? 'signup' : link} className="bg-[#A238FF] text-white py-2 px-4 rounded-lg">
                             {btnText}
                         </Link>
                     )

@@ -7,7 +7,10 @@ import React from 'react'
 import Sidebar from '../Sidebar'
 
 const Navbar = () => {
-    const { sidebar, setSidebar } = useDateContext();
+    const { sidebar, setSidebar, isAuth, setIsAuth, user } = useDateContext();
+
+    if (user !== undefined)
+        setIsAuth(true)
 
     if (sidebar)
         return <Sidebar />
@@ -25,8 +28,21 @@ const Navbar = () => {
                     <button onClick={() => { setSidebar(!sidebar) }} className='md:hidden'>
                         <FontAwesomeIcon icon={faCircleUser} size='xl' />
                     </button>
-                    <Link href='login' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Login</Link>
-                    <Link href='signup' className='hidden md:block px-4 py-2 text-lg hover:bg-white hover:text-black bg-[#A238FF] rounded-2xl border-2 border-[#A238FF]'>Sign Up</Link>
+                    {
+                        !isAuth ? (
+                            <>
+                                <Link href='login' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Login</Link>
+                                <Link href='signup' className='hidden md:block px-4 py-2 text-lg hover:bg-white hover:text-black bg-[#A238FF] rounded-2xl border-2 border-[#A238FF]'>Sign Up</Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link href='discover' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Discover</Link>
+                                <Link href='redroom' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Redroom</Link>
+                                <Link href='matches' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Matches</Link>
+                                <Link href='profile' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Profile</Link>
+                            </>
+                        )
+                    }
                 </div>
             </nav>
         </header>
