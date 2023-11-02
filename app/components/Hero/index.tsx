@@ -24,7 +24,10 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: P
         lastName: "",
         email: "",
         stem: "",
-        password: ""
+        password: "",
+        dateJoined: new Date(),
+        pumpkins: 0,
+        hickies: 0
     })
 
     const { setUser } = useDateContext();
@@ -39,7 +42,7 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse }: P
         e.preventDefault();
         console.log(formData, password2);
         setUser(formData)
-        router.replace("/questionnaire")
+        router.replace("/questionnaire/1")
     }
 
     return (
