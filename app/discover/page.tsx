@@ -16,22 +16,25 @@ const Discover = () => {
                 img={userExtended.profile_photo === undefined ? '/lady.webp' : `/${userExtended.profile_photo.media}`}
                 altImg={userExtended.profile_photo === undefined ? '/lady.webp' : `/${userExtended.profile_photo.alt}`}
                 btnText='View my profile'
-                link={`profile/${userExtended.user.stem}`}
+                link={`profile/my-profile`}
                 btnType='link'
                 heading={userExtended.user.stem}
                 subHeading={userExtended.bio}
                 reverse
             />
-            {
-                users
-                    .filter(({ user }) => user.stem !== userExtended.user.stem)
-                    .map((user) => (
-                        <DiscoverCard
-                            key={user.user.stem}
-                            user={user}
-                        />
-                    ))
-            }
+            <div>
+                <h1 className='text-center capitalize my-8'>Discover more dates</h1>
+                {
+                    users
+                        .filter(({ user }) => user.stem !== userExtended.user.stem)
+                        .map((user) => (
+                            <DiscoverCard
+                                key={user.user.stem}
+                                user={user}
+                            />
+                        ))
+                }
+            </div>
         </main>
     )
 }

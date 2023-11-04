@@ -11,8 +11,8 @@ interface Props {
 
 const DiscoverCard = ({ user }: Props) => {
     return (
-        <div className="flex justify-center w-full">
-            <div className='flex flex-col md:flex-row bg-transparent  w-[90%] h-500 rounded-2xl overflow-hidden'>
+        <div className="flex justify-center w-full py-16 px-4">
+            <div className='flex flex-col md:flex-row w-[90%] h-500 rounded-2xl overflow-hidden'>
                 <div className='w-full md:w-[60%] p-0 rounded-2xl'>
                     <Image
                         width={500}
@@ -22,14 +22,14 @@ const DiscoverCard = ({ user }: Props) => {
                         className='h-full w-full'
                     />
                 </div>
-                <div className='w-full md:w-[40%] text-center p-10 bg-gradient-to-tr from-[#0559E0] to-[#BAA9BF]'>
+                <div className='w-full md:w-[40%] text-center p-10 bg-gradient-to-br from-[#0559E0] to-[#BAA9BF]'>
                     <h1 className='text-4xl'>{user.user.stem}</h1>
                     <div className='my-8'>
                         <h1 className='text-2xl'>{user.user.firstName} {user.user.lastName}</h1>
                         {user.occupation !== undefined && (<p className=''>Works in {user.occupation[0].company} as a {user.occupation[0].title}</p>)}
                         {user.bio !== undefined && (<p className=''>{user.bio}</p>)}
                     </div>
-                    <div className='text-xl flex flex-col items-center space-y-10'>
+                    <div className='text-xl flex flex-col items-center justify-end space-y-8'>
                         <div className="flex space-x-10">
                             <p>{user.user.pumpkins} Pumpkins</p>
                             <p>{user.user.hickies} Hickies</p>

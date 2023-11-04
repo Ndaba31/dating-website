@@ -39,7 +39,7 @@ const Navbar = () => {
                                 <Link href='discover' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Discover</Link>
                                 <Link href='redroom' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Redroom</Link>
                                 <Link href='matches' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Matches</Link>
-                                <Link href='profile' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Profile</Link>
+                                <Link href='profile/my-profile' className='hidden md:block px-4 py-2 text-lg hover:opacity-50 bg=transparent rounded-2xl'>Profile</Link>
                             </>
                         )
                     }
