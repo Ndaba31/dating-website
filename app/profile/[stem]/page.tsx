@@ -4,7 +4,10 @@ import Posts from '@/app/components/Posts'
 import { useDateContext } from '@/app/context/dateContext'
 import { users } from '@/app/data'
 import { UserExtended } from '@/app/interfaces/User'
+import { faPenToSquare, faPlusSquare } from '@fortawesome/free-regular-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/legacy/image'
+import Link from 'next/link'
 import React, { useState } from 'react'
 
 const ProfileDetail = ({ params }: { params: { stem: string } }) => {
@@ -36,9 +39,32 @@ const ProfileDetail = ({ params }: { params: { stem: string } }) => {
                     />
                 </div>
                 <article className='md:w-1/2 p-8'>
+                    {
+                        params.stem === 'my-profile' && (
+                            <div className='flex justify-between my-2'>
+                                <Link href='edit' className='border-2 border-purple-500 hover:bg-white hover:text-purple-500 flex space-x-4 rounded-lg items-center p-2'>
+                                    <FontAwesomeIcon icon={faPenToSquare} />
+                                    <p>Edit Profile</p>
+                                </Link>
+                                <Link href='post' className='border-2 border-purple-500 hover:bg-white hover:text-purple-500 flex space-x-4 rounded-lg items-center p-2'>
+                                    <FontAwesomeIcon icon={faPlusSquare} />
+                                    <p>Post</p>
+                                </Link>
+                            </div>
+                        )
+                    }
                     <section>
                         <h1 className="text-xl font-bold">{user?.user.firstName + ' ' + user?.user.lastName + ', ' + age}</h1>
-                        <p className='text-m'>AKA {user?.nickName}</p>
+                        {
+                            user?.sex !== undefined && (
+                                <p className="text-m text-gray capitalize">{user?.sex}</p>
+                            )
+                        }
+                        {
+                            user?.nickName !== undefined && (
+                                <p className='text-m'>AKA {user?.nickName}</p>
+                            )
+                        }
                         {
                             user?.occupation?.map(({ title }, i) => (
                                 <p key={i} className='text-m'>{title}</p>
@@ -69,10 +95,10 @@ const ProfileDetail = ({ params }: { params: { stem: string } }) => {
                         user !== undefined && user.hobbies !== undefined && (
                             <section className='my-4'>
                                 <h1 className="text-lg font-bold">Hobbies</h1>
-                                <div className="grid grid-cols-3 gap-4">
+                                <div className="grid grid-cols-3 gap-4 p-2">
                                     {
                                         user.hobbies.map((hobby, i) => (
-                                            <button key={i} className="border-2 p-2 rounded-md cursor-not-allowed" disabled>
+                                            <button key={i} className="border-2 p-2 rounded-md capitalize" disabled>
                                                 {hobby}
                                             </button>
                                         ))
