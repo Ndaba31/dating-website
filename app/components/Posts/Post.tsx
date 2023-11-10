@@ -9,8 +9,8 @@ interface Props {
 const PostDetail = ({ post }: Props) => {
 
     return (
-        <div className='m-auto'>
-            <Image width={300} height={700} src={'/' + post.media} alt={post.alt !== undefined ? post.alt : ''} className='rounded-2xl' />
+        <div className='m-auto my-4 h-[400px] w-[300px]'>
+            <Image objectFit='contain' width={300} height={400} src={'/' + post.media} alt={post.alt !== undefined ? post.alt : ''} className='rounded-2xl' />
         </div>
     )
 }

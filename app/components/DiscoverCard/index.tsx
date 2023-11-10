@@ -4,12 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+import Like from '../Like'
 
 interface Props {
     user: UserExtended
 }
 
 const DiscoverCard = ({ user }: Props) => {
+
     return (
         <div className="flex justify-center w-full py-16 px-4">
             <div className='flex flex-col md:flex-row w-[90%] h-500 rounded-2xl overflow-hidden'>
@@ -40,7 +42,11 @@ const DiscoverCard = ({ user }: Props) => {
                                 <FontAwesomeIcon icon={faArrowAltCircleRight} className='text-4xl' />
                             </Link>
                         </div>
-                        <div className='flex space-x-8 items-center'>
+                        <div className={`flex space-x-8 items-center justify-around text-2xl`}>
+                            <Like like={false} prospect={user} />
+                            <Like like={true} prospect={user} />
+                        </div>
+                        {/* <div className='flex space-x-8 items-center'>
                             {
                                 user.socials
                                     ?.map(({ icon, social, link }) => (
@@ -49,7 +55,7 @@ const DiscoverCard = ({ user }: Props) => {
                                         </Link>
                                     ))
                             }
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

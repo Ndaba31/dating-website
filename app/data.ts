@@ -2,6 +2,7 @@ import { faComment } from '@fortawesome/free-regular-svg-icons';
 import { UserExtended } from './interfaces/User';
 import Socials from './interfaces/Socials';
 import { Facebook, Instagram, Twitter, WhatsApp } from '@mui/icons-material';
+import Match from './interfaces/Matches';
 interface QuestionProps {
 	id: number;
 	question: string | string[];
@@ -87,7 +88,7 @@ export const users: UserExtended[] = [
 		},
 		nickName: 'Inja Yegame',
 		profile_photo: { media: 'lynette.jpeg', alt: `profile photo of inja_yegame` },
-		dob: new Date(),
+		dob: new Date(1998, 7, 31),
 		id: 9808316100123,
 		idImg: { media: 'lynette.jpeg', alt: `ID photo of inja_yegame` },
 		phone: 76543902,
@@ -119,13 +120,13 @@ export const users: UserExtended[] = [
 				media: 'lisa.jpeg',
 			},
 			{
-				media: 'lisa.jpeg',
+				media: 'ntombi.jpeg',
 			},
 			{
-				media: 'lisa.jpeg',
+				media: 'tamia.jpeg',
 			},
 			{
-				media: 'lisa.jpeg',
+				media: 'linda.jpeg',
 			},
 		],
 	},
@@ -186,4 +187,13 @@ export const religions: string[] = [
 	'Bahai Faith',
 	'Not Sure',
 	'Nothing Really',
+];
+
+export const matches: Match[] = [
+	{
+		user: users[1],
+		when: new Date(),
+		likes: true,
+		pumpkin: users[0],
+	},
 ];

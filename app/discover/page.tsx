@@ -11,7 +11,7 @@ const Discover = () => {
 
     return (
         <main>
-            <Navbar />
+            <Navbar page='discover' />
             <Hero
                 img={userExtended.profile_photo === undefined ? '/lady.webp' : `/${userExtended.profile_photo.media}`}
                 altImg={userExtended.profile_photo === undefined ? '/lady.webp' : `/${userExtended.profile_photo.alt}`}

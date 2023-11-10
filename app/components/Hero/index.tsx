@@ -89,7 +89,7 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse, lin
                 }
                 {
                     btnType === "submit" && (
-                        <form onSubmit={submitInfo}>
+                        <form onSubmit={submitInfo} method='post'>
                             <div className="flex justify-between items-center w-full flex-col md:flex-row my-6 space-x-2">
                                 <div className='flex flex-col'>
                                     <label htmlFor="firstName" className='text-left'>First Name</label>
@@ -128,7 +128,7 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse, lin
                 }
                 {
                     btnType === "login" && (
-                        <form onSubmit={submitLogin} className='items-center flex flex-col'>
+                        <form onSubmit={submitLogin} className='items-center flex flex-col' method='post'>
                             <input
                                 type='email'
                                 id='email'

@@ -8,7 +8,7 @@ interface Props {
 
 const Posts = ({ posts }: Props) => {
     return (
-        <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4'>
+        <div className='grid grid-cols-1 md:grid-cols-3  gap-4'>
             {
                 posts.map((post, i) => (
                     <PostDetail key={i} post={post} />

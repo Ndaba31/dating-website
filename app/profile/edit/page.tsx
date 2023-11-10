@@ -1,17 +1,20 @@
 'use client'
 import { useDateContext } from '@/app/context/dateContext'
-import { ethinicities, regions, sex } from '@/app/data'
+import { ethinicities, regions, relationship_status, religions, sex, social_media } from '@/app/data'
 import Occupation from '@/app/interfaces/Occupation'
 import { AddCircle, Cancel, DeleteForever } from '@mui/icons-material'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { ChangeEvent, MouseEvent, useState } from 'react'
 
 const EditProfile = () => {
     const { userExtended, setUserExtended } = useDateContext();
     const [hob, setHob] = useState("")
     const [occ, setOcc] = useState<any>()
+    const [photo, setPhoto] = useState<string | null>(null)
+
     const separator = '/'
     const birthday = `${userExtended.dob?.getFullYear()}${separator}${userExtended.dob!.getMonth() + 1 < 10 ? `0${userExtended.dob!.getMonth() + 1}` : `${userExtended.dob!.getMonth() + 1}`}${separator}${userExtended.dob!.getDate() < 10 ? `0${userExtended.dob!.getDate()}` : `${userExtended.dob!.getDate()}`}`;
+    // setPhoto(userExtended.profile_photo?.media || null)
 
     const onHobChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setHob(e.target.value)
@@ -60,15 +63,35 @@ const EditProfile = () => {
         }))
     }
 
+    const onFileUploadChange = (e: ChangeEvent<HTMLInputElement>) => {
+        console.log("From onFileUploadChange");
+    };
+
+    const onCancelFile = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        console.log("From onCancelFile");
+    };
+
+    const onUploadFile = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        console.log("From onUploadFile");
+    };
+
     return (
         <main className='p-2'>
             <h4 className='my-2'>Edit Profile</h4>
             <hr />
-            <div className="flex flex-col md:flex-row">
+            <form method='post' className="flex flex-col md:flex-row">
                 <div className="w-full md:w-1/3 p-2 flex flex-col items-center">
                     <h6 className='font-bold my-2'>Profile</h6>
                     <div className="w-150 h-150 rounded-xl border-2">
-                        <Image width={150} height={150} className='rounded-xl' src={'/' + userExtended.profile_photo?.media || ''} alt={userExtended.profile_photo?.alt || ''} />
+                        {
+                            photo ? (
+                                <Image width={150} height={150} className='rounded-xl w-auto h-auto' src={'/' + photo} alt={userExtended.profile_photo?.alt || ''} />
+                            ) : (
+                                <Image width={150} height={150} className='rounded-xl w-auto h-auto' src={'/' + userExtended.profile_photo?.media || ''} alt={userExtended.profile_photo?.alt || ''} />
+                            )
+                        }
                     </div>
                     <div className='text-center my-4 text-lg'>
                         <p className='font-bold'>{userExtended.user.firstName} {userExtended.user.lastName}</p>
@@ -76,10 +99,17 @@ const EditProfile = () => {
                         <p className='text-purple-200'>@{userExtended.user.stem}</p>
                     </div>
                     <div className='flex flex-col'>
-                        <button className="bg-[#A238FF] text-white py-2 px-8 rounded-lg my-1">
+                        <label htmlFor='imgInput' className="bg-[#A238FF] cursor-pointer text-white py-2 px-8 rounded-lg my-1">
                             Upload Photo
-                        </button>
-                        <button className="bg-red-700 text-white py-2 px-8 rounded-lg my-1">
+                        </label>
+                        <input
+                            id="imgInput"
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={onFileUploadChange}
+                        />
+                        <button onClick={onCancelFile} className="bg-red-700 text-white py-2 px-8 rounded-lg my-1">
                             Delete Photo
                         </button>
                     </div>
@@ -127,7 +157,7 @@ const EditProfile = () => {
                     </div>
                     <div>
                         <h1 className="text-lg font-bold mb-4">About</h1>
-                        <textarea className='bg-transparent border-2 w-full p-2 rounded-lg' name="bio" id="bio" rows={10}>{userExtended.bio}</textarea>
+                        <textarea className='bg-transparent border-2 w-full p-2 rounded-lg' name="bio" id="bio" rows={10} defaultValue={userExtended.bio}></textarea>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 my-4">
                         <div className='flex flex-col mt-4 md:mt-0'>
@@ -221,25 +251,69 @@ const EditProfile = () => {
                                 <AddCircle />
                             </button>
                         </div>
-                        <div className="grid grid-cols-1 gap-4 p-4 my-4">
-                            {
-                                userExtended.occupation!.map(({ company, title, salary_min, salary_max }, i) => (
-                                    <button key={i} className='grid grid-cols-3 gap-2 border-2 p-2 rounded-md capitalize hover:border-red-400 hover:text-red-400'>
-                                        <p>{title}</p>
-                                        <p>At {company}</p>
+                        {
+                            userExtended.occupation !== undefined && (
+                                <div className="grid grid-cols-1 gap-4 p-4 my-4">
+                                    {
+                                        userExtended.occupation!.map(({ company, title, salary_min, salary_max }, i) => (
+                                            <button key={i} onClick={() => popOccupation({ company, title, salary_min, salary_max })} className='grid grid-cols-3 gap-2 border-2 p-2 rounded-md capitalize hover:border-red-400 hover:text-red-400'>
+                                                <p>{title}</p>
+                                                <p>At {company}</p>
+                                                {
+                                                    salary_max === undefined || salary_min === undefined && (<p>Earning between {salary_min} and {salary_max}</p>)
+                                                }
+                                                <div className='text-right'>
+                                                    <Cancel />
+                                                </div>
+                                            </button>
+                                        ))
+                                    }
+                                </div>
+                            )
+                        }
+                        <div>
+                            <h1 className="text-lg font-bold mb-4">More More Info</h1>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 my-4">
+                                <div className='flex flex-col'>
+                                    <label htmlFor="religion" className='text-left'>Religion</label>
+                                    <select name="religion" id="religion" className='bg-transparent border-b-2 p-2'>
+                                        <option value="" className='bg-transparent'>Please choose one</option>
                                         {
-                                            salary_max === undefined || salary_min === undefined && (<p>Earning between {salary_min} and {salary_max}</p>)
+                                            religions.map((religion, i) => (
+                                                <option className='bg-transparent text-black' key={i} value={religion}>{religion}</option>
+                                            ))
                                         }
-                                        <button key={i} onClick={() => popOccupation({ company, title, salary_min, salary_max })} className='text-right'>
-                                            <Cancel />
-                                        </button>
-                                    </button>
-                                ))
-                            }
+                                    </select>
+                                </div>
+                                <div className='flex flex-col'>
+                                    <label htmlFor="region" className='text-left'>Relationship Status</label>
+                                    <select name="region" id="region" className='bg-transparent border-b-2 p-2'>
+                                        <option value="" className='bg-transparent'>Please choose one</option>
+                                        {
+                                            relationship_status.map((relation, i) => (
+                                                <option className='bg-transparent text-black' key={i} value={relation}>{relation}</option>
+                                            ))
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h1 className="text-lg font-bold mb-4">Social Media</h1>
+                            <div className="grid grid-cols-1 gap-4">
+                                {
+                                    social_media.map(({ link, social }, i) => (
+                                        <div key={1} className='flex flex-col mt-4 md:mt-0'>
+                                            <label htmlFor={social} className='text-left'>{social}</label>
+                                            <input type="text" id={social} name={social} placeholder={`${link === '' ? (social === 'WhatsApp' ? 'Add WhatsApp number' : 'Add link') : link}`} className='bg-transparent border-b-2 p-2' /*value={formData.lastName} onChange={handleChange}*/ />
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </main>
     )
 }

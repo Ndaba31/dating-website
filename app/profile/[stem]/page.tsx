@@ -24,9 +24,12 @@ const ProfileDetail = ({ params }: { params: { stem: string } }) => {
         setShowAll(!showAll)
     }
 
+    console.log(age);
+
+
     return (
         <div>
-            <Navbar />
+            <Navbar page='profile' />
             <div className='mt-16 flex flex-col md:flex-row'>
                 <div className='md:w-1/2'>
                     <Image
@@ -39,6 +42,10 @@ const ProfileDetail = ({ params }: { params: { stem: string } }) => {
                     />
                 </div>
                 <article className='md:w-1/2 p-8'>
+                    <div className="flex justify-around mb-8">
+                        <p className="text-lg">{userExtended.user.pumpkins} Pumpkins</p>
+                        <p className="text-lg">{userExtended.user.hickies} Hickies</p>
+                    </div>
                     {
                         params.stem === 'my-profile' && (
                             <div className='flex justify-between my-2'>
@@ -46,7 +53,7 @@ const ProfileDetail = ({ params }: { params: { stem: string } }) => {
                                     <FontAwesomeIcon icon={faPenToSquare} />
                                     <p>Edit Profile</p>
                                 </Link>
-                                <Link href='post' className='border-2 border-purple-500 hover:bg-white hover:text-purple-500 flex space-x-4 rounded-lg items-center p-2'>
+                                <Link href='post-image' className='border-2 border-purple-500 hover:bg-white hover:text-purple-500 flex space-x-4 rounded-lg items-center p-2'>
                                     <FontAwesomeIcon icon={faPlusSquare} />
                                     <p>Post</p>
                                 </Link>
