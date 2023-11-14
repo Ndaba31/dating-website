@@ -1,5 +1,4 @@
 import { useDateContext } from '@/app/context/dateContext'
-import { matches } from '@/app/data'
 import Match from '@/app/interfaces/Matches'
 import { UserExtended } from '@/app/interfaces/User'
 import { faHeart, faXmarkCircle } from '@fortawesome/free-regular-svg-icons'
@@ -16,45 +15,57 @@ type Props = {
 }
 
 const Like = ({ like, prospect }: Props) => {
-    const [checked, setChecked] = useState<boolean>(false)
-    const { userExtended } = useDateContext();
-    const [combinations, setCombinations] = useState<Match[]>(matches)
+    const { userExtended, setAllMatches, allMatches } = useDateContext();
+    const [match, setMatch] = useState<Match | undefined>(
+        allMatches.find(({ user, pumpkin }) => (
+            user.user.email === userExtended.user.email && pumpkin.user.email === prospect.user.email
+        ))
+    )
+    const [checked, setChecked] = useState<boolean>(match?.likes === true)
 
     const toggleFavourite = () => {
+
+        //Check if the prospect already likes the user
+        const interest_shown: boolean = allMatches.find(({ user, pumpkin }) => (
+            user.user.email === prospect.user.email && pumpkin.user.email === userExtended.user.email
+        )) === undefined
+
+        console.log(interest_shown);
+
+        setChecked(checked ? false : true)
+
         switch (checked) {
             case true:
-                const match_exist: boolean = matches.find(({ user, pumpkin }) => (
-                    user.user.email === userExtended.user.email && pumpkin.user.email === prospect.user.email
-                )) === undefined
 
-                const interest_shown: boolean = matches.find(({ user, pumpkin }) => (
-                    user.user.email === pumpkin.user.email && pumpkin.user.email === userExtended.user.email
-                )) === undefined
+                setMatch({
+                    user: userExtended,
+                    pumpkin: prospect,
+                    when: new Date(),
+                    likes: false
+                })
 
-                if (!match_exist && !interest_shown) {
-                    setChecked(true)
-                    if (interest_shown) {
-                        matches
-                    } else {
-                        matches.push({
-                            user: userExtended,
-                            when: new Date(),
-                            pumpkin: prospect,
-                            likes: checked
-                        })
-                    }
-                }
+                setAllMatches((state) => [
+                    ...state,
+                    match!
+                ])
 
                 break;
 
-            default:
+            case false:
+
+                setAllMatches((state) => (
+                    state.filter(({ pumpkin, user }) => (
+                        user.user.stem !== match?.user.user.stem && pumpkin.user.stem !== match?.pumpkin.user.stem
+                    ))
+                ))
+
                 break;
         }
     }
 
     if (!like)
         return (
-            <button type="button">
+            <button type="button" onClick={() => console.log(checked, allMatches)}>
                 <FontAwesomeIcon icon={faXmarkCircle} size='2xl' />
             </button>
         )

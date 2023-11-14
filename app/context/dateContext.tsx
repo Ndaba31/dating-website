@@ -3,6 +3,8 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import User, { UserExtended } from '../interfaces/User';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
+import Match from '../interfaces/Matches';
+import { matches, users } from '../data';
 
 interface DateContextProps {
 	sidebar: boolean;
@@ -13,6 +15,10 @@ interface DateContextProps {
 	setUserExtended: React.Dispatch<React.SetStateAction<UserExtended>>;
 	isAuth: boolean;
 	setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+	allUsers: UserExtended[];
+	setAllUsers: React.Dispatch<React.SetStateAction<UserExtended[]>>;
+	allMatches: Match[]
+	setAllMatches: React.Dispatch<React.SetStateAction<Match[]>>;
 }
 
 const DateContext = createContext<DateContextProps | undefined>(undefined);
@@ -53,19 +59,19 @@ export function DateContextProvider({ children }: DateContextProviderProps) {
 		relationship_status: 'In a relationship',
 		religion: 'Christian'
 	})
+	const [allUsers, setAllUsers] = useState(users)
+	const [allMatches, setAllMatches] = useState(matches)
 	const [isAuth, setIsAuth] = useState(false)
 
 	return (
 		<DateContext.Provider
 			value={{
-				sidebar,
-				setSidebar,
-				user,
-				setUser,
-				userExtended,
-				setUserExtended,
-				isAuth,
-				setIsAuth
+				sidebar, setSidebar,
+				user, setUser,
+				userExtended, setUserExtended,
+				isAuth, setIsAuth,
+				allUsers, setAllUsers,
+				allMatches, setAllMatches
 			}}
 		>
 			{children}

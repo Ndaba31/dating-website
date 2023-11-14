@@ -193,7 +193,7 @@ export const matches: Match[] = [
 	{
 		user: users[1],
 		when: new Date(),
-		likes: true,
+		likes: false,
 		pumpkin: users[0],
 	},
 ];
