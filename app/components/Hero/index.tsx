@@ -1,10 +1,11 @@
 'use client'
 import { useDateContext } from '@/app/context/dateContext';
 import { users } from '@/app/data';
-import User, { UserExtended } from '@/app/interfaces/User';
+import User, { UserDB, UserExtended } from '@/app/interfaces/User';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import axios from 'axios'
 import React, { useState } from 'react';
 
 interface Props {
@@ -20,15 +21,13 @@ interface Props {
 
 const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse, link }: Props) => {
     const [password2, setPassword2] = useState("")
-    const [formData, setFormData] = useState<User>({
+    const [formData, setFormData] = useState<UserDB>({
         firstName: "",
         lastName: "",
         email: "",
         stem: "",
         password: "",
         dateJoined: new Date(),
-        pumpkins: 0,
-        hickies: 0
     })
     const [loginFormData, setLoginFormData] = useState<User>({
         firstName: "",
@@ -41,7 +40,7 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse, lin
         hickies: 0
     })
 
-    const { setUser, setIsAuth, setUserExtended } = useDateContext();
+    const { setUser, setIsAuth, setUserExtended, error, setError, isBusy, setIsBusy } = useDateContext();
     const router = useRouter()
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,12 +48,82 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse, lin
         setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
     };
 
-    const submitInfo = (e: any) => {
+    const submitInfo = async (e: any) => {
         e.preventDefault();
-        console.log(formData, password2);
-        setUser(formData)
-        setIsAuth(true)
-        router.replace("/questionnaire/1")
+        setError('')
+        const { firstName, lastName, email, stem, password } = formData
+        let stem_edited = stem.trim().replace(' ', '_')
+
+        //Password Error handling
+        setError(
+            password.length < 8 ?
+                'password must be longer than 8 characters' :
+                (
+                    password !== password2 ?
+                        'passwords do not match' :
+                        ''
+                )
+        )
+
+        if (error !== '') {
+
+            return;
+        } else {
+
+            console.log({
+                stem: stem_edited,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password
+            });
+
+            const postData = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    stem: stem_edited,
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    password: password
+                }),
+            }
+
+            setIsBusy(true)
+
+            try {
+                const res = await axios.post(`${process.env.NEXT_PUBLIC_URL}/api/users`, {
+                    stem: stem_edited,
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    password: password
+                }).then((result) => {
+                    if (result.status === 200) {
+                        console.log('Form submitted successfully');
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+
+                // if (res.) {
+                //     // Handle successful form submission
+                //     console.log('Form submitted successfully');
+                // } else {
+                //     // Handle error
+                //     console.error('Form submission failed');
+                // }
+            } catch (error) {
+                console.error('An error occurred during form submission', error);
+            }
+            setIsBusy(false)
+            // // setUser(formData)
+            // setIsAuth(true)
+            // // router.replace("/questionnaire/1")
+        }
     }
 
     const handleLoginChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,34 +162,39 @@ const Hero = ({ img, altImg, btnText, btnType, heading, subHeading, reverse, lin
                             <div className="flex justify-between items-center w-full flex-col md:flex-row my-6 space-x-2">
                                 <div className='flex flex-col'>
                                     <label htmlFor="firstName" className='text-left'>First Name</label>
-                                    <input type="text" id='firstName' name='firstName' className='bg-transparent border-b-2 p-2' value={formData.firstName} onChange={handleChange} />
+                                    <input type="text" id='firstName' required name='firstName' className='bg-transparent border-b-2 p-2' value={formData.firstName} onChange={handleChange} />
                                 </div>
                                 <div className='flex flex-col mt-4 md:mt-0'>
                                     <label htmlFor="lastName" className='text-left'>Last Name</label>
-                                    <input type="text" id='lastName' name='lastName' className='bg-transparent border-b-2 p-2' value={formData.lastName} onChange={handleChange} />
+                                    <input type="text" id='lastName' required name='lastName' className='bg-transparent border-b-2 p-2' value={formData.lastName} onChange={handleChange} />
                                 </div>
                             </div>
                             <div className="flex justify-between items-center w-full flex-col md:flex-row my-6 space-x-2">
                                 <div className='flex flex-col'>
                                     <label htmlFor="email" className='text-left'>Email</label>
-                                    <input type="email" id='email' name='email' className='bg-transparent border-b-2 p-2' value={formData.email} onChange={handleChange} />
+                                    <input type="email" id='email' name='email' required className='bg-transparent border-b-2 p-2' value={formData.email} onChange={handleChange} />
                                 </div>
                                 <div className='flex flex-col mt-4 md:mt-0'>
                                     <label htmlFor="stem" className='text-left'>Stem</label>
-                                    <input type="text" id='stem' name='stem' className='bg-transparent border-b-2 p-2' placeholder='Your username/handle' value={formData.stem} onChange={handleChange} />
+                                    <input type="text" id='stem' name='stem' required className='bg-transparent border-b-2 p-2' placeholder='Your username/handle' value={formData.stem} onChange={handleChange} />
                                 </div>
                             </div>
                             <div className="flex justify-between items-center w-full flex-col md:flex-row my-6 space-x-2">
                                 <div className='flex flex-col'>
                                     <label htmlFor="password" className='text-left'>Password</label>
-                                    <input type="password" id='password' name='password' className='bg-transparent border-b-2 p-2' value={formData.password} onChange={handleChange} />
+                                    <input type="password" id='password' required name='password' className='bg-transparent border-b-2 p-2' value={formData.password} onChange={handleChange} />
                                 </div>
                                 <div className='flex flex-col mt-4 md:mt-0'>
                                     <label htmlFor="password2" className='text-left'>Confirm Password</label>
-                                    <input type="password" id='password2' name='password2' className='bg-transparent border-b-2 p-2' value={password2} onChange={(e) => setPassword2(e.target.value)} />
+                                    <input type="password" id='password2' required name='password2' className='bg-transparent border-b-2 p-2' value={password2} onChange={(e) => setPassword2(e.target.value)} />
                                 </div>
                             </div>
-                            <button type={btnType} className="bg-[#A238FF] text-white py-2 px-4 rounded-lg">
+                            {
+                                error !== '' && (
+                                    <p className='text-md rounded-md bg-red-700 capitalize my-4'>{error}</p>
+                                )
+                            }
+                            <button type={btnType} disabled={isBusy} className={`bg-[#A238FF] text-white py-2 px-4 rounded-lg ${isBusy ? 'opacity-70' : ''}`}>
                                 {btnText}
                             </button>
                         </form>

@@ -1,7 +1,7 @@
 'use client';
 // First, create a context
 import { createContext, useContext, useState, ReactNode } from 'react';
-import User, { UserExtended } from '../interfaces/User';
+import User, { UserDB, UserExtended } from '../interfaces/User';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import Match from '../interfaces/Matches';
 import { matches, users } from '../data';
@@ -11,10 +11,16 @@ interface DateContextProps {
 	setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
 	user: User;
 	setUser: React.Dispatch<React.SetStateAction<User>>;
+	userDB: UserDB;
+	setUserDB: React.Dispatch<React.SetStateAction<UserDB>>;
+	error: string;
+	setError: React.Dispatch<React.SetStateAction<string>>;
 	userExtended: UserExtended;
 	setUserExtended: React.Dispatch<React.SetStateAction<UserExtended>>;
 	isAuth: boolean;
 	setIsAuth: React.Dispatch<React.SetStateAction<boolean>>;
+	isBusy: boolean;
+	setIsBusy: React.Dispatch<React.SetStateAction<boolean>>;
 	allUsers: UserExtended[];
 	setAllUsers: React.Dispatch<React.SetStateAction<UserExtended[]>>;
 	allMatches: Match[]
@@ -40,6 +46,14 @@ export function DateContextProvider({ children }: DateContextProviderProps) {
 		hickies: 16,
 		pumpkins: 5978
 	});
+	const [userDB, setUserDB] = useState<UserDB>({
+		stem: '',
+		firstName: '',
+		lastName: '',
+		dateJoined: new Date(),
+		email: '',
+		password: ''
+	})
 	const [userExtended, setUserExtended] = useState<UserExtended>({
 		user: user,
 		nickName: "boo thang",
@@ -62,14 +76,19 @@ export function DateContextProvider({ children }: DateContextProviderProps) {
 	const [allUsers, setAllUsers] = useState(users)
 	const [allMatches, setAllMatches] = useState(matches)
 	const [isAuth, setIsAuth] = useState(false)
+	const [isBusy, setIsBusy] = useState(false)
+	const [error, setError] = useState('')
 
 	return (
 		<DateContext.Provider
 			value={{
 				sidebar, setSidebar,
+				error, setError,
 				user, setUser,
+				userDB, setUserDB,
 				userExtended, setUserExtended,
 				isAuth, setIsAuth,
+				isBusy, setIsBusy,
 				allUsers, setAllUsers,
 				allMatches, setAllMatches
 			}}

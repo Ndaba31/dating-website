@@ -14,6 +14,15 @@ export default interface User {
 	pumpkins: number;
 }
 
+export interface UserDB {
+	firstName: string;
+	lastName: string;
+	email: string;
+	stem: string;
+	password: string;
+	dateJoined: Date;
+}
+
 export interface UserExtended {
 	user: User;
 	nickName?: string;
