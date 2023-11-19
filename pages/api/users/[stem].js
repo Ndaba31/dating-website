@@ -46,4 +46,62 @@ export default async function products(req, res) {
 			message: message,
 		});
 	}
+
+	if (req.method === 'PUT') {
+		const query_result = req.query;
+		const { stem } = query_result;
+		const {
+			nickName,
+			dob,
+			occupation,
+			city,
+			region,
+			bio,
+			hobbies,
+			phone,
+			sex,
+			ethnicity,
+			relationshipStatus,
+			religion,
+		} = req.body;
+		let message;
+
+		const updateUser = await query({
+			query: 'UPDATE user_details SET nick_name = ?, dob = ?, phone = ?, bio = ?, sex = ?, ethnicity = ?, relationship_status = ?, religion = ? WHERE stem = ?',
+			values: [nickName, dob, phone, bio, sex, ethnicity, relationshipStatus, religion, stem],
+		});
+
+		if (updateUser) {
+			message = 'User updated successfully';
+
+			const addLocation = await query({
+				query: 'INSERT INTO locations (stem, city, region) VALUES (?, ?, ?)',
+				values: [stem, city, region],
+			});
+
+			addLocation ? (message = 'Added Location') : (message = 'Failed to add location');
+
+			const addOccupation = await query({
+				query: 'INSERT INTO occupations (stem, company, title) VALUES (?, ?, ?)',
+				values: [stem, occupation.title, occupation.company],
+			});
+
+			addOccupation ? (message = 'Added Occupation') : (message = 'Failed to add occupation');
+
+			hobbies.map(async (hobby) => {
+				const addHobby = await query({
+					query: 'INSERT INTO hobbies (stem, hobby) VALUES (?, ?)',
+					values: [stem, hobby],
+				});
+
+				addHobby ? (message = 'Added Hobby') : (message = 'Failed to add hobby');
+			});
+		} else {
+			message = 'Problem with user update';
+		}
+
+		res.status(200).json({
+			message: message,
+		});
+	}
 }

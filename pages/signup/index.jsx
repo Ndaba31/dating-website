@@ -70,7 +70,7 @@ const Signup = () => {
 					setSuccess(message);
 					setUser(user);
 					setIsAuth(true);
-					router.replace('/');
+					router.replace('/details-questionnaire/1');
 				} else {
 					setError(message);
 				}
