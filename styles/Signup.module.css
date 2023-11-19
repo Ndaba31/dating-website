@@ -52,7 +52,7 @@
 	background: linear-gradient(to right, purple, orange);
 	border-radius: 10px;
 	font-size: 12pt;
-	margin: auto;
+	margin-top: 10px;
 	border: 2px #ccc solid;
 }
 
@@ -69,13 +69,12 @@
 	text-transform: capitalize;
 }
 
-.success {
-	background-color: lime;
-	color: white;
-	padding: 10px;
-	border-radius: 5px;
-	/* margin: 20px 0; */
-	text-transform: capitalize;
+.busy {
+	opacity: 0.7;
+}
+
+.busy:hover {
+	cursor: wait;
 }
 
 .password_container {
@@ -92,6 +91,21 @@
 	height: 100px;
 	border-radius: 50%;
 	overflow: hidden;
+}
+
+.links_container {
+	display: flex;
+	flex-direction: column;
+}
+
+.link {
+	color: #ccc;
+	text-decoration: none;
+	margin: 10px 0;
+}
+
+.link:hover {
+	opacity: 0.7;
 }
 
 /* Media Query for Mobile Devices */

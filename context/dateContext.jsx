@@ -13,10 +13,13 @@ const DateContextProvider = ({ children }) => {
 		dateJoined: new Date(),
 		email: '',
 		password: '',
+		hickies: 0,
+		pumpkins: 0,
 	});
 	const [isAuth, setIsAuth] = useState(false);
 	const [isBusy, setIsBusy] = useState(false);
 	const [error, setError] = useState('');
+	const [success, setSuccess] = useState('');
 
 	return (
 		<DateContext.Provider
@@ -25,6 +28,8 @@ const DateContextProvider = ({ children }) => {
 				setSidebar,
 				error,
 				setError,
+				success,
+				setSuccess,
 				user,
 				setUser,
 				isAuth,

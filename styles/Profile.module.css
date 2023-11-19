@@ -1,0 +1,88 @@
+.container {
+	margin-top: 64px;
+	display: flex;
+	flex-direction: column;
+}
+
+.left,
+.right {
+	width: 100%;
+}
+
+.followers {
+	display: flex;
+	width: 100%;
+	justify-content: space-around;
+	margin-bottom: 32px;
+	font-size: 18px;
+	line-height: 28px;
+}
+
+.heading {
+	font-size: 20px;
+	line-height: 28px;
+	font-weight: bold;
+}
+
+.section {
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
+.sex {
+	font-size: 16px;
+	line-height: 24px;
+	font-style: italic;
+	color: lightgray;
+}
+
+.hobbies {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	/* padding: 8px; */
+}
+
+.hobby {
+	border: 2px solid #ccc;
+	padding: 8px;
+	border-radius: 16px;
+	text-transform: capitalize;
+	color: white;
+}
+
+.posts {
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 16px;
+	justify-items: center;
+}
+
+@media only screen and (min-width: 600px) {
+	.posts {
+		grid-template-columns: 50% 50%;
+	}
+}
+
+@media only screen and (min-width: 930px) {
+	.container {
+		flex-direction: row;
+	}
+
+	.left,
+	.right {
+		width: 50%;
+	}
+
+	.right {
+		padding: 32px;
+	}
+
+	.posts {
+		grid-template-columns: 33% 33% 33%;
+	}
+
+	.hobbies {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
