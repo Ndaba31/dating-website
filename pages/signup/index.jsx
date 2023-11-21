@@ -1,6 +1,6 @@
 import { useDateContext } from '@/context/dateContext';
 import styles from '../../styles/Signup.module.css';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -101,9 +101,8 @@ const Signup = () => {
 
 				{/* Right Half with Content */}
 				<div className={styles.right_half}>
-					<div className={styles.heading}>
-						Welcome to Pumpkin. Where true love meets fortune.
-					</div>
+					<h1 /*className={styles.heading}*/>Welcome to Pumpkin</h1>
+					<h3>Where true love meets fortune.</h3>
 					{error !== '' && <p className={styles.error}>{error}</p>}
 
 					{/* Form Container */}

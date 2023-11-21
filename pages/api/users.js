@@ -54,4 +54,20 @@ export default async function handler(req, res) {
 		}
 		res.status(200).json({ user: user, message: message });
 	}
+
+	if (req.method === 'GET') {
+		let message;
+		const stems = await query({
+			query: 'SELECT stem FROM users',
+			values: [],
+		});
+
+		if (stems.length) {
+			message = 'No Users';
+		} else {
+			message = 'All users found';
+		}
+
+		res.status(200).json({ stems: stems, message: message });
+	}
 }

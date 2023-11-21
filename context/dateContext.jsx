@@ -16,35 +16,11 @@ const DateContextProvider = ({ children }) => {
 		hickies: 0,
 		pumpkins: 0,
 	});
-	const [signupInfo, setSignupInfo] = useState({
-		nickname: '',
-		age: '',
-		occupation: [
-			{
-				title: '',
-				company: '',
-				salary_min: 0,
-				salary_max: 0,
-			},
-		],
-		location: {
-			city: '',
-			region: '',
-			latitude: 0,
-			longitude: 0,
-		},
-		bio: '',
-		hobbies: [''],
-		phone: 0,
-		sex: '',
-		ethnicity: '',
-		relationshipStatus: '',
-		religion: '',
-	});
 	const [isAuth, setIsAuth] = useState(false);
 	const [isBusy, setIsBusy] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
+	const [allUsers, setAllUsers] = useState([]);
 
 	return (
 		<DateContext.Provider
@@ -57,8 +33,8 @@ const DateContextProvider = ({ children }) => {
 				setSuccess,
 				user,
 				setUser,
-				signupInfo,
-				setSignupInfo,
+				allUsers,
+				setAllUsers,
 				isAuth,
 				setIsAuth,
 				isBusy,
