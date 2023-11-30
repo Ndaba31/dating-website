@@ -1,6 +1,6 @@
 import { useDateContext } from '@/context/dateContext';
 import styles from '../../styles/Signup.module.css';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -13,6 +13,8 @@ const Login = () => {
 		email: '',
 		password: '',
 	});
+
+	// setError('');
 
 	const router = useRouter();
 
@@ -139,6 +141,7 @@ const Login = () => {
 						width={100}
 						height={100}
 						layout='responsive'
+						priority
 					/>
 				</div>
 			</div>

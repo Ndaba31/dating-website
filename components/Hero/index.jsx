@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '@/styles/Home.module.css';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import { useDateContext } from '@/context/dateContext';
 import Link from 'next/link';
 

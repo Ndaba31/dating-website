@@ -21,6 +21,12 @@ const DateContextProvider = ({ children }) => {
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
 	const [allUsers, setAllUsers] = useState([]);
+	const [employedUsers, setEmployedUsers] = useState([]);
+	const [hobbyUsers, setHobbyUsers] = useState([]);
+	const [locatedUsers, setLocatedUsers] = useState([]);
+	const [postedUsers, setPostedUsers] = useState([]);
+	const [connectedUsers, setConnectedUsers] = useState([]);
+	const [allMatches, setAllMatches] = useState([]);
 
 	return (
 		<DateContext.Provider
@@ -35,6 +41,18 @@ const DateContextProvider = ({ children }) => {
 				setUser,
 				allUsers,
 				setAllUsers,
+				allMatches,
+				setAllMatches,
+				employedUsers,
+				setEmployedUsers,
+				hobbyUsers,
+				setHobbyUsers,
+				locatedUsers,
+				setLocatedUsers,
+				postedUsers,
+				setPostedUsers,
+				connectedUsers,
+				setConnectedUsers,
 				isAuth,
 				setIsAuth,
 				isBusy,

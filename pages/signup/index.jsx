@@ -18,6 +18,8 @@ const Signup = () => {
 		dateJoined: new Date(),
 	});
 
+	setError('');
+
 	const [password2, setPassword2] = useState('');
 
 	const router = useRouter();

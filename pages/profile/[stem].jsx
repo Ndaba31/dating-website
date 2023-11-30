@@ -2,144 +2,170 @@ import Header from '@/components/Head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import styles from '@/styles/Profile.module.css';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import Posts from '@/components/Posts';
+import { useDateContext } from '@/context/dateContext';
+import { Favorite, FavoriteBorder, PeopleAlt } from '@mui/icons-material';
 
 const Page = () => {
 	const router = useRouter();
-	const stem = router.query.stem;
+	const id = router.query.stem;
 
-	const [user, setUser] = useState();
-	const [occupations, setOccupations] = useState([]);
-	const [locations, setLocations] = useState([]);
+	const { allUsers, allMatches, user, employedUsers, isAuth } = useDateContext();
+
+	const temp = allMatches.find(({ crushee, crush }) => crushee === user.stem && crush === id);
+
+	console.log(temp);
+
+	const pumpkin = allUsers.find(({ stem }) => stem === id);
+	const [favorite, setFavorite] = useState(temp.likes);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
 
 	const maxChar = 150;
 	const [showAll, setShowAll] = useState(false);
 
+	console.log(temp);
+	// setFavorite();
+
 	const toggleReadMore = () => {
 		setShowAll(!showAll);
 	};
 
-	const getUser = async () => {
-		const getData = {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		};
+	// const getUser = async () => {
+	// 	const getData = {
+	// 		method: 'GET',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 	};
 
-		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_URL}/api/users/${router.query.stem}`,
-			getData
-		);
-		const { user, message, occupations, locations, hobbies, posts } = await res.json();
+	// 	const res = await fetch(
+	// 		`${process.env.NEXT_PUBLIC_URL}/api/users/${router.query.stem}`,
+	// 		getData
+	// 	);
+	// 	const { user, message, occupations, locations, hobbies, posts } = await res.json();
 
-		setUser(user[0]);
-		setOccupations(occupations);
-		setLocations(locations);
-		setHobbies(hobbies);
-		setPosts(posts);
-		console.log('User function', user[0], message, occupations, locations, hobbies);
-	};
+	// 	setUser(user[0]);
+	// 	setOccupations(occupations);
+	// 	setLocations(locations);
+	// 	setHobbies(hobbies);
+	// 	setPosts(posts);
+	// 	console.log('User function', user[0], message, occupations, locations, hobbies);
+	// };
 
 	useEffect(() => {
-		getUser();
-	}, [stem]);
+		const toggleLike = async () => {
+			const updateData = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					like: favorite === true ? 1 : 0,
+					update: 'like',
+					crushee: user.stem,
+					crush: id,
+				}),
+			};
 
-	console.log(user);
-	const age = user.dob ? new Date().getFullYear() - new Date(user.dob).getFullYear() : '';
+			const likeUser = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, updateData);
+			const { message } = await likeUser.json();
 
+			// if (message === 'Liked profile!') setFavorite(!favorite);
+		};
+
+		toggleLike();
+	}, [favorite, user.stem, id]);
+
+	console.log(pumpkin);
+	const age =
+		pumpkin.dob !== undefined || pumpkin.dob !== null
+			? new Date().getFullYear() - new Date(pumpkin.dob).getFullYear() + ' y/o'
+			: '';
+
+	const occupations = employedUsers
+		.filter((array, i) => array.length !== 0)
+		.map((arr) => arr.filter(({ stem }) => stem === id))
+		.filter((list) => list.length !== 0);
+
+	console.log(occupations);
 	return (
 		<>
-			<Header title={stem} />
+			<Header title={id} />
 			<div className={styles.container}>
 				<div className={styles.left}>
 					<Image
-						src={`/${user.profile_photo ? user.profile_photo : 'no_photo.png'}`}
-						alt={`/${user.profile_photo ? user.profile_photo : 'no_photo.png'}`}
-						width={500}
-						height={500}
-						layout='responsive'
+						src={
+							pumpkin.profile_photo === null
+								? '/no_photo.png'
+								: '/' + pumpkin.profile_photo
+						}
+						alt={`/${
+							pumpkin.profile_photo === null ? pumpkin.profile_photo : 'No Photo'
+						}`}
+						// width={500}
+						// height={500}
+						layout='fill'
+						objectFit='cover'
 						priority
-						style={{ borderRadius: '10px' }}
+						style={{ width: '100%', height: '100%' }}
 					/>
 				</div>
 
 				<article className={styles.right}>
-					<div className={styles.followers}>
-						<p>{user.pumpkins} Pumpkins</p>
-						<p>{user.hickies} Hickies</p>
-					</div>
-					<section>
-						<h1 className={styles.heading}>
-							{user.first_name + ' ' + user.last_name + ', ' + age}
-						</h1>
-						{user.sex &&
-							(user.sex === 'M' ? (
+					<section className={styles.followers}>
+						<p>{pumpkin.pumpkins} Pumpkins</p>
+						<p>{pumpkin.hickies} Hickies</p>
+					</section>
+					<section className={styles.top_section}>
+						{pumpkin.nick_name && (
+							<h1 style={{ fontSize: '24pt', lineHeight: '24px' }}>
+								{pumpkin.nick_name}
+							</h1>
+						)}
+						<p className={styles.heading}>
+							{pumpkin.first_name + ' ' + pumpkin.last_name + ', ' + age}
+						</p>
+						{pumpkin.sex &&
+							pumpkin.sex !== 'X' &&
+							(pumpkin.sex === 'M' ? (
 								<p className={styles.sex}>Male</p>
 							) : (
 								<p className={styles.sex}>Female</p>
 							))}
-						{user.nick_name && (
-							<p className={styles.sex} style={{ color: 'white' }}>
-								AKA {user.nick_name}
-							</p>
+						{pumpkin.bio && (
+							<div className={styles.section}>
+								{/* <h1 className={styles.heading}>About</h1> */}
+								<p style={{ fontSize: '16pt' }}>
+									{showAll ? pumpkin.bio : pumpkin.bio.slice(0, maxChar)}
+								</p>
+								{pumpkin.bio.length > maxChar && (
+									<button onClick={toggleReadMore} className={styles.read}>
+										{showAll ? 'Read Less' : 'Read More'}
+									</button>
+								)}
+							</div>
+						)}
+						{isAuth && (
+							<div style={{ display: 'flex', justifyContent: 'space-around' }}>
+								<button
+									onClick={() => setFavorite(!favorite)}
+									style={{ backgroundColor: 'transparent', border: 0 }}
+								>
+									{favorite ? (
+										<Favorite className={styles.favorite} />
+									) : (
+										<FavoriteBorder className={styles.favorite} />
+									)}
+								</button>
+								<button className={styles.match_button}>
+									<p style={{ fontSize: '12pt' }}>Match</p>
+									<PeopleAlt />
+								</button>
+							</div>
 						)}
 					</section>
-					{occupations.length !== 0 && (
-						<section className={styles.section}>
-							<h1 className={styles.heading}>Occupation</h1>
-							{occupations.map(({ title, company }, i) => (
-								<p
-									key={i}
-									style={{
-										fontSize: '16px',
-										lineHeight: '24px',
-										padding: 2,
-									}}
-								>
-									{title} at {company}
-								</p>
-							))}
-						</section>
-					)}
-					{locations.length !== 0 && (
-						<section className={styles.section}>
-							<h1 className={styles.heading}>Location</h1>
-							{locations.map(({ city, region }, i) => (
-								<p key={i} style={{ fontSize: '16px', lineHeight: '24px' }}>
-									{city}, {region} region
-								</p>
-							))}
-						</section>
-					)}
-					{user.bio && (
-						<section className={styles.section}>
-							<h1 className={styles.heading}>About</h1>
-							<p className='text-m'>
-								{showAll ? user.bio : user.bio.slice(0, maxChar)}
-							</p>
-							{user.bio.length > maxChar && (
-								<button onClick={toggleReadMore} className='text-blue-500'>
-									{showAll ? 'Read Less' : 'Read More'}
-								</button>
-							)}
-						</section>
-					)}
-					{hobbies.length !== 0 && (
-						<section className={styles.section}>
-							<h1 className={styles.heading}>Hobbies</h1>
-							<div className={styles.hobbies}>
-								{hobbies.map(({ hobby }, i) => (
-									<button key={i} className={styles.hobby} disabled>
-										{hobby}
-									</button>
-								))}
-							</div>
-						</section>
-					)}
 				</article>
 			</div>
 			<div style={{ padding: '16px' }}>

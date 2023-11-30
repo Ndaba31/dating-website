@@ -37,6 +37,8 @@ export default async function products(req, res) {
 			message = 'Could not find user';
 		}
 
+		console.log(user, occupations, locations, hobbies, posts, message);
+
 		res.status(200).json({
 			user: user,
 			occupations: occupations,
