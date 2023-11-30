@@ -18,7 +18,7 @@ const Page = () => {
 	console.log(temp);
 
 	const pumpkin = allUsers.find(({ stem }) => stem === id);
-	const [favorite, setFavorite] = useState(temp.likes);
+	const [favorite, setFavorite] = useState(false);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
 
