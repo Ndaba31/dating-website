@@ -1,0 +1,203 @@
+.success {
+	background-color: lime;
+	color: white;
+	padding: 10px;
+	border-radius: 5px;
+	/* margin: 20px 0; */
+	text-transform: capitalize;
+}
+
+.hero_container {
+	background: linear-gradient(to right, #200b33, #19171c, #19276b);
+	min-height: 50vh;
+	width: 100%;
+}
+
+.hero_shadow {
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+	align-items: center;
+}
+
+.hero_image {
+	width: 100%;
+}
+
+.hero_content {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100%;
+}
+
+.hero_heading {
+	font-size: 48pt;
+	color: #ccc;
+	font-weight: bold;
+}
+
+.hero_subheading {
+	font-size: 28pt;
+	/* line-height: 22px; */
+	color: #ccc;
+	font-family: cursive;
+	text-align: center;
+	/* margin-bottom: 16px; */
+}
+
+.hero_buttons {
+	padding: 12px 32px;
+	border: '4px solid white';
+	border-radius: 20px;
+	text-decoration: none;
+	color: #ccc;
+	background-color: #a238ff;
+	font-size: 14pt;
+	margin-bottom: 24px;
+}
+
+.hero_buttons:hover {
+	background-color: #ccc;
+	color: #a238ff;
+	border: '4px solid #a238ff';
+}
+
+.discover_container {
+	display: flex;
+	justify-items: center;
+	width: 100%;
+	background: linear-gradient(to right, #200b33, #19171c, #19276b);
+}
+
+.discover_card {
+	display: flex;
+	flex-direction: column;
+	width: 90%;
+	min-height: 500px;
+	border-radius: 20px;
+	overflow: hidden;
+	background: linear-gradient(to top right, #0c5cdf, #e9beb6);
+	margin: 20px auto;
+}
+
+.discover_image {
+	width: 100%;
+	padding: 0;
+	border-radius: 20px;
+	/* height: 500px; */
+	/* height: 50%; */
+}
+
+.discover_content {
+	width: 100%;
+	padding: 10px;
+	color: black;
+	/* height: 50%; */
+	background: linear-gradient(to top left, #0559e0, #baa9bf);
+}
+
+.discover_options {
+	font-size: 20px;
+	line-height: 22px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-items: flex-end;
+}
+
+.discover_options * {
+	margin-top: 32px;
+}
+
+.discover_following {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	justify-items: center;
+	border: '2px red solid';
+}
+
+.discover_joins {
+	display: flex;
+	width: 100%;
+	justify-content: space-around;
+}
+
+.match_container {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 16px;
+	padding: 20px;
+	background: linear-gradient(to right, #200b33, #19171c, #19276b);
+}
+
+/* MatchCard.module.css */
+.matchCard {
+	position: relative;
+	width: 100%;
+	height: 500px; /* Adjust the height as needed */
+}
+
+.overlay {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	color: orange;
+	font-size: 1.5rem;
+	padding: 20px;
+}
+
+.text {
+	max-width: 600px; /* Adjust the max-width as needed */
+	margin: 0 auto;
+	background-color: rgba(0, 0, 0, 0.5);
+	padding: 2px;
+}
+
+/* .discover_following * {
+	margin-left: 40px;
+} */
+
+@media only screen and (min-width: 930px) {
+	.hero_shadow {
+		min-height: 100vh;
+		flex-direction: row-reverse;
+	}
+
+	.hero_image,
+	.hero_content {
+		width: 50%;
+		height: 100%;
+	}
+
+	.hero_content {
+		padding: 32px;
+	}
+
+	.discover_card {
+		flex-direction: row;
+		max-height: 500px;
+	}
+
+	.discover_image {
+		width: 60%;
+	}
+
+	.discover_content {
+		width: 40%;
+	}
+
+	.discover_options {
+		flex-direction: column;
+	}
+
+	.match_container {
+		grid-template-columns: 1fr 1fr;
+	}
+}

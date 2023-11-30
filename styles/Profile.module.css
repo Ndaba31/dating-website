@@ -1,0 +1,159 @@
+.container {
+	margin-top: 64px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	min-height: 100vh;
+}
+
+.left,
+.right {
+	width: 100%;
+	min-height: 100vh;
+	position: relative;
+}
+
+/* .right {
+	margin: 5px;
+} */
+
+.followers {
+	display: flex;
+	width: 100%;
+	justify-content: space-around;
+	margin-bottom: 32px;
+	font-size: 20pt;
+	line-height: 28px;
+}
+
+.heading {
+	font-size: 22pt;
+	line-height: 28px;
+	/* font-weight: semi-bold; */
+}
+
+.section {
+	margin-top: 16px;
+	margin-bottom: 16px;
+}
+
+.sex {
+	font-size: 16pt;
+	line-height: 24px;
+	font-style: italic;
+	color: lightgray;
+}
+
+.hobbies {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	/* padding: 8px; */
+}
+
+.hobby {
+	border: 2px solid #ccc;
+	padding: 8px;
+	border-radius: 16px;
+	text-transform: capitalize;
+	color: white;
+}
+
+.posts {
+	display: grid;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+	gap: 16px;
+	justify-items: center;
+}
+
+.top_section {
+	background-color: black;
+	padding: 5px;
+}
+
+.read {
+	border: 0;
+	background-color: transparent;
+	color: blue;
+}
+
+.read:hover {
+	cursor: pointer;
+}
+
+.favorite {
+	padding: 8px;
+	border-radius: 10px;
+	background-color: transparent;
+	border: 2px solid black;
+	color: red;
+}
+
+.favorite:hover {
+	background-color: white;
+	border: 2px solid white;
+	cursor: pointer;
+}
+
+.match_button {
+	display: flex;
+	align-items: center;
+	width: 200px;
+	height: 50px;
+	justify-content: center;
+	border-radius: 20px;
+	border: 0;
+	background: linear-gradient(to right, #af85be, #d3a3a9, #d6bfbc);
+}
+
+.match_icon {
+	/* background-color: transparent; */
+	color: red;
+}
+
+.match_icon:hover {
+	background-color: #ccc;
+}
+
+.match_button:hover {
+	background: linear-gradient(to left, #af85be, #d3a3a9, #d6bfbc);
+	cursor: pointer;
+}
+
+@media only screen and (min-width: 600px) {
+	.posts {
+		grid-template-columns: 50% 50%;
+	}
+}
+
+@media only screen and (min-width: 930px) {
+	/* .container {
+		flex-direction: row;
+	}
+
+	.left,
+	.right {
+		width: 50%;
+	} */
+
+	.left {
+		/* height: 100vh; */
+		/* position: relative; */
+	}
+
+	.right {
+		/* padding: 32px; */
+	}
+
+	.posts {
+		grid-template-columns: 33% 33% 33%;
+	}
+
+	.hobbies {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.top_section {
+		padding: 20px;
+	}
+}
