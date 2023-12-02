@@ -15,10 +15,12 @@ const Page = () => {
 
 	const temp = allMatches.find(({ crushee, crush }) => crushee === user.stem && crush === id);
 
-	console.log(temp);
-
 	const pumpkin = allUsers.find(({ stem }) => stem === id);
-	const [favorite, setFavorite] = useState(false);
+
+	console.log(pumpkin);
+
+	const [favorite, setFavorite] = useState(temp.likes);
+	const [slide, setSlide] = useState(temp.slide);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
 
@@ -56,6 +58,8 @@ const Page = () => {
 
 	useEffect(() => {
 		const toggleLike = async () => {
+			let like_count = pumpkin.pumpkins === 0 ? 0 : pumpkin.pumpkins;
+
 			const updateData = {
 				method: 'PUT',
 				headers: {
@@ -66,6 +70,7 @@ const Page = () => {
 					update: 'like',
 					crushee: user.stem,
 					crush: id,
+					like_count: favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
 				}),
 			};
 
@@ -104,10 +109,10 @@ const Page = () => {
 						alt={`/${
 							pumpkin.profile_photo === null ? pumpkin.profile_photo : 'No Photo'
 						}`}
-						// width={500}
-						// height={500}
-						layout='fill'
-						objectFit='cover'
+						width={500}
+						height={500}
+						layout='responsive'
+						// objectFit='cover'
 						priority
 						style={{ width: '100%', height: '100%' }}
 					/>
@@ -160,7 +165,7 @@ const Page = () => {
 									)}
 								</button>
 								<button className={styles.match_button}>
-									<p style={{ fontSize: '12pt' }}>Match</p>
+									<p style={{ fontSize: '12pt' }}>Slide</p>
 									<PeopleAlt />
 								</button>
 							</div>

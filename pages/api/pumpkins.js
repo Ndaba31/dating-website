@@ -43,7 +43,8 @@ export default async function handler(req, res) {
 		});
 
 		const allMatches = await query({
-			query: 'SELECT * FROM matches WHERE slide = 1 AND liked_back = 1',
+			// query: 'SELECT * FROM matches WHERE slide = 1 AND liked_back = 1',
+			query: 'SELECT * FROM matches',
 			value: [],
 		});
 
@@ -60,11 +61,11 @@ export default async function handler(req, res) {
 	}
 
 	if (req.method === 'PUT') {
-		const { like, update, crush, crushee } = req.body;
+		const { like, update, crush, crushee, like_count } = req.body;
 
 		// const tiny = like === 1 ? true : false;
 
-		console.log(like, update, crush, crushee);
+		console.log(like, update, crush, crushee, like_count);
 
 		if (update === 'like') {
 			const updateLike = await query({
@@ -72,7 +73,12 @@ export default async function handler(req, res) {
 				values: [like, crushee, crush],
 			});
 
-			message = updateLike ? 'Liked profile!' : 'Error with Like Button';
+			const updatePumpkin = await query({
+				query: `UPDATE user_details SET pumpkins = ? WHERE stem = ?`,
+				values: [like_count, crush],
+			});
+
+			message = updateLike && updatePumpkin ? 'Liked profile!' : 'Error with Like Button';
 		}
 
 		res.status(200).json({ message: message });
