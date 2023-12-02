@@ -5,6 +5,13 @@ import MatchCard from './MatchCard';
 
 const MatchesCard = () => {
 	const { allMatches } = useDateContext();
+
+	const filteredMatches = allMatches.filter(
+		({ slide, liked_back }) => slide === 1 && liked_back === 1
+	);
+
+	console.log(filteredMatches);
+
 	return (
 		<>
 			<h1 style={{ textAlign: 'center', margin: '50px 0' }}>Matches</h1>
@@ -12,7 +19,7 @@ const MatchesCard = () => {
 				<h1>No Matches Yet</h1>
 			) : (
 				<div className={styles.match_container}>
-					{allMatches.map((match, i) => (
+					{filteredMatches.map((match, i) => (
 						<MatchCard key={i} match={match} />
 					))}
 				</div>

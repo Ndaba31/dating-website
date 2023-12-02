@@ -17,10 +17,10 @@ const Page = () => {
 
 	const pumpkin = allUsers.find(({ stem }) => stem === id);
 
-	console.log(pumpkin);
+	console.log(user);
 
-	const [favorite, setFavorite] = useState(temp.likes);
-	const [slide, setSlide] = useState(temp.slide);
+	const [favorite, setFavorite] = useState(temp.like || false);
+	const [slide, setSlide] = useState(temp.slide || false);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
 

@@ -11,8 +11,15 @@ import { ArrowForwardIos } from '@mui/icons-material';
 // TODO EDIT DESIGN FOR [STEM] PROFILE
 
 const DiscoverCard = ({ id }) => {
-	const { allUsers, employedUsers, hobbyUsers, locatedUsers, postedUsers, connectedUsers } =
-		useDateContext();
+	const {
+		allUsers,
+		employedUsers,
+		isAuth,
+		hobbyUsers,
+		locatedUsers,
+		postedUsers,
+		connectedUsers,
+	} = useDateContext();
 
 	// const [user, setUser] = useState([]);
 	// const [occupations, setOccupations] = useState([]);
@@ -73,7 +80,7 @@ const DiscoverCard = ({ id }) => {
 						<div className={styles.discover_following} style={{ alignItems: 'center' }}>
 							<h2>Check out my profile</h2>
 							<Link
-								href={`profile/${user.stem}`}
+								href={isAuth ? `profile/${user.stem}` : 'login'}
 								style={{
 									color: '#9D6200',
 									backgroundColor: 'transparent',

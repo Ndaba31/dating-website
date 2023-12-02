@@ -5,7 +5,7 @@ import { ArrowForwardIos } from '@mui/icons-material';
 import Link from 'next/link';
 
 const MatchCard = ({ match }) => {
-	const { blog_post, couple_photo, date_accepted } = match;
+	const { blog_post, couple_photo, date_accepted, crush, crushee } = match;
 	const maxChar = 60;
 
 	return (
@@ -17,8 +17,12 @@ const MatchCard = ({ match }) => {
 				objectFit='cover'
 			/>
 			<div className={styles.overlay}>
-				{blog_post.length !== null && (
+				{blog_post !== null ? (
 					<p className={styles.text}>{blog_post.slice(0, maxChar)}</p>
+				) : (
+					<p className={styles.text}>
+						{crush} &hearts; {crushee}
+					</p>
 				)}
 
 				<div style={{ margin: '20px 0' }}>
