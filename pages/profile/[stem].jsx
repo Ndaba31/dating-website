@@ -19,7 +19,7 @@ const Page = () => {
 
 	console.log(user);
 
-	const [favorite, setFavorite] = useState(temp.like || false);
+	const [favorite, setFavorite] = useState(temp.likes || false);
 	const [slide, setSlide] = useState(temp.slide || false);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
