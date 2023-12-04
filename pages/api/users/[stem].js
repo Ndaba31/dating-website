@@ -26,6 +26,26 @@ export default async function products(req, res) {
 			values: [stem],
 		});
 
+		const hickies = await query({
+			query: 'SELECT crush AS hicky FROM matches WHERE crushee = ? AND slide = 1 and liked_back = 1 UNION SELECT crushee FROM matches WHERE crush = ? AND slide = 1 and liked_back = 1',
+			values: [stem, stem],
+		});
+
+		let hicky_list = [];
+
+		if (hickies.length !== 0) {
+			hickies.map(async ({ hicky }) => {
+				const person = await query({
+					query: 'SELECT profile_photo, nick_name, stem FROM user_details WHERE stem = ?;',
+					values: [hicky],
+				});
+
+				hicky_list.push(person);
+			});
+
+			console.log(hicky_list);
+		}
+
 		const posts = await query({
 			query: 'SELECT posts FROM posts WHERE stem = ?;',
 			values: [stem],
@@ -37,7 +57,7 @@ export default async function products(req, res) {
 			message = 'Could not find user';
 		}
 
-		console.log(user, occupations, locations, hobbies, posts, message);
+		// console.log(user, occupations, locations, hobbies, posts, message);
 
 		res.status(200).json({
 			user: user,
@@ -45,6 +65,7 @@ export default async function products(req, res) {
 			locations: locations,
 			hobbies: hobbies,
 			posts: posts,
+			hickies: hicky_list,
 			message: message,
 		});
 	}
@@ -85,7 +106,7 @@ export default async function products(req, res) {
 
 			const addOccupation = await query({
 				query: 'INSERT INTO occupations (stem, company, title) VALUES (?, ?, ?)',
-				values: [stem, occupation.title, occupation.company],
+				values: [stem, occupation.company, occupation.title],
 			});
 
 			addOccupation ? (message = 'Added Occupation') : (message = 'Failed to add occupation');

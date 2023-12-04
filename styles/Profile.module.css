@@ -3,19 +3,17 @@
 	display: flex;
 	flex-direction: column;
 	position: relative;
-	min-height: 100vh;
 }
 
 .left,
 .right {
 	width: 100%;
-	min-height: 100vh;
 	position: relative;
 }
 
-/* .right {
-	margin: 5px;
-} */
+.right {
+	text-transform: capitalize;
+}
 
 .followers {
 	display: flex;
@@ -37,7 +35,8 @@
 	margin-bottom: 16px;
 }
 
-.sex {
+.sex,
+.info * {
 	font-size: 16pt;
 	line-height: 24px;
 	font-style: italic;
@@ -48,27 +47,45 @@
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	gap: 16px;
-	/* padding: 8px; */
+	margin-bottom: 50px;
 }
 
 .hobby {
 	border: 2px solid #ccc;
-	padding: 8px;
+	padding: 12px 8px;
 	border-radius: 16px;
 	text-transform: capitalize;
 	color: white;
+	font-size: 12pt;
+	background-color: transparent;
 }
 
 .posts {
-	display: grid;
+	display: inline-grid;
 	grid-template-columns: repeat(1, minmax(0, 1fr));
-	gap: 16px;
+	grid-gap: 16px;
+	width: 100%;
 	justify-items: center;
+	align-items: center;
+}
+
+.images * {
+	width: 300px;
 }
 
 .top_section {
 	background-color: black;
 	padding: 5px;
+}
+
+.info {
+	display: flex;
+	gap: 24px;
+}
+
+.info_container {
+	display: grid;
+	grid-template-columns: 1fr;
 }
 
 .read {
@@ -120,21 +137,29 @@
 	cursor: pointer;
 }
 
+.hicky_container {
+	display: grid;
+	gird-template-columns: 1fr 1fr;
+}
+
 @media only screen and (min-width: 600px) {
 	.posts {
 		grid-template-columns: 50% 50%;
 	}
+
+	.info_container {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.images * {
+		width: 400px;
+	}
 }
 
 @media only screen and (min-width: 930px) {
-	/* .container {
-		flex-direction: row;
+	.container {
+		min-height: 100vh;
 	}
-
-	.left,
-	.right {
-		width: 50%;
-	} */
 
 	.left {
 		/* height: 100vh; */
@@ -147,6 +172,7 @@
 
 	.posts {
 		grid-template-columns: 33% 33% 33%;
+		gap: 0;
 	}
 
 	.hobbies {
@@ -155,5 +181,9 @@
 
 	.top_section {
 		padding: 20px;
+	}
+
+	.hicky_container {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
 }

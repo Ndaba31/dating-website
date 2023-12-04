@@ -21,7 +21,7 @@ const DateContextProvider = ({ children }) => {
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
 	const [allUsers, setAllUsers] = useState([]);
-	const [employedUsers, setEmployedUsers] = useState([]);
+	const [allOccupations, setAllOccupations] = useState([]);
 	const [hobbyUsers, setHobbyUsers] = useState([]);
 	const [locatedUsers, setLocatedUsers] = useState([]);
 	const [postedUsers, setPostedUsers] = useState([]);
@@ -43,8 +43,8 @@ const DateContextProvider = ({ children }) => {
 				setAllUsers,
 				allMatches,
 				setAllMatches,
-				employedUsers,
-				setEmployedUsers,
+				allOccupations,
+				setAllOccupations,
 				hobbyUsers,
 				setHobbyUsers,
 				locatedUsers,
