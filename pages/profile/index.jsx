@@ -5,6 +5,10 @@ import { useDateContext } from '@/context/dateContext';
 import styles from '@/styles/Profile.module.css';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/legacy/image';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faPlusSquare } from '@fortawesome/free-regular-svg-icons';
+import { AddBoxOutlined, EditNoteSharp } from '@mui/icons-material';
 
 const Profile = () => {
 	const { user } = useDateContext();
@@ -174,6 +178,20 @@ const Profile = () => {
 									</div>
 								</div>
 							)}
+							<div style={{ display: 'flex', justifyContent: 'space-around' }}>
+								<Link href='profile/edit' className={styles.link}>
+									<EditNoteSharp />
+									<p>Edit Profile</p>
+								</Link>
+								<Link
+									href='profile/post-image'
+									className={styles.link}
+									// className='border-2 border-purple-500 hover:bg-white hover:text-purple-500 flex space-x-4 rounded-lg items-center p-2'
+								>
+									<AddBoxOutlined />
+									<p>Post</p>
+								</Link>
+							</div>
 						</section>
 					</article>
 				)}
