@@ -120,6 +120,11 @@
 	cursor: pointer;
 }
 
+.hicky_container {
+	display: grid;
+	gird-template-columns: 1fr 1fr;
+}
+
 @media only screen and (min-width: 600px) {
 	.posts {
 		grid-template-columns: 50% 50%;
@@ -155,5 +160,9 @@
 
 	.top_section {
 		padding: 20px;
+	}
+
+	.hicky_container {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
 }

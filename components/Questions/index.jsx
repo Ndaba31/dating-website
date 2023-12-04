@@ -7,18 +7,6 @@ import styles from '@/styles/Signup.module.css';
 import { useDateContext } from '@/context/dateContext';
 import { AddCircle } from '@mui/icons-material';
 
-// export interface QuestionProps {
-//     count: number;
-//     total: number;
-//     question: string | string[];
-//     options?: string[];
-//     type: string;
-//     inpName: string;
-//     btnFunction: () => void;
-//     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-//     formData: UserExtended;
-// }
-
 const Questions = ({
 	count,
 	total,

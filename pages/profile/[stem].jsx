@@ -5,7 +5,9 @@ import styles from '@/styles/Profile.module.css';
 import Image from 'next/legacy/image';
 import Posts from '@/components/Posts';
 import { useDateContext } from '@/context/dateContext';
-import { Favorite, FavoriteBorder, PeopleAlt } from '@mui/icons-material';
+import { Favorite, FavoriteBorder, PeopleAlt, PeopleAltOutlined } from '@mui/icons-material';
+import Hickies from '@/components/Hickies';
+import Navbar from '@/components/Navbar';
 
 const Page = () => {
 	const router = useRouter();
@@ -21,6 +23,7 @@ const Page = () => {
 
 	const [favorite, setFavorite] = useState(temp.likes || false);
 	const [slide, setSlide] = useState(temp.slide || false);
+	const [hickies, setHickies] = useState([]);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
 
@@ -34,27 +37,28 @@ const Page = () => {
 		setShowAll(!showAll);
 	};
 
-	// const getUser = async () => {
-	// 	const getData = {
-	// 		method: 'GET',
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 	};
+	useEffect(() => {
+		const getUserHickies = async () => {
+			const getData = {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			};
 
-	// 	const res = await fetch(
-	// 		`${process.env.NEXT_PUBLIC_URL}/api/users/${router.query.stem}`,
-	// 		getData
-	// 	);
-	// 	const { user, message, occupations, locations, hobbies, posts } = await res.json();
+			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/users/${id}`, getData);
+			const { hickies } = await res.json();
 
-	// 	setUser(user[0]);
-	// 	setOccupations(occupations);
-	// 	setLocations(locations);
-	// 	setHobbies(hobbies);
-	// 	setPosts(posts);
-	// 	console.log('User function', user[0], message, occupations, locations, hobbies);
-	// };
+			setHickies(hickies);
+			// setOccupations(occupations);
+			// setLocations(locations);
+			// setHobbies(hobbies);
+			// setPosts(posts);
+			console.log('Profile stem function', hickies);
+		};
+
+		getUserHickies();
+	}, []);
 
 	useEffect(() => {
 		const toggleLike = async () => {
@@ -83,6 +87,36 @@ const Page = () => {
 		toggleLike();
 	}, [favorite, user.stem, id]);
 
+	useEffect(() => {
+		const toggleMatch = async () => {
+			let hickie_count = pumpkin.hickies === 0 ? 0 : pumpkin.hickies;
+
+			const updateData = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					hicky: slide === true ? 1 : 0,
+					update: 'hicky',
+					crushee: user.stem,
+					crush: id,
+					hickie_count: slide ? ++hickie_count : hickie_count === 0 ? 0 : --hickie_count,
+				}),
+			};
+
+			const slideUser = await fetch(
+				`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+				updateData
+			);
+			const { message } = await slideUser.json();
+
+			// if (message === 'Liked profile!') setFavorite(!favorite);
+		};
+
+		toggleMatch();
+	}, [slide]);
+
 	console.log(pumpkin);
 	const age =
 		pumpkin.dob !== undefined || pumpkin.dob !== null
@@ -98,6 +132,7 @@ const Page = () => {
 	return (
 		<>
 			<Header title={id} />
+			<Navbar page='profile' />
 			<div className={styles.container}>
 				<div className={styles.left}>
 					<Image
@@ -164,15 +199,26 @@ const Page = () => {
 										<FavoriteBorder className={styles.favorite} />
 									)}
 								</button>
-								<button className={styles.match_button}>
-									<p style={{ fontSize: '12pt' }}>Slide</p>
-									<PeopleAlt />
+								<button
+									onClick={() => setSlide(!slide)}
+									className={styles.match_button}
+								>
+									{slide && temp.liked_back ? (
+										<p style={{ fontSize: '12pt' }}>Unmatch</p>
+									) : slide && !temp.liked_back ? (
+										<p style={{ fontSize: '12pt' }}>Pending</p>
+									) : (
+										<p style={{ fontSize: '12pt' }}>Slide</p>
+									)}
+									<PeopleAltOutlined />
 								</button>
 							</div>
 						)}
 					</section>
 				</article>
 			</div>
+			{/* <Hickies hickies={hickies} /> */}
+			{console.log(hickies)}
 			<div style={{ padding: '16px' }}>
 				{posts.length !== 0 ? (
 					<>
