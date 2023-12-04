@@ -40,33 +40,6 @@ const Page = () => {
 		setShowAll(!showAll);
 	};
 
-<<<<<<< HEAD
-	// const getUser = async () => {
-	// 	const getData = {
-	// 		method: 'GET',
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 	};
-
-	// 	const res = await fetch(
-	// 		`${process.env.NEXT_PUBLIC_URL}/api/users/${router.query.stem}`,
-	// 		getData
-	// 	);
-	// 	const { user, message, occupations, locations, hobbies, posts } = await res.json();
-
-	// 	setUser(user[0]);
-	// 	setOccupations(occupations);
-	// 	setLocations(locations);
-	// 	setHobbies(hobbies);
-	// 	setPosts(posts);
-	// 	console.log('User function', user[0], message, occupations, locations, hobbies);
-	// };
-     console.log(pumpkin.pumpkins)
-
-
-=======
->>>>>>> 1fe95df737cb3ed27eeb9d6f07791859eb2a043b
 	useEffect(() => {
 		const getPumpkin = async () => {
 			const getData = {
@@ -76,35 +49,8 @@ const Page = () => {
 				},
 			};
 
-<<<<<<< HEAD
-			const removeData = {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					like: favorite === true ? 1 : 0,
-					update: 'dislike',
-					crushee: user.stem,
-					crush: id,
-					like_count: favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
-				}),
-			};
-
-			if(favorite){
-				const likeUser = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, updateData);
-				const { message } = await likeUser.json();
-			}else{
-				const removeLike = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,removeData);
-			}
-			
-			
-			
-			
-=======
 			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumkins/${id}`, getData);
 			const { user, occupations, hobbies, posts, location, message } = await res.json();
->>>>>>> 1fe95df737cb3ed27eeb9d6f07791859eb2a043b
 
 			setPumpkin(user);
 			setOccupations(occupations);
@@ -119,25 +65,6 @@ const Page = () => {
 
 		getPumpkin();
 	}, []);
-
-	useEffect(() => {
-		const slideApproach = async () ={
-         
-			const slide_Data = {
-				method: 'PUT',
-				headers:{
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					update:'slide',
-					crushee: stem.id,
-					crush: id
-				}),
-			}
-		};
-	
-	  
-	}, [slide,user.stem,id])
 	
 
 

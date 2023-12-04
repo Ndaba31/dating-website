@@ -51,30 +51,8 @@ export default async function handler(req, res) {
 				values: [like_count, crush],
 			});
 
-<<<<<<< HEAD
-			const likeProfile = await query({
-				query: 'INSERT into likes (crushee,crush) values (?,?)',
-				values: [crushee,crush],
-			});
-
-			message = updateLike && updatePumpkin && likeProfile ? 'Liked profile!' : 'Error with Like Button';
-		}else if(update == 'dislike'){
-			const dislike = await query({
-               query: 'DELETE from likes where crushee = ? AND crush = ?',
-			   values: [crushee,crush],
-			});
-
-			const updatePumpkin = await query({
-				query: `UPDATE user_details SET pumpkins = ? WHERE stem = ?`,
-				values: [like_count, crush],
-			});
-
-			message = dislike && updatePumpkin ? 'Removed Like' : 'Error';
-			console.log(message)
-=======
 			console.log(like, update, crush, crushee, like_count);
 			message = updateLike && updatePumpkin ? 'Liked profile!' : 'Error with Like Button';
->>>>>>> 1fe95df737cb3ed27eeb9d6f07791859eb2a043b
 		}
 
 		if (update === 'hicky') {
