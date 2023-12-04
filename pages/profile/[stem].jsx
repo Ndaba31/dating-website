@@ -55,6 +55,8 @@ const Page = () => {
 	// 	setPosts(posts);
 	// 	console.log('User function', user[0], message, occupations, locations, hobbies);
 	// };
+     console.log(pumpkin.pumpkins)
+
 
 	useEffect(() => {
 		const toggleLike = async () => {
@@ -74,14 +76,58 @@ const Page = () => {
 				}),
 			};
 
-			const likeUser = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, updateData);
-			const { message } = await likeUser.json();
+			const removeData = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					like: favorite === true ? 1 : 0,
+					update: 'dislike',
+					crushee: user.stem,
+					crush: id,
+					like_count: favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
+				}),
+			};
+
+			if(favorite){
+				const likeUser = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, updateData);
+				const { message } = await likeUser.json();
+			}else{
+				const removeLike = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,removeData);
+			}
+			
+			
+			
+			
 
 			// if (message === 'Liked profile!') setFavorite(!favorite);
 		};
 
 		toggleLike();
 	}, [favorite, user.stem, id]);
+
+	useEffect(() => {
+		const slideApproach = async () ={
+         
+			const slide_Data = {
+				method: 'PUT',
+				headers:{
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					update:'slide',
+					crushee: stem.id,
+					crush: id
+				}),
+			}
+		};
+	
+	  
+	}, [slide,user.stem,id])
+	
+
+
 
 	console.log(pumpkin);
 	const age =
