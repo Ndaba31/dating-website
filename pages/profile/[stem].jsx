@@ -13,24 +13,27 @@ const Page = () => {
 	const router = useRouter();
 	const id = router.query.stem;
 
-	const { allUsers, allMatches, user, employedUsers, isAuth } = useDateContext();
+	const { user, isAuth, setError, error } = useDateContext();
 
-	const temp = allMatches.find(({ crushee, crush }) => crushee === user.stem && crush === id);
+	// const temp = allMatches.find(({ crushee, crush }) => crushee === user.stem && crush === id);
 
-	const pumpkin = allUsers.find(({ stem }) => stem === id);
+	// const pumpkin = allUsers.find(({ stem }) => stem === id);
 
-	console.log(user);
+	console.log(id);
 
-	const [favorite, setFavorite] = useState(temp.likes || false);
-	const [slide, setSlide] = useState(temp.slide || false);
-	const [hickies, setHickies] = useState([]);
+	const [favorite, setFavorite] = useState(false);
+	const [slide, setSlide] = useState(false);
+	// const [hickies, setHickies] = useState([]);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
+	const [occupations, setOccupations] = useState([]);
+	const [location, setLocation] = useState({});
+	const [pumpkin, setPumpkin] = useState({});
 
 	const maxChar = 150;
 	const [showAll, setShowAll] = useState(false);
 
-	console.log(temp);
+	// console.log(temp);
 	// setFavorite();
 
 	const toggleReadMore = () => {
@@ -38,7 +41,7 @@ const Page = () => {
 	};
 
 	useEffect(() => {
-		const getUserHickies = async () => {
+		const getPumpkin = async () => {
 			const getData = {
 				method: 'GET',
 				headers: {
@@ -46,89 +49,32 @@ const Page = () => {
 				},
 			};
 
-			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/users/${id}`, getData);
-			const { hickies } = await res.json();
+			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumkins/${id}`, getData);
+			const { user, occupations, hobbies, posts, location, message } = await res.json();
 
-			setHickies(hickies);
-			// setOccupations(occupations);
-			// setLocations(locations);
-			// setHobbies(hobbies);
-			// setPosts(posts);
-			console.log('Profile stem function', hickies);
+			setPumpkin(user);
+			setOccupations(occupations);
+			setHobbies(hobbies);
+			setPosts(posts);
+			setLocation(location);
+
+			if (message === 'User Not Found') {
+				setError(message);
+			}
 		};
 
-		getUserHickies();
+		getPumpkin();
 	}, []);
 
-	useEffect(() => {
-		const toggleLike = async () => {
-			let like_count = pumpkin.pumpkins === 0 ? 0 : pumpkin.pumpkins;
-
-			const updateData = {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					like: favorite === true ? 1 : 0,
-					update: 'like',
-					crushee: user.stem,
-					crush: id,
-					like_count: favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
-				}),
-			};
-
-			const likeUser = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, updateData);
-			const { message } = await likeUser.json();
-
-			// if (message === 'Liked profile!') setFavorite(!favorite);
-		};
-
-		toggleLike();
-	}, [favorite, user.stem, id]);
-
-	useEffect(() => {
-		const toggleMatch = async () => {
-			let hickie_count = pumpkin.hickies === 0 ? 0 : pumpkin.hickies;
-
-			const updateData = {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					hicky: slide === true ? 1 : 0,
-					update: 'hicky',
-					crushee: user.stem,
-					crush: id,
-					hickie_count: slide ? ++hickie_count : hickie_count === 0 ? 0 : --hickie_count,
-				}),
-			};
-
-			const slideUser = await fetch(
-				`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
-				updateData
-			);
-			const { message } = await slideUser.json();
-
-			// if (message === 'Liked profile!') setFavorite(!favorite);
-		};
-
-		toggleMatch();
-	}, [slide]);
-
 	console.log(pumpkin);
-	const age =
-		pumpkin.dob !== undefined || pumpkin.dob !== null
-			? new Date().getFullYear() - new Date(pumpkin.dob).getFullYear() + ' y/o'
-			: '';
+	let age;
 
-	const occupations = employedUsers
-		.filter((array, i) => array.length !== 0)
-		.map((arr) => arr.filter(({ stem }) => stem === id))
-		.filter((list) => list.length !== 0);
+	if (pumpkin === undefined || pumpkin.dob === undefined || pumpkin.dob === null) {
+		age = '';
+	} else {
+		age = new Date().getFullYear() - new Date(pumpkin.dob).getFullYear();
+	}
 
-	console.log(occupations);
 	return (
 		<>
 			<Header title={id} />
@@ -137,89 +83,147 @@ const Page = () => {
 				<div className={styles.left}>
 					<Image
 						src={
+							pumpkin === undefined ||
+							pumpkin.profile_photo === undefined ||
 							pumpkin.profile_photo === null
 								? '/no_photo.png'
 								: '/' + pumpkin.profile_photo
 						}
 						alt={`/${
-							pumpkin.profile_photo === null ? pumpkin.profile_photo : 'No Photo'
+							pumpkin === undefined ||
+							pumpkin.profile_photo === undefined ||
+							pumpkin.profile_photo === null
+								? 'No Photo'
+								: pumpkin.profile_photo
 						}`}
 						width={500}
 						height={500}
 						layout='responsive'
 						// objectFit='cover'
 						priority
-						style={{ width: '100%', height: '100%' }}
+						// style={{ width: '100%', height: '100%' }}
 					/>
 				</div>
 
-				<article className={styles.right}>
-					<section className={styles.followers}>
-						<p>{pumpkin.pumpkins} Pumpkins</p>
-						<p>{pumpkin.hickies} Hickies</p>
-					</section>
-					<section className={styles.top_section}>
-						{pumpkin.nick_name && (
-							<h1 style={{ fontSize: '24pt', lineHeight: '24px' }}>
-								{pumpkin.nick_name}
-							</h1>
-						)}
-						<p className={styles.heading}>
-							{pumpkin.first_name + ' ' + pumpkin.last_name + ', ' + age}
-						</p>
-						{pumpkin.sex &&
-							pumpkin.sex !== 'X' &&
-							(pumpkin.sex === 'M' ? (
-								<p className={styles.sex}>Male</p>
-							) : (
-								<p className={styles.sex}>Female</p>
-							))}
-						{pumpkin.bio && (
-							<div className={styles.section}>
-								{/* <h1 className={styles.heading}>About</h1> */}
-								<p style={{ fontSize: '16pt' }}>
-									{showAll ? pumpkin.bio : pumpkin.bio.slice(0, maxChar)}
-								</p>
-								{pumpkin.bio.length > maxChar && (
-									<button onClick={toggleReadMore} className={styles.read}>
-										{showAll ? 'Read Less' : 'Read More'}
-									</button>
+				{pumpkin !== undefined && (
+					<article className={styles.right}>
+						<section className={styles.followers}>
+							<p>{pumpkin.pumpkins} Pumpkins</p>
+							<p>{pumpkin.hickies} Hickies</p>
+						</section>
+						<section className={styles.top_section}>
+							{pumpkin.nick_name !== null && (
+								<h1 style={{ fontSize: '24pt', lineHeight: '24px' }}>
+									{pumpkin.nick_name}
+								</h1>
+							)}
+							<p className={styles.heading}>
+								{pumpkin.first_name + ' ' + pumpkin.last_name + ', ' + age}
+							</p>
+							{occupations.length !== 0 &&
+								occupations.map(({ title, company }, i) => (
+									<p key={i} style={{ fontSize: '14pt' }}>
+										{title} at {company}
+									</p>
+								))}
+							{pumpkin.sex &&
+								pumpkin.sex !== 'X' &&
+								(pumpkin.sex === 'M' ? (
+									<p className={styles.sex}>Male</p>
+								) : (
+									<p className={styles.sex}>Female</p>
+								))}
+							<div className={styles.info_container}>
+								{location !== undefined && location.city && (
+									<div className={styles.info}>
+										<p>Closest City:</p>
+										<p>{location.city}</p>
+									</div>
+								)}
+								{location !== undefined && location.region && (
+									<div className={styles.info}>
+										<p>Region:</p>
+										<p>{location.region}</p>
+									</div>
+								)}
+								{pumpkin.ethnicity && (
+									<div className={styles.info}>
+										<p>Ethnicity:</p>
+										<p>{pumpkin.ethnicity}</p>
+									</div>
+								)}
+								{pumpkin.relationship_status && (
+									<div className={styles.info}>
+										<p>Relationship Status:</p>
+										<p>{pumpkin.relationship_status}</p>
+									</div>
+								)}
+								{pumpkin.religion && (
+									<div className={styles.info}>
+										<p>Religion:</p>
+										<p>{pumpkin.religion}</p>
+									</div>
 								)}
 							</div>
-						)}
-						{isAuth && (
-							<div style={{ display: 'flex', justifyContent: 'space-around' }}>
-								<button
-									onClick={() => setFavorite(!favorite)}
-									style={{ backgroundColor: 'transparent', border: 0 }}
-								>
-									{favorite ? (
-										<Favorite className={styles.favorite} />
-									) : (
-										<FavoriteBorder className={styles.favorite} />
+							{pumpkin.bio && (
+								<div className={styles.section}>
+									<h2>About</h2>
+									<p style={{ fontSize: '16pt' }}>
+										{showAll ? pumpkin.bio : pumpkin.bio.slice(0, maxChar)}
+									</p>
+									{pumpkin.bio.length > maxChar && (
+										<button onClick={toggleReadMore} className={styles.read}>
+											{showAll ? 'Read Less' : 'Read More'}
+										</button>
 									)}
-								</button>
-								<button
-									onClick={() => setSlide(!slide)}
-									className={styles.match_button}
-								>
-									{slide && temp.liked_back ? (
-										<p style={{ fontSize: '12pt' }}>Unmatch</p>
-									) : slide && !temp.liked_back ? (
-										<p style={{ fontSize: '12pt' }}>Pending</p>
-									) : (
-										<p style={{ fontSize: '12pt' }}>Slide</p>
-									)}
-									<PeopleAltOutlined />
-								</button>
-							</div>
-						)}
-					</section>
-				</article>
+								</div>
+							)}
+							{hobbies.length !== 0 && (
+								<div>
+									<h2>Hobbies</h2>
+									<div className={styles.hobbies}>
+										{hobbies.map(({ hobby }, i) => (
+											<button key={i} className={styles.hobby} disabled>
+												{hobby}
+											</button>
+										))}
+									</div>
+								</div>
+							)}
+							{isAuth && (
+								<div style={{ display: 'flex', justifyContent: 'space-around' }}>
+									<button
+										onClick={() => setFavorite(!favorite)}
+										style={{ backgroundColor: 'transparent', border: 0 }}
+									>
+										{favorite ? (
+											<Favorite className={styles.favorite} />
+										) : (
+											<FavoriteBorder className={styles.favorite} />
+										)}
+									</button>
+									<button
+										onClick={() => setSlide(!slide)}
+										className={styles.match_button}
+									>
+										{slide && temp.liked_back ? (
+											<p style={{ fontSize: '12pt' }}>Unmatch</p>
+										) : slide && !temp.liked_back ? (
+											<p style={{ fontSize: '12pt' }}>Pending</p>
+										) : (
+											<p style={{ fontSize: '12pt' }}>Slide</p>
+										)}
+										<PeopleAltOutlined />
+									</button>
+								</div>
+							)}
+						</section>
+					</article>
+				)}
 			</div>
 			{/* <Hickies hickies={hickies} /> */}
-			{console.log(hickies)}
-			<div style={{ padding: '16px' }}>
+			{/* {console.log(hickies)} */}
+			<div style={{ padding: '16px', display: 'grid' }}>
 				{posts.length !== 0 ? (
 					<>
 						<h1
