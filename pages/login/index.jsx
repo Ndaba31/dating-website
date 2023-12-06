@@ -79,6 +79,7 @@ const Login = () => {
 						width={500}
 						height={500}
 						layout='responsive'
+						priority
 					/>
 				</div>
 

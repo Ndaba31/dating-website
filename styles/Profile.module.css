@@ -69,6 +69,10 @@
 	align-items: center;
 }
 
+/* .images {
+	position: relative;
+} */
+
 .images * {
 	width: 300px;
 }
@@ -159,6 +163,335 @@
 	color: purple;
 }
 
+.edit_container {
+	padding: 16px;
+}
+
+.edit_form {
+	display: flex;
+	flex-direction: column;
+}
+
+.edit_left {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	/* padding: 8px; */
+}
+
+.edit_right {
+	width: 100%;
+	padding: 8px;
+}
+
+.edit_img_container {
+	width: 200px;
+	height: 200px;
+	border-radius: 10px;
+	border: 2px solid white;
+}
+
+.edit_img_container * {
+	border-radius: 10px;
+	width: 100%;
+	height: 100%;
+}
+
+.edit_names {
+	text-align: center;
+	margin: 16px 0;
+	font-size: 18px;
+	line-height: 20px;
+}
+
+.edit_upload_button,
+.edit_delete_button {
+	background-color: #a238ff;
+	color: white;
+	padding: 8px 16px;
+	border-radius: 10px;
+	maring: 4px 0;
+	font-size: 14pt;
+	border: 2px solid white;
+}
+
+.edit_upload_button:hover,
+.edit_delete_button:hover {
+	cursor: pointer;
+	background-color: transparent;
+}
+
+.edit_delete_button {
+	background-color: red;
+}
+
+.edit_bio {
+	margin: '16px 0';
+	padding: 8px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.edit_bio_heading,
+.edit_heading {
+	font-size: 18px;
+	line-height: 20px;
+	font-weight: bold;
+	text-transform: uppercase;
+	margin-bottom: 8px;
+}
+
+.edit_heading {
+	text-transform: capitalize;
+}
+
+.edit_options_container {
+	display: flex;
+	justify-content: flex-start;
+	/* align-items: center; */
+	margin-bottom: 16px;
+}
+
+.edit_basic_info {
+	font-size: 22px;
+	line-height: 24px;
+	font-weight: bold;
+	margin: auto;
+}
+
+.edit_options {
+	display: none;
+}
+
+.edit_options_buttons {
+	padding: 8px 32px;
+	color: white;
+	border-radius: 10px;
+	margin: 4px 0;
+	border: 2px solid #ccc;
+	font-size: 14pt;
+}
+
+.edit_options_buttons:hover {
+	cursor: pointer;
+}
+
+.edit_cancel {
+	border: 2px solid #a238ff;
+	background-color: transparent;
+	text-decoration: none;
+}
+
+.edit_cancel:hover {
+	border: 2px solid #ccc;
+	background-color: #a238ff;
+}
+
+.edit_save {
+	background-color: #a238ff;
+	border: 2px solid #a238ff;
+}
+
+.edit_save:hover {
+	background-color: transparent;
+}
+
+.edit_input_container {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 16px;
+	padding: 16px;
+	margin: 16px 0;
+}
+
+.edit_input_container div {
+	display: flex;
+	flex-direction: column;
+}
+
+.edit_input_container div:nth-child(1) {
+	display: flex;
+	flex-direction: flex-column;
+}
+
+.edit_input_container div:nth-child(2) {
+	display: flex;
+	flex-direction: flex-column;
+	margin-top: 16px;
+}
+
+.edit_input_container div label {
+	text-align: left;
+}
+
+.edit_text_input {
+	width: 100%;
+	margin-bottom: 30px;
+	padding: 10px;
+	border-bottom: 2px solid #ccc;
+	border-top: 0px;
+	border-left: 0px;
+	border-right: 0px;
+	color: #ccc;
+	font-size: 12pt;
+	background-color: transparent;
+}
+
+.edit_textarea {
+	background-color: transparent;
+	border: 2px solid white;
+	width: 90%;
+	height: 200px;
+	padding: 8px;
+	border-radius: 18px;
+}
+
+.edit_select_opt {
+	background-color: transparent;
+	color: black;
+}
+
+.edit_hobbies_container {
+	display: flex;
+	gap: 16px;
+	justify-content: center;
+	align-items: center;
+}
+
+.edit_hobbies {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	padding: 16px;
+	margin: 16px 0;
+}
+
+.edit_hobby_button {
+	border: 2px solid white;
+	padding: 8px;
+	display: flex;
+	gap: 16px;
+	justify-content: center;
+	align-items: center;
+	border-radius: 5px;
+	text-transform: capitalize;
+	background-color: transparent;
+	font-size: 12pt;
+	color: white;
+}
+
+.edit_hobby_button:hover {
+	border-color: red;
+	color: red;
+	cursor: pointer;
+}
+
+.edit_add_hobby {
+	background-color: transparent;
+	color: white;
+	border: 0;
+}
+
+.edit_add_hobby:hover {
+	cursor: pointer;
+	color: green;
+}
+
+.edit_more_info {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 16px;
+	padding: 16px;
+	margin: 16px 0;
+}
+
+.edit_general_input {
+	display: flex;
+	flex-direction: flex-column;
+	margin-top: 16px;
+}
+
+.edit_general_input label {
+	text-align: left;
+}
+
+.edit_general_input_second {
+	display: flex;
+	flex-direction: flex-column;
+}
+
+.edit_general_input_second label {
+	text-align: left;
+}
+
+.edit_occupations {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 16px;
+}
+
+.edit_occupations_button {
+	background-color: #a238ff;
+	border: 2px solid white;
+	padding: 8px;
+	width: 100px;
+	height: 50px;
+	display: flex;
+	gap: 16px;
+	justify-content: center;
+	align-items: center;
+	color: white;
+	border-radius: 5px;
+	text-transform: capitalize;
+}
+
+.edit_occupations_button:hover {
+	background-color: transparent;
+	border-color: green;
+	color: green;
+	cursor: pointer;
+}
+
+.edit_occupations_display {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 16px;
+	padding: 16px;
+	margin: 16px 0;
+}
+
+.edit_pop_occupation {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	gap: 8px;
+	border: 2px solid white;
+	padding: 8px;
+	border-radius: 5px;
+	text-transform: capitalize;
+	align-items: center;
+	background-color: transparent;
+	color: white;
+}
+
+.edit_pop_occupation:hover {
+	border-color: red;
+	color: red;
+}
+
+.edit_social_container {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 16px;
+}
+
+.edit_socials {
+	display: flex;
+	flex-direction: column;
+	margin-top: 16px;
+}
+
 @media only screen and (min-width: 600px) {
 	.posts {
 		grid-template-columns: 50% 50%;
@@ -202,5 +535,63 @@
 
 	.hicky_container {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+
+	.edit_form {
+		flex-direction: row;
+	}
+
+	.edit_left {
+		/* flex-direction: row; */
+		width: 33%;
+		align-items: center;
+		justify-content: flex-start;
+	}
+
+	.edit_right {
+		width: 67%;
+	}
+
+	.edit_basic_info {
+		margin: 0;
+		text-align: left;
+	}
+
+	.edit_options_container {
+		justify-content: space-between;
+	}
+
+	.edit_options {
+		display: flex;
+		gap: 16px;
+	}
+
+	.edit_input_container {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.edit_text_input,
+	.edit_textarea {
+		width: 75%;
+	}
+
+	.edit_input_container div:nth-child(2) {
+		margin-top: 0;
+	}
+
+	.edit_hobbies {
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+	}
+
+	.edit_more_info {
+		grid-template-columns: 1fr 1fr 1fr;
+	}
+
+	.edit_occupations {
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	}
+
+	.edit_socials {
+		margin-top: 0;
 	}
 }

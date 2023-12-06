@@ -11,10 +11,11 @@ import { faPenToSquare, faPlusSquare } from '@fortawesome/free-regular-svg-icons
 import { AddBoxOutlined, EditNoteSharp } from '@mui/icons-material';
 
 const Profile = () => {
-	const { user } = useDateContext();
-	const [hobbies, setHobbies] = useState([]);
-	const [posts, setPosts] = useState([]);
-	const [occupations, setOccupations] = useState([]);
+	const { user, setUser, setHobbies, hobbies, setOccupations, occupations, posts, setPosts } =
+		useDateContext();
+	// const [hobbies, setHobbies] = useState([]);
+	// const [posts, setPosts] = useState([]);
+	// const [occupations, setOccupations] = useState([]);
 	const [location, setLocation] = useState({});
 	const [pumpkin, setPumpkin] = useState({});
 
@@ -42,6 +43,7 @@ const Profile = () => {
 			const { user, occupations, hobbies, posts, location, message } = await res.json();
 
 			setPumpkin(user);
+			setUser(user);
 			setOccupations(occupations);
 			setHobbies(hobbies);
 			setPosts(posts);
