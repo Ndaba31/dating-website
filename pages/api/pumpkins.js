@@ -96,6 +96,42 @@ export default async function handler(req, res) {
 			});
 
 			message = dislike && updatePumpkin ? 'Removed Like' : 'Error';
+		}else if(update == 'slide'){
+			const currentDate = new Date().toISOString()
+
+             const checkOppMatch = await query({
+			 	query: 'SELECT * From matches WHERE crush = ? AND crushee = ?',
+			 	values: [crushee,crush]
+			 })
+
+			 if(checkOppMatch){
+				
+			 	const checkMatch = await query({
+			 		query: 'SELECT * From matches WHERE crushee = ? AND crush = ?',
+			 		values: [crushee,crush]
+			 	})
+
+				if(checkMatch){
+					const initiateSlide = await query({
+						query: `INSERT into matches (crushee,crush,date_slide,slide) values (?,?,?,?) `,
+						values: [crushee,crush,currentDate,1]
+					});
+					message = initiateSlide&&(checkOppMatch)&&(checkMatch) ? 'Slide Initiated' : 'Slide1 has already been initiated';
+				}else{
+					message='slide2 has already initiated'
+				}
+			}else{
+              message='slide3 has already been initiated'
+			}
+			
+			        console.log(message)
+		}else if(update == 'slideout'){
+			const removeSlide =await query({
+				query: `DELETE from matches where crushee = ? AND crush = ?`,
+				values: [crushee,crush]
+			});
+
+			message = removeSlide ? 'Slide Cancelled' : 'There is no slide to retract'
 			console.log(message)
 		}
 

@@ -19,7 +19,7 @@ const Page = () => {
 
 	console.log(user);
 
-	const [favorite, setFavorite] = useState(temp.likes || false);
+	const [favorite, setFavorite] = useState(/*temp.likes || */false);
 	const [slide, setSlide] = useState(temp.slide || false);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
@@ -55,7 +55,6 @@ const Page = () => {
 	// 	setPosts(posts);
 	// 	console.log('User function', user[0], message, occupations, locations, hobbies);
 	// };
-     console.log(pumpkin.pumpkins)
 
 
 	useEffect(() => {
@@ -108,22 +107,42 @@ const Page = () => {
 	}, [favorite, user.stem, id]);
 
 	useEffect(() => {
-		const slideApproach = async () ={
+		const slideApproach = async () =>{
          
-			const slide_Data = {
+			const slideData = {
 				method: 'PUT',
 				headers:{
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
 					update:'slide',
-					crushee: stem.id,
+					crushee: user.stem,
 					crush: id
 				}),
 			}
+
+			const cancelSlide = {
+				method: 'PUT',
+				headers:{
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					update:'slideout',
+					crushee: user.stem,
+					crush: id
+				}),
+			}
+
+			if(slide){
+				const slide_onUser = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,slideData)
+			  }else{
+				const slideCancel = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,cancelSlide)
+			  }
 		};
+
+		
 	
-	  
+	  slideApproach();
 	}, [slide,user.stem,id])
 	
 
@@ -210,8 +229,10 @@ const Page = () => {
 										<FavoriteBorder className={styles.favorite} />
 									)}
 								</button>
-								<button className={styles.match_button}>
-									<p style={{ fontSize: '12pt' }}>Slide</p>
+								
+								<button onClick={()=>setSlide(!slide)} className={!slide?styles.match_button:styles.match_button_clicked}>
+                                     {!slide ? <p style={{ fontSize: '12pt' }}>Slide</p>:<p style={{ fontSize: '12pt' }}>Gwababa</p>} 
+									
 									<PeopleAlt />
 								</button>
 							</div>
