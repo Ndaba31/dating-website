@@ -514,7 +514,7 @@ const EditProfile = () => {
 							<h1 className={styles.edit_heading}>Social Media</h1>
 							<div className={styles.edit_social_container}>
 								{social_media.map(({ link, social }, i) => (
-									<div key={1} className={styles.edit_socials}>
+									<div key={i} className={styles.edit_socials}>
 										<label htmlFor={social} style={{ textAlign: 'left' }}>
 											{social}
 										</label>

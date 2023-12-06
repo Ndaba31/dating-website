@@ -492,6 +492,34 @@
 	margin-top: 16px;
 }
 
+.post_form {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 16px 0;
+}
+
+.post {
+	border: 2px solid white;
+	border-radius: 10px;
+	margin-bottom: 16px;
+	width: 300px;
+	height: 400px;
+}
+
+.flex_center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.flex_col_center {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 @media only screen and (min-width: 600px) {
 	.posts {
 		grid-template-columns: 50% 50%;
@@ -593,5 +621,9 @@
 
 	.edit_socials {
 		margin-top: 0;
+	}
+
+	.post_general {
+		width: 400px;
 	}
 }
