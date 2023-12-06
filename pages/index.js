@@ -45,8 +45,6 @@ export default function Home() {
 		getInfo();
 	}, []);
 
-	console.log(connectedUsers);
-
 	return (
 		<div style={{ bacground: 'linear-gradient(to right, #200b33, #19171c, #19276b)' }}>
 			<Header title='Pumpkin' description='Where true love meets fortune' />

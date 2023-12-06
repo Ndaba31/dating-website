@@ -5,12 +5,17 @@ import { useDateContext } from '@/context/dateContext';
 import styles from '@/styles/Profile.module.css';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/legacy/image';
+import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPenToSquare, faPlusSquare } from '@fortawesome/free-regular-svg-icons';
+import { AddBoxOutlined, EditNoteSharp } from '@mui/icons-material';
 
 const Profile = () => {
-	const { user } = useDateContext();
-	const [hobbies, setHobbies] = useState([]);
-	const [posts, setPosts] = useState([]);
-	const [occupations, setOccupations] = useState([]);
+	const { user, setUser, setHobbies, hobbies, setOccupations, occupations, posts, setPosts } =
+		useDateContext();
+	// const [hobbies, setHobbies] = useState([]);
+	// const [posts, setPosts] = useState([]);
+	// const [occupations, setOccupations] = useState([]);
 	const [location, setLocation] = useState({});
 	const [pumpkin, setPumpkin] = useState({});
 
@@ -38,6 +43,7 @@ const Profile = () => {
 			const { user, occupations, hobbies, posts, location, message } = await res.json();
 
 			setPumpkin(user);
+			setUser(user);
 			setOccupations(occupations);
 			setHobbies(hobbies);
 			setPosts(posts);
@@ -174,6 +180,20 @@ const Profile = () => {
 									</div>
 								</div>
 							)}
+							<div style={{ display: 'flex', justifyContent: 'space-around' }}>
+								<Link href='profile/edit' className={styles.link}>
+									<EditNoteSharp />
+									<p>Edit Profile</p>
+								</Link>
+								<Link
+									href='profile/post-image'
+									className={styles.link}
+									// className='border-2 border-purple-500 hover:bg-white hover:text-purple-500 flex space-x-4 rounded-lg items-center p-2'
+								>
+									<AddBoxOutlined />
+									<p>Post</p>
+								</Link>
+							</div>
 						</section>
 					</article>
 				)}

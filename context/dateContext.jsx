@@ -21,10 +21,11 @@ const DateContextProvider = ({ children }) => {
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
 	const [allUsers, setAllUsers] = useState([]);
+	const [occupations, setOccupations] = useState([]);
 	const [allOccupations, setAllOccupations] = useState([]);
-	const [hobbyUsers, setHobbyUsers] = useState([]);
+	const [hobbies, setHobbies] = useState([]);
 	const [locatedUsers, setLocatedUsers] = useState([]);
-	const [postedUsers, setPostedUsers] = useState([]);
+	const [posts, setPosts] = useState([]);
 	const [connectedUsers, setConnectedUsers] = useState([]);
 	const [allMatches, setAllMatches] = useState([]);
 
@@ -43,14 +44,16 @@ const DateContextProvider = ({ children }) => {
 				setAllUsers,
 				allMatches,
 				setAllMatches,
+				occupations,
+				setOccupations,
 				allOccupations,
 				setAllOccupations,
-				hobbyUsers,
-				setHobbyUsers,
+				hobbies,
+				setHobbies,
 				locatedUsers,
 				setLocatedUsers,
-				postedUsers,
-				setPostedUsers,
+				posts,
+				setPosts,
 				connectedUsers,
 				setConnectedUsers,
 				isAuth,

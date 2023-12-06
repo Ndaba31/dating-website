@@ -31,24 +31,22 @@ const DiscoverCard = ({ id }) => {
 	const occupationArrays = allOccupations.filter(({ stem }) => stem === id);
 	const socialArrays = connectedUsers.filter(({ stem }) => stem === id);
 
-	console.log(socialArrays);
-
 	return (
 		<div className={styles.discover_container}>
 			<div className={styles.discover_card}>
 				<div className={styles.discover_image}>
 					<Image
-						width={500}
-						height={500}
-						layout='responsive'
-						// objectFit='contain'
+						// width={500}
+						// height={500}
+						layout='fill'
+						objectFit='cover'
 						quality={100}
 						alt={user.profile_photo === null ? 'No profile photo' : user.profile_photo}
 						src={
 							user.profile_photo === null ? '/no_photo.png' : '/' + user.profile_photo
 						}
 						style={{
-							// height: '100%',
+							// minHeight: '100%',
 							// width: '100%',
 							borderRight: user.profile_photo === null ? '2px solid #ccc' : '0',
 						}}

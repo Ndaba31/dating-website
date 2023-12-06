@@ -85,11 +85,12 @@
 }
 
 .discover_image {
+	position: relative;
 	width: 100%;
 	padding: 0;
 	border-radius: 20px;
 	/* height: 500px; */
-	/* height: 50%; */
+	height: 100%;
 }
 
 .discover_content {
