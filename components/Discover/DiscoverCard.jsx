@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from '@/styles/Home.module.css';
 import { faArrowAltCircleRight } from '@fortawesome/free-regular-svg-icons';
 import { useDateContext } from '@/context/dateContext';
-import { ArrowForwardIos } from '@mui/icons-material';
+import { ArrowForwardIos, Facebook, Instagram, WhatsApp } from '@mui/icons-material';
 
 // TODO DESIGN FOR PROFILE
 // TODO EDIT DESIGN FOR [STEM] PROFILE
@@ -13,7 +13,7 @@ import { ArrowForwardIos } from '@mui/icons-material';
 const DiscoverCard = ({ id }) => {
 	const {
 		allUsers,
-		employedUsers,
+		allOccupations,
 		isAuth,
 		hobbyUsers,
 		locatedUsers,
@@ -21,8 +21,6 @@ const DiscoverCard = ({ id }) => {
 		connectedUsers,
 	} = useDateContext();
 
-	// const [user, setUser] = useState([]);
-	// const [occupations, setOccupations] = useState([]);
 	const [locations, setLocations] = useState([]);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
@@ -30,27 +28,25 @@ const DiscoverCard = ({ id }) => {
 	const maxChar = 100;
 
 	const user = allUsers.find(({ stem }) => stem === id);
-	const occupationArrays = employedUsers
-		.filter((array, i) => array.length !== 0)
-		.map((arr) => arr.filter(({ stem }) => stem === id))
-		.filter((list) => list.length !== 0);
+	const occupationArrays = allOccupations.filter(({ stem }) => stem === id);
+	const socialArrays = connectedUsers.filter(({ stem }) => stem === id);
 
 	return (
 		<div className={styles.discover_container}>
 			<div className={styles.discover_card}>
 				<div className={styles.discover_image}>
 					<Image
-						width={500}
-						height={500}
-						layout='responsive'
-						// objectFit='contain'
+						// width={500}
+						// height={500}
+						layout='fill'
+						objectFit='cover'
 						quality={100}
 						alt={user.profile_photo === null ? 'No profile photo' : user.profile_photo}
 						src={
 							user.profile_photo === null ? '/no_photo.png' : '/' + user.profile_photo
 						}
 						style={{
-							// height: '100%',
+							// minHeight: '100%',
 							// width: '100%',
 							borderRight: user.profile_photo === null ? '2px solid #ccc' : '0',
 						}}
@@ -63,14 +59,12 @@ const DiscoverCard = ({ id }) => {
 							{user.first_name} {user.last_name}
 						</h1>
 						<div>
-							{occupationArrays.length === 0 &&
-								occupationArrays.map((array) =>
-									array.map(({ company, title }, i) => (
-										<p key={i}>
-											{title} at {company}
-										</p>
-									))
-								)}
+							{occupationArrays.length !== 0 &&
+								occupationArrays.map(({ title, company }, i) => (
+									<h3 key={i}>
+										{title} at {company}
+									</h3>
+								))}
 							{user.bio !== null && (
 								<p style={{ fontSize: '14pt' }}>{user.bio.slice(0, maxChar)}</p>
 							)}
@@ -97,23 +91,37 @@ const DiscoverCard = ({ id }) => {
 							</Link>
 						</div>
 						<div className={styles.discover_joins}>
-							<p>{user.pumpkins} Pumpkins</p>
-							<p>{user.hickies} Hickies</p>
+							<p>
+								{user.pumpkins === 1
+									? user.pumpkins + ' Pumpkin'
+									: user.pumpkins + ' Pumpkins'}
+							</p>
+							<p>
+								{user.hickies === 1
+									? user.hickies + ' Hicky'
+									: user.hickies + ' Hickies'}
+							</p>
 						</div>
 						{/* <div className={`flex space-x-8 items-center justify-around text-2xl`}>
                             <Like like={false} prospect={user} />
                             <Like like={true} prospect={user} />
                         </div> */}
-						{/* <div className='flex space-x-8 items-center'>
-                            {
-                                user.socials
-                                    ?.map(({ icon, social, link }) => (
-                                        <Link href={link} key={social}>
-                                            <FontAwesomeIcon icon={icon} />
-                                        </Link>
-                                    ))
-                            }
-                        </div> */}
+						<div className={styles.discover_socials}>
+							{socialArrays.length !== 0 &&
+								socialArrays.map(({ social, visible }) => {
+									if (visible) {
+										if (social === 'facebook') {
+											return <Facebook />;
+										} else if (social === 'instagram') {
+											return <Instagram />;
+										} else if (social === 'whatsapp') {
+											return <WhatsApp />;
+										} else {
+											return <Twitter />;
+										}
+									}
+								})}
+						</div>
 					</div>
 				</div>
 			</div>

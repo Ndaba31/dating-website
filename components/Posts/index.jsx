@@ -5,7 +5,7 @@ import styles from '@/styles/Profile.module.css';
 const Posts = ({ posts }) => {
 	console.log(posts);
 	return (
-		<div className={styles.posts}>
+		<div className={styles.posts} style={{ justifyItems: 'center' }}>
 			{posts.map(({ posts }, i) => (
 				<PostDetail key={i} post={posts} />
 			))}

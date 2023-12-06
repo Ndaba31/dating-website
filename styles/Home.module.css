@@ -85,11 +85,12 @@
 }
 
 .discover_image {
+	position: relative;
 	width: 100%;
 	padding: 0;
 	border-radius: 20px;
 	/* height: 500px; */
-	/* height: 50%; */
+	height: 100%;
 }
 
 .discover_content {
@@ -125,6 +126,16 @@
 	display: flex;
 	width: 100%;
 	justify-content: space-around;
+}
+
+.discover_socials {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.discover_socials * {
+	transform: scale(1.1);
 }
 
 .match_container {
@@ -182,7 +193,7 @@
 
 	.discover_card {
 		flex-direction: row;
-		max-height: 500px;
+		min-height: 400px;
 	}
 
 	.discover_image {
