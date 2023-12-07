@@ -72,7 +72,7 @@ const Page = () => {
 	if (pumpkin === undefined || pumpkin.dob === undefined || pumpkin.dob === null) {
 		age = '';
 	} else {
-		age = new Date().getFullYear() - new Date(pumpkin.dob).getFullYear();
+		age = ', ' + String(new Date().getFullYear() - new Date(pumpkin.dob).getFullYear());
 	}
 
 	return (
@@ -112,20 +112,22 @@ const Page = () => {
 							<p>{pumpkin.hickies} Hickies</p>
 						</section>
 						<section className={styles.top_section}>
-							{pumpkin.nick_name !== null && (
+							{pumpkin.nick_name !== '' && (
 								<h1 style={{ fontSize: '24pt', lineHeight: '24px' }}>
 									{pumpkin.nick_name}
 								</h1>
 							)}
 							<p className={styles.heading}>
-								{pumpkin.first_name + ' ' + pumpkin.last_name + ', ' + age}
+								{pumpkin.first_name + ' ' + pumpkin.last_name + age}
 							</p>
 							{occupations.length !== 0 &&
-								occupations.map(({ title, company }, i) => (
-									<p key={i} style={{ fontSize: '14pt' }}>
-										{title} at {company}
-									</p>
-								))}
+								occupations.map(({ title, company }, i) => {
+									title !== '' && (
+										<p key={i} style={{ fontSize: '14pt' }}>
+											{title} {company === '' ? '' : 'at ' + company}
+										</p>
+									);
+								})}
 							{pumpkin.sex &&
 								pumpkin.sex !== 'X' &&
 								(pumpkin.sex === 'M' ? (

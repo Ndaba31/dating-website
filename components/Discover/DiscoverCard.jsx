@@ -111,13 +111,13 @@ const DiscoverCard = ({ id }) => {
 								socialArrays.map(({ social, visible }) => {
 									if (visible) {
 										if (social === 'facebook') {
-											return <Facebook />;
+											return <Facebook key={social} />;
 										} else if (social === 'instagram') {
-											return <Instagram />;
+											return <Instagram key={social} />;
 										} else if (social === 'whatsapp') {
-											return <WhatsApp />;
+											return <WhatsApp key={social} />;
 										} else {
-											return <Twitter />;
+											return <Twitter key={social} />;
 										}
 									}
 								})}

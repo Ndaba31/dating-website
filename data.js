@@ -90,7 +90,7 @@ export const sexes = [
 	},
 ];
 
-export const social_media = [
+export let social_media = [
 	{
 		icon: <WhatsApp />,
 		social: 'WhatsApp',

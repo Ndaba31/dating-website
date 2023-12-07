@@ -87,6 +87,10 @@ const Questions = ({
 		console.log(value);
 	};
 
+	if (inpName === 'age') {
+		inpName.max = new Date().toISOString().split('T')[0];
+	}
+
 	return (
 		<div className={styles.question_container}>
 			<div

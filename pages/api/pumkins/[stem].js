@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 	console.log(stem);
 	if (req.method === 'GET') {
 		const user = await query({
-			query: 'SELECT users.stem AS stem, email, nick_name, dob, bio, sex, hickies, pumpkins, profile_photo, first_name, last_name, date_joined, relationship_status, religion, ethnicity FROM user_details, users WHERE users.stem = user_details.stem AND users.stem = ?',
+			query: 'SELECT users.stem AS stem, email, nick_name, dob, bio, phone, sex, hickies, pumpkins, profile_photo, first_name, last_name, date_joined, relationship_status, religion, ethnicity FROM user_details, users WHERE users.stem = user_details.stem AND users.stem = ?',
 			values: [stem],
 		});
 
@@ -38,6 +38,11 @@ export default async function handler(req, res) {
 			values: [stem],
 		});
 
+		const socials = await query({
+			query: 'SELECT * FROM socials WHERE stem = ?;',
+			values: [stem],
+		});
+
 		console.log(user, posts, occupations, hobbies, location, message);
 
 		res.status(200).json({
@@ -46,6 +51,7 @@ export default async function handler(req, res) {
 			occupations: occupations,
 			hobbies: hobbies,
 			location: location[0],
+			socials: socials,
 			message: message,
 		});
 	}
