@@ -1,5 +1,5 @@
 import { AddCircle, Cancel, DeleteForever } from '@mui/icons-material';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import React, { useState } from 'react';
 import styles from '@/styles/Profile.module.css';
 import { useDateContext } from '@/context/dateContext';
@@ -18,6 +18,8 @@ const EditProfile = () => {
 		socials,
 		isBusy,
 		setIsBusy,
+		setSuccess,
+		success,
 	} = useDateContext();
 
 	const [hob, setHob] = useState('');
@@ -27,7 +29,8 @@ const EditProfile = () => {
 		salary_min: 0,
 		salary_max: 0,
 	});
-	const [photo, setPhoto] = useState(null);
+	const [photo, setPhoto] = useState(user.profile_photo);
+	const [imagePreview, setImagePreview] = useState(null);
 
 	const birthday = user.dob !== undefined && user.dob !== null ? new Date(user.dob) : '';
 
@@ -142,21 +145,63 @@ const EditProfile = () => {
 		setOccupations(occupation);
 	};
 
-	setIsBusy(user.profile_photo ? false : true);
+	setIsBusy(photo ? false : true);
 
-	console.log(isBusy);
 	const onFileUploadChange = (e) => {
-		console.log('From onFileUploadChange');
+		const selectedFile = e.target.files[0];
+		setPhoto(selectedFile);
+
+		// Generate a preview of the selected image
+		if (selectedFile) {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setImagePreview(reader.result);
+			};
+			reader.readAsDataURL(selectedFile);
+		} else {
+			setImagePreview(null);
+		}
 	};
 
-	const onCancelFile = (e) => {
-		e.preventDefault();
-		console.log('From onCancelFile');
+	const onCancelFile = () => {
+		setPhoto(null);
+		setImagePreview(null);
 	};
 
-	const onUploadFile = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log('From onUploadFile');
+		console.log('Submit Function');
+		// if(!photo)
+		// 	return;
+
+		try {
+			const data = new FormData();
+
+			data.append('user', JSON.stringify(formData));
+			data.append('socials', JSON.stringify(socialMedia));
+			data.append('stem', user.stem);
+
+			photo !== user.profile_photo
+				? data.append('file', photo)
+				: data.append('temp_photo', photo);
+
+			user.profile_photo
+				? data.append('profile_photo', user.profile_photo)
+				: data.append('profile_photo', null);
+
+			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/upload`, {
+				method: 'POST',
+				body: data,
+			});
+
+			if (!res.ok) throw new Error(await res.text());
+			else {
+				const { message } = await res.json();
+				setSuccess(message);
+			}
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	for (let i = 0; i < social_media.length; i++) {
@@ -173,22 +218,30 @@ const EditProfile = () => {
 			<Header title='Edit Profile' />
 			<h1 style={{ margin: '20px 0' }}>Edit Profile</h1>
 			<hr />
-			<form method='post' className={styles.edit_form}>
+			<form onSubmit={handleSubmit} className={styles.edit_form}>
 				<div className={styles.edit_left}>
 					<h3 style={{ margin: '8px 0' }}>Profile</h3>
 					<div className={styles.edit_img_container}>
-						{user.profile_photo ? (
+						{imagePreview ? (
 							<Image
-								width={150}
-								height={150}
-								src={'/' + user.profile_photo}
+								src={imagePreview}
+								layout='fill'
+								objectFit='contain'
+								alt='Profile Photo Preview'
+								priority
+							/>
+						) : photo ? (
+							<Image
+								layout='fill'
+								objectFit='contain'
+								src={'/' + photo}
 								alt={user.profile_photo}
 								priority
 							/>
 						) : (
 							<Image
-								width={150}
-								height={150}
+								layout='fill'
+								objectFit='contain'
 								src='/no_photo.png'
 								alt='No Photo'
 								priority
@@ -246,7 +299,7 @@ const EditProfile = () => {
 								Cancel
 							</Link>
 							<button
-								type='button'
+								type='submit'
 								className={[styles.edit_options_buttons, styles.edit_save].join(
 									' '
 								)}
@@ -710,7 +763,7 @@ const EditProfile = () => {
 									Cancel
 								</Link>
 								<button
-									type='button'
+									type='submit'
 									className={[styles.edit_options_buttons, styles.edit_save].join(
 										' '
 									)}

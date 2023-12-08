@@ -14,7 +14,7 @@ const PostDetail = ({ post }) => {
 				height={450}
 				src={'/' + post}
 				alt={post}
-				style={{ width: 'auto', height: 'auto' }}
+				// style={{ width: 'auto', height: 'auto' }}
 			/>
 		</div>
 	);

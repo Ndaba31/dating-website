@@ -12,9 +12,11 @@ import Navbar from '@/components/Navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-	const { setAllUsers, connectedUsers, setAllOccupations, setConnectedUsers, setError } =
+	const { setAllUsers, setAllOccupations, setConnectedUsers, setError, setSuccess } =
 		useDateContext();
 	let num = 20;
+
+	setSuccess('');
 
 	const getInfo = async () => {
 		const getData = {
