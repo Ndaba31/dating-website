@@ -4,9 +4,10 @@ export default async function handler(req, res) {
 	let message;
 	const query_result = req.query;
 	const { stem } = query_result;
+	const {crushee} = req.body;
 
 	console.log(stem);
-	if (req.method === 'GET') {
+	if (req.method === 'POST') {
 		const user = await query({
 			query: 'SELECT users.stem AS stem, email, nick_name, dob, bio, sex, hickies, pumpkins, profile_photo, first_name, last_name, date_joined, relationship_status, religion, ethnicity FROM user_details, users WHERE users.stem = user_details.stem AND users.stem = ?',
 			values: [stem],
@@ -38,8 +39,28 @@ export default async function handler(req, res) {
 			values: [stem],
 		});
 
-		console.log(user, posts, occupations, hobbies, location, message);
+		 const likes =await query({
+		 	query: 'SELECT crush FROM likes WHERE crush = ? AND crushee = ?;',
+		 	values: [stem,crushee],
+		 })
 
+		const matches = await query({
+			query: 'SELECT * FROM matches WHERE crush = ? AND crushee = ?;',
+			values: [stem,crushee],
+		})
+
+		const crushExist = await query({
+			query: 'SELECT * FROM matches WHERE crush = ? AND crushee = ?;',
+			values: [crushee,stem]
+		})
+
+		const liked_back_array = await query({
+			query: 'SELECT liked_back FROM matches WHERE crush = ? AND crushee = ?;',
+			values: [crushee,stem]
+		})
+
+		//console.log(user, posts, occupations, hobbies, location, message ,likes,matches,crushExist);
+         console.log(matches.length===0?false:true)
 		res.status(200).json({
 			user: user[0],
 			posts: posts,
@@ -47,6 +68,11 @@ export default async function handler(req, res) {
 			hobbies: hobbies,
 			location: location[0],
 			message: message,
+			likes: likes[0],
+			matches:matches,
+			crushExist:crushExist[0],
+			liked_back:liked_back_array.length===0?false: liked_back_array[0].liked_back,
+			slide:matches.length===0?false:true
 		});
 	}
 }

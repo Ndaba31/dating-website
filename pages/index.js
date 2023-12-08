@@ -12,7 +12,7 @@ import Navbar from '@/components/Navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-	const { setAllUsers, connectedUsers, setAllOccupations, setConnectedUsers, setError } =
+	const { setAllUsers, allUsers, connectedUsers, allOccupations, setAllOccupations, setConnectedUsers, setError } =
 		useDateContext();
 	let num = 20;
 
@@ -45,6 +45,9 @@ export default function Home() {
 		getInfo();
 	}, []);
 
+	console.log(connectedUsers);
+	console.log(allOccupations);
+	console.log(allUsers);
 	return (
 		<div style={{ bacground: 'linear-gradient(to right, #200b33, #19171c, #19276b)' }}>
 			<Header title='Pumpkin' description='Where true love meets fortune' />

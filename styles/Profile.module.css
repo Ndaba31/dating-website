@@ -127,6 +127,59 @@
 	background: linear-gradient(to right, #af85be, #d3a3a9, #d6bfbc);
 }
 
+.change_mind{
+	display: none;
+	align-items: center;
+	width: 200px;
+	height: 50px;
+	justify-content: center;
+	border-radius: 20px;
+	border: 0;
+	background: linear-gradient(to right, #ccf905, #e3f033, #f1f16a);
+}
+
+.change_mind:hover{
+	background: linear-gradient(to left, #d1ed63, #cbe861, #d2e080);
+	cursor: pointer;
+}
+
+.match_button_decline{
+	display: flex;
+	align-items: center;
+	width: 100px;
+	height: 50px;
+	justify-content: center;
+	border-radius: 20px;
+	border: 0;
+	background: linear-gradient(to right, #fe2802, #be3e27, #a73d36);
+}
+
+.choice_buttons{
+	display: flex;
+	justify-content: space-between;
+}
+
+.match_button_accept{
+	display: flex;
+	align-items: center;
+	width: 100px;
+	height: 50px;
+	justify-content: center;
+	border-radius: 20px;
+	border: 0;
+	background: linear-gradient(to right, #55e512, #12c329, #0e9c23);
+}
+
+.match_button_accept:hover{
+	background: linear-gradient(to left, #12daac, #30e2b0, #56dcaf);
+	cursor: pointer;
+}
+
+.match_button_decline:hover{
+	background: linear-gradient(to left, #ed5353, #f45f5f, #f57a7a);
+	cursor: pointer;
+}
+
 .match_button_clicked{
 	display: flex;
 	align-items: center;

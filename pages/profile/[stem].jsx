@@ -13,22 +13,41 @@ const Page = () => {
 	const router = useRouter();
 	const id = router.query.stem;
 
-	const { user, isAuth, setError, error } = useDateContext();
+	//const [allMatches, setAllMatches] = useState([]);
 
-	// const temp = allMatches.find(({ crushee, crush }) => crushee === user.stem && crush === id);
+	const {user, isAuth, setError, error } = useDateContext();
+	const currentUser = user
+	const event ={
+		initial:0,
+		action:1,
+		reaction:2,
+		bonus:3
+	}
+	//let initSlide = false
+	
+	// try{
+	 
+	//  if (temp.slide){
+    //     initSlide=true
+	//  }
+	// }catch(e){}
 
 	// const pumpkin = allUsers.find(({ stem }) => stem === id);
 
-	console.log(id);
+	//console.log(id);
 
-	const [favorite, setFavorite] = useState(false);
-	const [slide, setSlide] = useState(false);
+	const [favorite, setFavorite] = useState(event.initial);
+	const [slide, setSlide] = useState(event.initial);
 	// const [hickies, setHickies] = useState([]);
+	const [confirm,setConfirm]= useState(event.initial)
+	const [liked_back, setLiked_back] = useState()
+	const [matchesEmpty, setMatchesEmpty] = useState(true)
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
 	const [occupations, setOccupations] = useState([]);
 	const [location, setLocation] = useState({});
 	const [pumpkin, setPumpkin] = useState({});
+	//const [allMatches,setAllMatches] =useState({})
 
 	const maxChar = 150;
 	const [showAll, setShowAll] = useState(false);
@@ -43,23 +62,115 @@ const Page = () => {
 	useEffect(() => {
 		const getPumpkin = async () => {
 			const getData = {
-				method: 'GET',
+				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
+				body: JSON.stringify({
+					crushee: currentUser.stem
+				})
 			};
 
 			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumkins/${id}`, getData);
-			const { user, occupations, hobbies, posts, location, message } = await res.json();
+			const { user,occupations, hobbies, posts, location, message,likes,matches,slide,crushExist,liked_back } = await res.json();
 
 			setPumpkin(user);
 			setOccupations(occupations);
 			setHobbies(hobbies);
 			setPosts(posts);
 			setLocation(location);
+			setLiked_back(liked_back);
+			setMatchesEmpty(matches.length===0)
+			console.log(matchesEmpty)
+
+           
+				setSlide(slide)
+			
+			
+
+			 if (likes){
+			 	setFavorite(event.action)
+			 }
+			 if(crushExist){
+			//	hideEnableSlide('none')
+				//hideEnableChoice('block')
+			 }
+			//  if(!isNull){
+			// 	hideEnableChangeMind('flex')
+			// 	hideEnableChoice('none')
+			//  }else/* if(!isNull)*/{
+			// 	hideEnableChangeMind('none')
+				
+			//  }
+             
+			//  console.log(isNull)
 
 			if (message === 'User Not Found') {
 				setError(message);
+			}
+		}
+		getPumpkin();
+	},[]);
+
+	useEffect(() => {
+		const toggleLike = async () => {
+			let like_count = pumpkin.pumpkins === 0 ? 0 : pumpkin.pumpkins;
+
+			const updateData = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					like: favorite == event.action ? 1 : 0,
+					update: 'like',
+					crushee: user.stem,
+					crush: id,
+					like_count: favorite==event.action ? ++like_count : like_count === 0 ? 0 : --like_count,
+				}),
+			};
+
+			const removeData = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					like: favorite == event.action ? 1 : 0,
+					update: 'dislike',
+					crushee: user.stem,
+					crush: id,
+					like_count: favorite==event.action ? ++like_count : like_count === 0 ? 0 : --like_count,
+				}),
+			};
+
+			if(favorite==event.action){
+				const likeUser = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, updateData);
+				const { message } = await likeUser.json();
+			}else if(favorite==event.reaction){
+				const removeLike = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,removeData);
+			}
+
+			// if (message === 'Liked profile!') setFavorite(!favorite);
+		};
+
+		toggleLike();
+	}, [favorite]);
+
+	
+    useEffect(() => {
+		const slideApproach = async () =>{
+         
+			const slideData = {
+				method: 'PUT',
+				headers:{
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					update:'slide',
+					crushee: user.stem,
+					crush: id
+				}),
 			}
 
 			const cancelSlide = {
@@ -74,20 +185,103 @@ const Page = () => {
 				}),
 			}
 
-			if(slide){
+			const decline = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					update:'slideout',
+					crushee: id,
+					crush: user.stem
+				}),
+			}
+
+			if(slide==event.action){
 				const slide_onUser = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,slideData)
-			  }else{
+				const {message} = await slide_onUser.json()
+				
+				if (message==='slideInitiated'){
+					setSlide(event.initial)
+					alert('Slide has already been initiated')
+				}
+			  }else if(slide==event.reaction){
 				const slideCancel = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,cancelSlide)
+			  }else if(slide==event.bonus){
+				const declineSlide =await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,decline)
+				setSlide(initial)
 			  }
+
+			
 		};
 
-		getPumpkin();
-	}, []);
+		
+	
+	  slideApproach();
+	}, [slide])
+
+	useEffect(() => {
+	  const confirmMatches= async() =>{
+		let totalMatches = pumpkin.hickies === 0 ? 0 : pumpkin.hickies
+
+        const confirmMatch = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update:'confirmMatch',
+				crushee: id,
+				crush: user.stem,
+				totalMatches:confirm===event.action?++totalMatches:totalMatches===0?0:--totalMatches 
+			}),
+		}
+
+		const denyMatch = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update:'denyMatch',
+				crushee: id,
+				crush: user.stem
+			}),
+		}
+
+		const nullify = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update:'nullify',
+				crushee: id,
+				crush: user.stem,
+				totalMatches: confirm===event.action?++totalMatches:totalMatches===0?0:--totalMatches
+			}),
+		}
+
+		if(confirm===event.action){
+			setConfirm(event.initial)
+			const acceptMatch =await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,confirmMatch)
+		}
+		if(confirm===event.reaction){
+			setConfirm(event.initial)
+			const declineMatch= await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,denyMatch)
+		}
+		if(confirm===event.bonus){
+			setConfirm(event.initial)
+			const negate = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,nullify)
+		}
+	  };
+	
+	  confirmMatches();
+	}, [confirm])
 	
 
 
-
-	console.log(pumpkin);
+	//console.log(pumpkin);
 	let age;
 
 	if (pumpkin === undefined || pumpkin.dob === undefined || pumpkin.dob === null) {
@@ -95,6 +289,25 @@ const Page = () => {
 	} else {
 		age = new Date().getFullYear() - new Date(pumpkin.dob).getFullYear();
 	}
+
+	// function hideEnableSlide(displayValue){
+	// 	var div = document.getElementById('slide');
+	// 	div.style.display = displayValue
+		
+
+	// }
+
+	// function hideEnableChoice(displayValue){
+	// 	var div = document.getElementById('choice');
+	// 	div.style.display = displayValue
+		 
+
+	// }
+
+	// function hideEnableChangeMind(displayValue){
+	// 	var div = document.getElementById('changeMind');
+	// 	div.style.display = displayValue
+	// }
 
 	return (
 		<>
@@ -213,29 +426,73 @@ const Page = () => {
 							)}
 							{isAuth && (
 								<div style={{ display: 'flex', justifyContent: 'space-around' }}>
-									<button
-										onClick={() => setFavorite(!favorite)}
+									<button 
+										onClick={()=>{if(favorite==event.initial||favorite==event.reaction){
+											setFavorite(event.action)
+										}
+										else{
+										  setFavorite(event.reaction)
+										}}}
 										style={{ backgroundColor: 'transparent', border: 0 }}
 									>
-										{favorite ? (
+										{favorite==event.action ? (
 											<Favorite className={styles.favorite} />
 										) : (
 											<FavoriteBorder className={styles.favorite} />
 										)}
 									</button>
-									<button
-										onClick={() => setSlide(!slide)}
-										className={styles.match_button}
-									>
-										{slide && temp.liked_back ? (
-											<p style={{ fontSize: '12pt' }}>Unmatch</p>
-										) : slide && !temp.liked_back ? (
-											<p style={{ fontSize: '12pt' }}>Pending</p>
-										) : (
-											<p style={{ fontSize: '12pt' }}>Slide</p>
-										)}
-										<PeopleAltOutlined />
-									</button>
+								
+									{
+										!matchesEmpty&&(
+											<button id='slide' onClick={()=>{if(slide==event.initial||slide==event.reaction){
+												setSlide(event.action)
+											}
+											else{
+											  setSlide(event.reaction)
+											}}}
+											 className={slide?styles.match_button:styles.match_button_clicked}>
+											 {!slide ? 
+												<p style={{ fontSize: '12pt' }}>Slide</p>:<p 
+												style={{ fontSize: '12pt' }}>Gwababa</p>} 
+												<PeopleAlt />
+											</button>
+										)
+									}
+								{
+									liked_back===null&&(
+										<div id='choice'><p style={{fontSize: '12pt'}}><b>This Person has already initiated to match with you </b></p>
+								       <div className={styles.choice_buttons}>
+									   <button onClick={()=>{
+									   setConfirm(event.action)
+									   //hideEnableChangeMind('flex')
+									   //hideEnableChoice('none')
+									   
+									   }
+									}
+									    className={styles.match_button_accept}><p style={{fontSize: '12pt'}}>Accept</p></button>
+									    <button onClick={()=>{
+											setConfirm(event.reaction)
+										 //   hideEnableChoice('none')
+										//	hideEnableChangeMind('flex')
+											
+										}}
+									    className={styles.match_button_decline}><p style={{fontSize: '12pt'}}>Decline</p></button>
+									   </div>
+									   
+								</div>
+									)
+								}
+									
+									{
+										liked_back===0||liked_back===1 && (
+											<button id='changeMind' onClick={()=>{
+												setConfirm(event.bonus)
+										//		hideEnableChangeMind('none')
+										//	hideEnableChoice('block')
+											}} className={styles.change_mind} ><p style={{fontSize: '12pt'}}>Change Mind</p></button>
+										)
+									}
+									
 								</div>
 							)}
 						</section>
