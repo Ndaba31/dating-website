@@ -20,10 +20,17 @@ export default async function handler(req, res) {
 			// Parse the JSON string back into an object
 			const userObject = fields.user;
 			const socialObject = fields.socials;
+			const occupationObject = fields.occupations;
 
 			const user = JSON.parse(userObject);
+			console.log(`User nickname: ${user.nickName}\nUser phone: ${user.phone}\nUser ethnicity: ${user.ethnicity}\nUser Relationship Status: ${user.relationship_status}\nUser religion: ${user.religion}`);
+
+			const occupations = JSON.parse(occupationObject);
+			console.log(`Occupations Object: ${occupations[0].title}`);
 
 			const social = JSON.parse(socialObject);
+			console.log(`Social Media Object: ${social.instagram}`);
+
 			let valid_socials = [];
 
 			if (social.whatsapp !== '') valid_socials.push(social.whatsapp);
@@ -31,19 +38,28 @@ export default async function handler(req, res) {
 			if (social.facebook !== '') valid_socials.push(social.facebook);
 			if (social.instagram !== '') valid_socials.push(social.instagram);
 
+			console.log(`Social Array: ${valid_socials}`);
+
 			const stem = fields.stem;
 			console.log(`Updating this stem's profile: ${stem}`);
 
 			try {
-				const updateUserDetails = query({
-					query: 'UPDATE user_details SET stem = ?, nick_name = ?, dob = ?, phone = ?, bio = ?, sex = ?, ethnicity = ?, relationship_status = ?, religion = ? WHERE stem = ?;',
+				const updateUserDetails1 = query({
+					query: 'UPDATE user_details SET stem = ?, dob = ?, bio = ?, sex = ? WHERE stem = ?;',
 					values: [
 						user.stem,
-						user.nickName,
 						user.dob,
-						user.phone,
 						user.bio,
 						user.sex,
+						stem
+					],
+				});
+
+				const updateUserDetails2 = query({
+					query: 'UPDATE user_details SET nick_name = ?, phone = ?, ethnicity = ?, relationship_status = ?, religion = ? WHERE stem = ?;',
+					values: [
+						user.nickName,
+						user.phone,
 						user.ethnicity,
 						user.relationship_status,
 						user.religion,
@@ -103,10 +119,12 @@ export default async function handler(req, res) {
 
 				let updateSocials;
 				valid_socials.map((link) => {
+					console.log(link);
 					switch (link) {
 						case social.whatsapp:
+							console.log("Whatsapp");
 							const whatsapp = query({
-								query: 'SELECT * socials WHERE stem = ? AND social = ?',
+								query: 'SELECT * FROM socials WHERE stem = ? AND social = ?',
 								values: [user.stem, 'whatsapp'],
 							});
 
@@ -125,8 +143,9 @@ export default async function handler(req, res) {
 							break;
 
 						case social.facebook:
+							console.log("Facebook");
 							const facebook = query({
-								query: 'SELECT * socials WHERE stem = ? AND social = ?',
+								query: 'SELECT * FROM socials WHERE stem = ? AND social = ?',
 								values: [user.stem, 'facebook'],
 							});
 
@@ -145,8 +164,9 @@ export default async function handler(req, res) {
 							break;
 
 						case social.instagram:
+							console.log("Instagram");
 							const insta = query({
-								query: 'SELECT * socials WHERE stem = ? AND social = ?',
+								query: 'SELECT * FROM socials WHERE stem = ? AND social = ?',
 								values: [user.stem, 'instagram'],
 							});
 
@@ -165,8 +185,9 @@ export default async function handler(req, res) {
 							break;
 
 						case social.twitter:
+							console.log(`Link: ${link}\nTwitter: ${social.twitter}`);
 							const twitter = query({
-								query: 'SELECT * socials WHERE stem = ? AND social = ?',
+								query: 'SELECT * FROM socials WHERE stem = ? AND social = ?',
 								values: [user.stem, 'twitter'],
 							});
 

@@ -179,6 +179,7 @@ const EditProfile = () => {
 
 			data.append('user', JSON.stringify(formData));
 			data.append('socials', JSON.stringify(socialMedia));
+			data.append('occupations', JSON.stringify(occupations));
 			data.append('stem', user.stem);
 
 			photo !== user.profile_photo

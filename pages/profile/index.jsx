@@ -24,6 +24,7 @@ const Profile = () => {
 		setLocation,
 		socials,
 		setSocials,
+		setError
 	} = useDateContext();
 	// const [hobbies, setHobbies] = useState([]);
 	// const [posts, setPosts] = useState([]);
