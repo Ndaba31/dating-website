@@ -113,12 +113,8 @@ const Questions = ({
 						/>
 					</button>
 				)}
-				{count < total ? (
+				{count < total && (
 					<Link href={`${count + 1}`} className={styles.skip}>
-						Skip
-					</Link>
-				) : (
-					<Link href='/' className={styles.skip}>
 						Skip
 					</Link>
 				)}

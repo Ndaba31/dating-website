@@ -197,7 +197,8 @@ const EditProfile = () => {
 
 			if (!res.ok) throw new Error(await res.text());
 			else {
-				const { message } = await res.json();
+				const { message, twitter } = await res.json();
+				console.log(twitter);
 				setSuccess(message);
 			}
 		} catch (error) {

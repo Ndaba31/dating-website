@@ -23,7 +23,9 @@ export default async function handler(req, res) {
 			const occupationObject = fields.occupations;
 
 			const user = JSON.parse(userObject);
-			console.log(`User nickname: ${user.nickName}\nUser phone: ${user.phone}\nUser ethnicity: ${user.ethnicity}\nUser Relationship Status: ${user.relationship_status}\nUser religion: ${user.religion}`);
+			console.log(
+				`User nickname: ${user.nickName}\nUser phone: ${user.phone}\nUser ethnicity: ${user.ethnicity}\nUser Relationship Status: ${user.relationship_status}\nUser religion: ${user.religion}`
+			);
 
 			const occupations = JSON.parse(occupationObject);
 			console.log(`Occupations Object: ${occupations[0].title}`);
@@ -31,14 +33,134 @@ export default async function handler(req, res) {
 			const social = JSON.parse(socialObject);
 			console.log(`Social Media Object: ${social.instagram}`);
 
-			let valid_socials = [];
+			// let valid_socials = [];
 
-			if (social.whatsapp !== '') valid_socials.push(social.whatsapp);
-			if (social.twitter !== '') valid_socials.push(social.twitter);
-			if (social.facebook !== '') valid_socials.push(social.facebook);
-			if (social.instagram !== '') valid_socials.push(social.instagram);
+			if (social.whatsapp !== '') {
+				console.log('Social Whatsapp object is not empty');
+				const whatsapp = query({
+					query: 'SELECT * FROM socials WHERE stem = ? AND social = "whatsapp"',
+					values: [user.stem],
+				});
 
-			console.log(`Social Array: ${valid_socials}`);
+				console.log('Social Whatsapp Query executed');
+				whatsapp.then((res) => {
+					if (res.length === 0) {
+						const insert_whatsapp = query({
+							query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
+							values: [user.stem, 'whatsapp', social.whatsapp, 0],
+						});
+						console.log('Social Whatsapp Insertion executed');
+					} else {
+						const update_whatsapp = query({
+							query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?',
+							values: [social.whatsapp, user.stem, 'whatsapp'],
+						});
+						console.log('Social Whatsapp Update executed');
+					}
+				});
+			} else {
+				const pop_whatsapp = query({
+					query: 'DELETE FROM socials WHERE stem = ? AND social = ?',
+					values: [user.stem, 'whatsapp'],
+				});
+			}
+
+			if (social.facebook !== '') {
+				console.log('Social facebook object is not empty');
+				const facebook = query({
+					query: 'SELECT * FROM socials WHERE stem = ? AND social = "facebook"',
+					values: [user.stem],
+				});
+
+				console.log('Social facebook Query executed');
+				facebook.then((res) => {
+					if (res.length === 0) {
+						const insert_facebook = query({
+							query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
+							values: [user.stem, 'facebook', social.facebook, 0],
+						});
+						console.log('Social facebook Insertion executed');
+					} else {
+						const update_facebook = query({
+							query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?',
+							values: [social.facebook, user.stem, 'facebook'],
+						});
+						console.log('Social facebook Update executed');
+					}
+				});
+			} else {
+				const pop_facebook = query({
+					query: 'DELETE FROM socials WHERE stem = ? AND social = ?',
+					values: [user.stem, 'facebook'],
+				});
+			}
+
+			if (social.instagram !== '') {
+				console.log('Social instagram object is not empty');
+				const instagram = query({
+					query: 'SELECT * FROM socials WHERE stem = ? AND social = "instagram"',
+					values: [user.stem],
+				});
+
+				console.log('Social instagram Query executed');
+				instagram.then((res) => {
+					if (res.length === 0) {
+						const insert_instagram = query({
+							query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
+							values: [user.stem, 'instagram', social.instagram, 0],
+						});
+						console.log('Social instagram Insertion executed');
+					} else {
+						const update_instagram = query({
+							query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?',
+							values: [social.instagram, user.stem, 'instagram'],
+						});
+						console.log('Social instagram Update executed');
+					}
+				});
+			} else {
+				const pop_instagram = query({
+					query: 'DELETE FROM socials WHERE stem = ? AND social = ?',
+					values: [user.stem, 'instagram'],
+				});
+			}
+
+			if (social.twitter !== '') {
+				console.log('Social twitter object is not empty');
+				const twitter = query({
+					query: 'SELECT * FROM socials WHERE stem = ? AND social = "twitter"',
+					values: [user.stem],
+				});
+
+				console.log('Social twitter Query executed');
+				twitter.then((res) => {
+					if (res.length === 0) {
+						const insert_twitter = query({
+							query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
+							values: [user.stem, 'twitter', social.twitter, 0],
+						});
+						console.log('Social twitter Insertion executed');
+					} else {
+						const update_twitter = query({
+							query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?',
+							values: [social.twitter, user.stem, 'twitter'],
+						});
+						console.log('Social twitter Update executed');
+					}
+				});
+			} else {
+				const pop_twitter = query({
+					query: 'DELETE FROM socials WHERE stem = ? AND social = ?',
+					values: [user.stem, 'twitter'],
+				});
+			}
+
+			// if (social.whatsapp !== '') valid_socials.push(social.whatsapp);
+			// if (social.twitter !== '') valid_socials.push(social.twitter);
+			// if (social.facebook !== '') valid_socials.push(social.facebook);
+			// if (social.instagram !== '') valid_socials.push(social.instagram);
+
+			// console.log(`Social Array: ${valid_socials}`);
 
 			const stem = fields.stem;
 			console.log(`Updating this stem's profile: ${stem}`);
@@ -46,13 +168,7 @@ export default async function handler(req, res) {
 			try {
 				const updateUserDetails1 = query({
 					query: 'UPDATE user_details SET stem = ?, dob = ?, bio = ?, sex = ? WHERE stem = ?;',
-					values: [
-						user.stem,
-						user.dob,
-						user.bio,
-						user.sex,
-						stem
-					],
+					values: [user.stem, user.dob, user.bio, user.sex, stem],
 				});
 
 				const updateUserDetails2 = query({
@@ -81,6 +197,25 @@ export default async function handler(req, res) {
 					query: 'UPDATE locations SET stem = ? WHERE stem = ?;',
 					values: [user.stem, stem],
 				});
+
+				const pumpkin_location = query({
+					query: 'SELECT * FROM locations WHERE stem = ?;',
+					values: [user.stem],
+				});
+
+				console.log('Pumpkin Location Query: ' + pumpkin_location);
+
+				if (pumpkin_location.length === 0) {
+					const insert_location = query({
+						query: 'INSERT INTO locations (stem, city, region) VALUES (?, ?, ?);',
+						values: [user.stem, user.city, user.region],
+					});
+				} else {
+					const update_location = query({
+						query: 'UPDATE locations SET city = ?, region = ? WHERE stem = ?',
+						values: [user.city, user.region, user.stem],
+					});
+				}
 
 				const updateOccupationsStem = query({
 					query: 'UPDATE occupations SET stem = ? WHERE stem = ?;',
@@ -118,97 +253,10 @@ export default async function handler(req, res) {
 				});
 
 				let updateSocials;
-				valid_socials.map((link) => {
-					console.log(link);
-					switch (link) {
-						case social.whatsapp:
-							console.log("Whatsapp");
-							const whatsapp = query({
-								query: 'SELECT * FROM socials WHERE stem = ? AND social = ?',
-								values: [user.stem, 'whatsapp'],
-							});
-
-							if (whatsapp.length === 0) {
-								updateSocials = query({
-									query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
-									values: [user.stem, 'whatsapp', link, 0],
-								});
-							} else {
-								updateSocials = query({
-									query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?;',
-									values: [link, user.stem, 'whatsapp'],
-								});
-							}
-
-							break;
-
-						case social.facebook:
-							console.log("Facebook");
-							const facebook = query({
-								query: 'SELECT * FROM socials WHERE stem = ? AND social = ?',
-								values: [user.stem, 'facebook'],
-							});
-
-							if (facebook.length === 0) {
-								updateSocials = query({
-									query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
-									values: [user.stem, 'facebook', link, 0],
-								});
-							} else {
-								updateSocials = query({
-									query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?;',
-									values: [link, user.stem, 'facebook'],
-								});
-							}
-
-							break;
-
-						case social.instagram:
-							console.log("Instagram");
-							const insta = query({
-								query: 'SELECT * FROM socials WHERE stem = ? AND social = ?',
-								values: [user.stem, 'instagram'],
-							});
-
-							if (insta.length === 0) {
-								updateSocials = query({
-									query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
-									values: [user.stem, 'instagram', link, 0],
-								});
-							} else {
-								updateSocials = query({
-									query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?;',
-									values: [link, user.stem, 'instagram'],
-								});
-							}
-
-							break;
-
-						case social.twitter:
-							console.log(`Link: ${link}\nTwitter: ${social.twitter}`);
-							const twitter = query({
-								query: 'SELECT * FROM socials WHERE stem = ? AND social = ?',
-								values: [user.stem, 'twitter'],
-							});
-
-							if (twitter.length === 0) {
-								updateSocials = query({
-									query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
-									values: [user.stem, 'twitter', link, 0],
-								});
-							} else {
-								updateSocials = query({
-									query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?;',
-									values: [link, user.stem, 'twitter'],
-								});
-							}
-
-							break;
-
-						default:
-							break;
-					}
-				});
+				let whatsapp = [];
+				let facebook = [];
+				let instagram = [];
+				let twitter = [];
 			} catch (error) {
 				res.status(400).json({ error: `Error on update queries: ${error}` });
 			}
