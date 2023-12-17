@@ -20,6 +20,7 @@ const Questions = ({
 }) => {
 	const { isBusy } = useDateContext();
 	const router = useRouter();
+	const today = new Date().toISOString().split('T')[0];
 
 	const [hobby, setHobby] = useState('');
 
@@ -87,10 +88,6 @@ const Questions = ({
 		console.log(value);
 	};
 
-	if (inpName === 'age') {
-		inpName.max = new Date().toISOString().split('T')[0];
-	}
-
 	return (
 		<div className={styles.question_container}>
 			<div
@@ -151,6 +148,7 @@ const Questions = ({
 							className={styles.question_input}
 							onChange={ageChange}
 							value={value}
+							max={today}
 						/>
 						<button
 							type='button'

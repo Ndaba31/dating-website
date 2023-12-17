@@ -11,51 +11,46 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-	let message;
 	if (req.method === 'POST') {
 		const form = new IncomingForm();
 		form.uploadDir = './public/uploads';
 
 		form.parse(req, async (err, fields, files) => {
 			// Parse the JSON string back into an object
+			const stem = fields.stem;
 			const userObject = fields.user;
 			const socialObject = fields.socials;
 			const occupationObject = fields.occupations;
+			const poppedOccupationObject = fields.poppedOccupations;
+			const hobbiesObject = fields.hobbies;
+			const poppedHobbiesObject = fields.poppedHobbies;
 
+			// Convert JSON Object to a regular object
 			const user = JSON.parse(userObject);
-			console.log(
-				`User nickname: ${user.nickName}\nUser phone: ${user.phone}\nUser ethnicity: ${user.ethnicity}\nUser Relationship Status: ${user.relationship_status}\nUser religion: ${user.religion}`
-			);
-
 			const occupations = JSON.parse(occupationObject);
-			console.log(`Occupations Object: ${occupations[0].title}`);
-
+			const poppedOccupations = JSON.parse(poppedOccupationObject);
+			const hobbies = JSON.parse(hobbiesObject);
+			const poppedHobbies = JSON.parse(poppedHobbiesObject);
 			const social = JSON.parse(socialObject);
-			console.log(`Social Media Object: ${social.instagram}`);
 
-			// let valid_socials = [];
-
+			//QUERY FOR USER SOCIAL MEDIA
 			if (social.whatsapp !== '') {
-				console.log('Social Whatsapp object is not empty');
 				const whatsapp = query({
 					query: 'SELECT * FROM socials WHERE stem = ? AND social = "whatsapp"',
 					values: [user.stem],
 				});
 
-				console.log('Social Whatsapp Query executed');
 				whatsapp.then((res) => {
 					if (res.length === 0) {
 						const insert_whatsapp = query({
 							query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
 							values: [user.stem, 'whatsapp', social.whatsapp, 0],
 						});
-						console.log('Social Whatsapp Insertion executed');
 					} else {
 						const update_whatsapp = query({
 							query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?',
 							values: [social.whatsapp, user.stem, 'whatsapp'],
 						});
-						console.log('Social Whatsapp Update executed');
 					}
 				});
 			} else {
@@ -66,26 +61,22 @@ export default async function handler(req, res) {
 			}
 
 			if (social.facebook !== '') {
-				console.log('Social facebook object is not empty');
 				const facebook = query({
 					query: 'SELECT * FROM socials WHERE stem = ? AND social = "facebook"',
 					values: [user.stem],
 				});
 
-				console.log('Social facebook Query executed');
 				facebook.then((res) => {
 					if (res.length === 0) {
 						const insert_facebook = query({
 							query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
 							values: [user.stem, 'facebook', social.facebook, 0],
 						});
-						console.log('Social facebook Insertion executed');
 					} else {
 						const update_facebook = query({
 							query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?',
 							values: [social.facebook, user.stem, 'facebook'],
 						});
-						console.log('Social facebook Update executed');
 					}
 				});
 			} else {
@@ -96,26 +87,22 @@ export default async function handler(req, res) {
 			}
 
 			if (social.instagram !== '') {
-				console.log('Social instagram object is not empty');
 				const instagram = query({
 					query: 'SELECT * FROM socials WHERE stem = ? AND social = "instagram"',
 					values: [user.stem],
 				});
 
-				console.log('Social instagram Query executed');
 				instagram.then((res) => {
 					if (res.length === 0) {
 						const insert_instagram = query({
 							query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
 							values: [user.stem, 'instagram', social.instagram, 0],
 						});
-						console.log('Social instagram Insertion executed');
 					} else {
 						const update_instagram = query({
 							query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?',
 							values: [social.instagram, user.stem, 'instagram'],
 						});
-						console.log('Social instagram Update executed');
 					}
 				});
 			} else {
@@ -126,26 +113,22 @@ export default async function handler(req, res) {
 			}
 
 			if (social.twitter !== '') {
-				console.log('Social twitter object is not empty');
 				const twitter = query({
 					query: 'SELECT * FROM socials WHERE stem = ? AND social = "twitter"',
 					values: [user.stem],
 				});
 
-				console.log('Social twitter Query executed');
 				twitter.then((res) => {
 					if (res.length === 0) {
 						const insert_twitter = query({
 							query: 'INSERT INTO socials (stem, social, contact, visible) VALUES (?, ?, ?, ?)',
 							values: [user.stem, 'twitter', social.twitter, 0],
 						});
-						console.log('Social twitter Insertion executed');
 					} else {
 						const update_twitter = query({
 							query: 'UPDATE socials SET contact = ? WHERE stem = ? AND social = ?',
 							values: [social.twitter, user.stem, 'twitter'],
 						});
-						console.log('Social twitter Update executed');
 					}
 				});
 			} else {
@@ -155,16 +138,7 @@ export default async function handler(req, res) {
 				});
 			}
 
-			// if (social.whatsapp !== '') valid_socials.push(social.whatsapp);
-			// if (social.twitter !== '') valid_socials.push(social.twitter);
-			// if (social.facebook !== '') valid_socials.push(social.facebook);
-			// if (social.instagram !== '') valid_socials.push(social.instagram);
-
-			// console.log(`Social Array: ${valid_socials}`);
-
-			const stem = fields.stem;
-			console.log(`Updating this stem's profile: ${stem}`);
-
+			//THE REST OF THE SQL QUERIES TO UPDATE USER INFORMATION
 			try {
 				const updateUserDetails1 = query({
 					query: 'UPDATE user_details SET stem = ?, dob = ?, bio = ?, sex = ? WHERE stem = ?;',
@@ -252,13 +226,71 @@ export default async function handler(req, res) {
 					values: [user.stem, stem],
 				});
 
-				let updateSocials;
-				let whatsapp = [];
-				let facebook = [];
-				let instagram = [];
-				let twitter = [];
+				occupations.map(({ title, company, salary_min, salary_max }) => {
+					if (title !== '') {
+						const exist_occupation = query({
+							query: 'SELECT * FROM occupations WHERE stem = ? AND title = ? AND company = ?',
+							values: [user.stem, title, company],
+						});
+
+						exist_occupation.then((result) => {
+							if (result.length === 0) {
+								const insert_occupation = query({
+									query: 'INSERT INTO occupations (stem, title, company, salary_min, salary_max) VALUES (?, ?, ?, ?, ?);',
+									values: [user.stem, title, company, salary_min, salary_max],
+								});
+							}
+						});
+					} else {
+						const pop_occupation = query({
+							query: 'DELETE FROM occupations WHERE title = ? AND company = ? AND stem = ?;',
+							values: [title, company, user.stem],
+						});
+					}
+				});
+
+				if (poppedOccupations.length !== 0) {
+					poppedOccupations.map(({ title, company }) => {
+						const pop_occupation = query({
+							query: 'DELETE FROM occupations WHERE title = ? AND company = ? AND stem = ?;',
+							values: [title, company, user.stem],
+						});
+					});
+				}
+
+				hobbies.map(({ hobby }) => {
+					if (hobby !== '') {
+						const exist_hobby = query({
+							query: 'SELECT * FROM hobbies WHERE stem = ? AND hobby = ?',
+							values: [user.stem, hobby],
+						});
+
+						exist_hobby.then((result) => {
+							if (result.length === 0) {
+								const insert_hobby = query({
+									query: 'INSERT INTO hobbies (stem, hobby) VALUES (?, ?);',
+									values: [user.stem, hobby],
+								});
+							}
+						});
+					} else {
+						const pop_hobby = query({
+							query: 'DELETE FROM hobbies WHERE stem = ? AND hobby = ?;',
+							values: [user.stem, hobby],
+						});
+					}
+				});
+
+				if (poppedHobbies.length !== 0) {
+					poppedHobbies.map(({ hobby }) => {
+						const pop_hobby = query({
+							query: 'DELETE FROM hobbies WHERE stem = ? AND hobby = ?;',
+							values: [user.stem, hobby],
+						});
+					});
+				}
 			} catch (error) {
-				res.status(400).json({ error: `Error on update queries: ${error}` });
+				res.status(500).json({ error: `Error on update queries: ${error}` });
 			}
 
 			if (err) {
@@ -267,18 +299,12 @@ export default async function handler(req, res) {
 				return;
 			}
 
+			//UPLOADING IMAGE
 			const uploadedFile = files?.file;
 
 			const dbImgPath = fields.temp_photo
 				? fields.temp_photo
 				: `uploads/${uploadedFile.name}`;
-
-			console.log(`dbImgPath = ${dbImgPath}`);
-
-			if (!uploadedFile) {
-				res.status(400).json({ error: 'No file uploaded' });
-				return;
-			}
 
 			const oldPath = files.file.path;
 			const newPath = path.join(form.uploadDir, uploadedFile.name);
@@ -298,9 +324,7 @@ export default async function handler(req, res) {
 					// Delete the existing file before moving the new one
 					try {
 						await fs.unlink(prevProfilePhotoPath);
-						console.log('Deleted previous profile photo');
 					} catch (error) {
-						console.error('Error deleting existing file:', error);
 						res.status(500).json({ error: 'Error deleting existing file' });
 						return;
 					}
@@ -315,9 +339,8 @@ export default async function handler(req, res) {
 					values: [dbImgPath, user.stem],
 				});
 
-				res.status(200).json({ success: true });
+				res.status(200).json({ message: 'Profile updated successfully' });
 			} catch (error) {
-				console.error('Error moving file:', error);
 				res.status(500).json({ error: 'Error moving file' });
 			}
 		});

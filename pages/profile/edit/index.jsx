@@ -6,6 +6,7 @@ import { useDateContext } from '@/context/dateContext';
 import { ethinicities, regions, relationship_status, religions, sexes, social_media } from '@/data';
 import Header from '@/components/Head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const EditProfile = () => {
 	const {
@@ -19,9 +20,10 @@ const EditProfile = () => {
 		isBusy,
 		setIsBusy,
 		setSuccess,
-		success,
+		setError,
 	} = useDateContext();
 
+	const router = useRouter();
 	const [hob, setHob] = useState('');
 	const [occ, setOcc] = useState({
 		title: '',
@@ -31,6 +33,8 @@ const EditProfile = () => {
 	});
 	const [photo, setPhoto] = useState(user.profile_photo);
 	const [imagePreview, setImagePreview] = useState(null);
+	const [poppedOccupations, setPoppedOccupations] = useState([]);
+	const [poppedHobbies, setPoppedHobbies] = useState([]);
 
 	const birthday = user.dob !== undefined && user.dob !== null ? new Date(user.dob) : '';
 
@@ -46,8 +50,9 @@ const EditProfile = () => {
 		bio: user.bio,
 		sex: user.sex,
 		dob: birthday === '' ? '' : birthday.toISOString().substring(0, 10),
-		region: location.region,
-		city: location.city,
+		region:
+			location !== undefined ? (location.region === undefined ? '' : location.region) : '',
+		city: location !== undefined ? (location.city === undefined ? '' : location.city) : '',
 		nickName: user.nick_name,
 		phone: user.phone,
 		ethnicity: user.ethnicity,
@@ -77,13 +82,11 @@ const EditProfile = () => {
 	const handleSocialChange = (event) => {
 		const { name, value } = event.target;
 		setSocialMedia((prevFormData) => ({ ...prevFormData, [name]: value }));
-		console.log(socialMedia);
 	};
 
 	const handleChange = (event) => {
 		const { name, value } = event.target;
 		setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
-		console.log(formData);
 	};
 
 	const onHobChange = (e) => {
@@ -100,9 +103,10 @@ const EditProfile = () => {
 
 	const popHobbies = (hobby) => {
 		const hobs = hobbies.filter((interest) => interest.hobby !== hobby);
+		const popped_hobs = hobbies.find((interest) => interest.hobby === hobby);
 
-		console.log(hobs);
 		setHobbies(hobs);
+		setPoppedHobbies((state) => [...state, popped_hobs]);
 	};
 
 	const pushHobbies = () => {
@@ -113,8 +117,6 @@ const EditProfile = () => {
 		if (check.length === 0) {
 			hobs.push({ hobby: hob });
 		}
-
-		console.log(hobbies);
 
 		setHob('');
 		setHobbies(hobs);
@@ -133,12 +135,16 @@ const EditProfile = () => {
 			occupation.push(occ);
 		}
 
-		console.log(occupation);
 		setOcc({ company: '', title: '', salary_max: 0, salary_min: 0 });
 		setOccupations(occupation);
 	};
 
 	const popOccupation = (job) => {
+		const poppedJob = occupations.find(
+			(work) => work.company === job.company && work.title === job.title
+		);
+		setPoppedOccupations((state) => [...state, poppedJob]);
+
 		const occupation = occupations.filter(
 			(work) => work.company !== job.company && work.title !== job.title
 		);
@@ -170,9 +176,6 @@ const EditProfile = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log('Submit Function');
-		// if(!photo)
-		// 	return;
 
 		try {
 			const data = new FormData();
@@ -180,6 +183,9 @@ const EditProfile = () => {
 			data.append('user', JSON.stringify(formData));
 			data.append('socials', JSON.stringify(socialMedia));
 			data.append('occupations', JSON.stringify(occupations));
+			data.append('poppedOccupations', JSON.stringify(poppedOccupations));
+			data.append('hobbies', JSON.stringify(hobbies));
+			data.append('poppedHobbies', JSON.stringify(poppedHobbies));
 			data.append('stem', user.stem);
 
 			photo !== user.profile_photo
@@ -195,14 +201,18 @@ const EditProfile = () => {
 				body: data,
 			});
 
-			if (!res.ok) throw new Error(await res.text());
-			else {
-				const { message, twitter } = await res.json();
-				console.log(twitter);
+			if (!res.ok) {
+				const { error } = await res.json();
+				setError(error);
+				throw new Error(await res.text());
+			} else {
+				const { message } = await res.json();
 				setSuccess(message);
 			}
+
+			router.replace('/profile');
 		} catch (error) {
-			console.log(error);
+			setError(error);
 		}
 	};
 
@@ -321,6 +331,7 @@ const EditProfile = () => {
 								className={styles.edit_text_input}
 								value={formData.firstName}
 								onChange={handleChange}
+								required
 							/>
 						</div>
 						<div>
@@ -332,6 +343,7 @@ const EditProfile = () => {
 								className={styles.edit_text_input}
 								value={formData.lastName}
 								onChange={handleChange}
+								required
 							/>
 						</div>
 					</div>
@@ -345,6 +357,7 @@ const EditProfile = () => {
 								className={styles.edit_text_input}
 								value={formData.email}
 								onChange={handleChange}
+								required
 							/>
 						</div>
 						<div>
@@ -356,6 +369,7 @@ const EditProfile = () => {
 								className={styles.edit_text_input}
 								value={formData.stem}
 								onChange={handleChange}
+								required
 							/>
 						</div>
 					</div>
