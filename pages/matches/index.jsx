@@ -37,17 +37,10 @@ const Matches = () => {
             slideForCrush,
             crushAccepted,
             crushRejected, } = await myMatches.json();
-
-    //     const uniqueSet = new Set(users.map(JSON.stringify));
-    // const uniqueArray = Array.from(uniqueSet).map(JSON.parse);
-
-    //     setAllUsers(uniqueArray);
 		
 		setSlideYou(slideForYou)
 		setYouAccept(youAcceptedMatch);
 		setYouReject(youRejectedMatch);
-		//setSlideYou(slideForYou.filter(e=>!(youAccept.includes(e))));
-		//setSlideYou(slideForYou.filter(e=>!(youReject.includes(e))));
 		setAcceptedRequest(crushAccepted);
 		setRejectedRequest(crushRejected);
 		setYourSlide(slideForCrush);
