@@ -69,9 +69,9 @@ export default async function handler(req, res) {
 			location: location[0],
 			message: message,
 			likes: likes[0],
-			matches:matches,
-			crushExist:crushExist[0],
-			liked_back:liked_back_array.length===0?false: liked_back_array[0].liked_back,
+			matches:matches.length===0?false:true,
+			crushExist:crushExist.length===0?true:false,
+			liked_back:liked_back_array.length===0?4: liked_back_array[0].liked_back,
 			slide:matches.length===0?false:true
 		});
 	}

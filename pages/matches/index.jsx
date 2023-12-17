@@ -44,8 +44,6 @@ const Matches = () => {
 		setAcceptedRequest(crushAccepted);
 		setRejectedRequest(crushRejected);
 		setYourSlide(slideForCrush);
-		//setYourSlide(slideForCrush.filter(e=>!(acceptedRequest.includes(e))));
-		//setYourSlide(slideForCrush.filter(e=>!(rejectedRequest.includes(e))));
         setAllOccupations(occupations);
         setConnectedUsers(socials);
 
@@ -89,7 +87,7 @@ const Matches = () => {
 			)} */}
 
 			{
-				slideYou && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'pink'}}>
+				slideYou.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'pink'}}>
 				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
 				These Personalities want to be in touch with you
 				</h1>
@@ -111,7 +109,7 @@ const Matches = () => {
 			}
 
 {
-				youAccept && (<div><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'limegreen'}}>
+				youAccept.length!==0 && (<div><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'limegreen'}}>
 				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
 				These Are People who you have matched with
 				</h1>
@@ -133,7 +131,7 @@ const Matches = () => {
 			}
 
 {
-				youReject && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'orangered'}}>
+				youReject.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'orangered'}}>
 				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
 				These Are People who you have rejected
 				</h1>
@@ -155,7 +153,7 @@ const Matches = () => {
 			}
 
 {
-				yourSlide && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'pink'}}>
+				yourSlide.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'pink'}}>
 				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
 				These Are The Profiles you have sent a request to
 				</h1>
@@ -177,7 +175,7 @@ const Matches = () => {
 			}
 
 {
-				acceptedRequest && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'limegreen'}}>
+				acceptedRequest.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'limegreen'}}>
 				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
 				These Are People who have accepted you
 				</h1>
@@ -199,7 +197,7 @@ const Matches = () => {
 			}
 
 {
-				rejectedRequest && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'orangered'}}>
+				rejectedRequest.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'orangered'}}>
 				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
 				These People have denied your request 
 				</h1>

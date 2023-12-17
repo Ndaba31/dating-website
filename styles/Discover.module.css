@@ -1,0 +1,10 @@
+.discover{
+	
+	background: linear-gradient(to right, #fc4041, #411554) ;
+}
+
+.searchbuttons{
+	justify-content: space-between;
+	display: block;
+	margin: auto;
+}

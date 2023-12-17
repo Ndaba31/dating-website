@@ -5,7 +5,7 @@ import styles from '@/styles/Profile.module.css';
 import Image from 'next/legacy/image';
 import Posts from '@/components/Posts';
 import { useDateContext } from '@/context/dateContext';
-import { Favorite, FavoriteBorder, PeopleAlt, PeopleAltOutlined } from '@mui/icons-material';
+import { Favorite, FavoriteBorder,PeopleAlt } from '@mui/icons-material';
 import Hickies from '@/components/Hickies';
 import Navbar from '@/components/Navbar';
 
@@ -39,6 +39,7 @@ const Page = () => {
 	const [favorite, setFavorite] = useState(event.initial);
 	const [slide, setSlide] = useState(event.initial);
 	// const [hickies, setHickies] = useState([]);
+	const [crushBack,setCrushBack] = useState(false)
 	const [confirm,setConfirm]= useState(event.initial)
 	const [liked_back, setLiked_back] = useState()
 	const [matchesEmpty, setMatchesEmpty] = useState(true)
@@ -80,11 +81,13 @@ const Page = () => {
 			setPosts(posts);
 			setLocation(location);
 			setLiked_back(liked_back);
-			setMatchesEmpty(matches.length===0)
+			setMatchesEmpty(!matches);
+			setCrushBack(crushExist)
+			
 			console.log(matchesEmpty)
 
            
-				setSlide(slide)
+				setSlide(slide?event.action:event.initial)
 			
 			
 
@@ -203,7 +206,7 @@ const Page = () => {
 				
 				if (message==='slideInitiated'){
 					setSlide(event.initial)
-					alert('Slide has already been initiated')
+					
 				}
 			  }else if(slide==event.reaction){
 				const slideCancel = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,cancelSlide)
@@ -443,23 +446,26 @@ const Page = () => {
 									</button>
 								
 									{
-										!matchesEmpty&&(
-											<button id='slide' onClick={()=>{if(slide==event.initial||slide==event.reaction){
+										crushBack&&(
+											<button id='slide' onClick={()=>{if(slide==event.initial||slide==event.reaction&&!matchesEmpty){
 												setSlide(event.action)
+												setMatchesEmpty(true)
 											}
-											else{
+											else if(slide===event.action&&matchesEmpty){
 											  setSlide(event.reaction)
+											  matchesEmpty(false)
 											}}}
-											 className={slide?styles.match_button:styles.match_button_clicked}>
-											 {!slide ? 
+											 className={(slide===event.reaction||slide===event.initial)&&liked_back===4?styles.match_button:styles.match_button_clicked}>
+											 {(slide===event.reaction||slide===event.initial&&liked_back===4) ? 
 												<p style={{ fontSize: '12pt' }}>Slide</p>:<p 
 												style={{ fontSize: '12pt' }}>Gwababa</p>} 
 												<PeopleAlt />
 											</button>
 										)
+										
 									}
 								{
-									liked_back===null&&(
+									slide===event.action&&liked_back===4&&(
 										<div id='choice'><p style={{fontSize: '12pt'}}><b>This Person has already initiated to match with you </b></p>
 								       <div className={styles.choice_buttons}>
 									   <button onClick={()=>{
