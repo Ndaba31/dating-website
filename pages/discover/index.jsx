@@ -12,6 +12,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import Button from '@mui/material/Button'
 import { style } from '@mui/system';
 import styles from '@/styles/Discover.module.css';
 
@@ -125,7 +126,7 @@ const Discover = () => {
             onChange={handleChange}
             value={button}
             >
-                <FormControlLabel value="age" control={<Radio onClick={handleClick}/>} label="Min Age" />
+        <FormControlLabel value="age" control={<Radio onClick={handleClick}/>} label="Min Age" />
         <FormControlLabel value="city" control={<Radio onClick={handleClick}/>} label="City" />
         <FormControlLabel value="region" control={<Radio onClick={handleClick}/>} label="Region" />
         <FormControlLabel value="hobbies" control={<Radio onClick={handleClick}/>} label="Hobbies" />
@@ -136,6 +137,7 @@ const Discover = () => {
         <FormControlLabel value="company" control={<Radio onClick={handleClick}/>} label="Company" />
             </RadioGroup>
            </FormControl>
+           <Button size='20%' variant='contained' onClick={readRefvalue}>Search</Button>
            </form>
            </div>
       

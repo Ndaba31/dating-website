@@ -21,7 +21,10 @@ const Page = () => {
 		initial:0,
 		action:1,
 		reaction:2,
-		bonus:3
+		bonus:3,
+		accept:4,
+		reject:5
+
 	}
 	//let initSlide = false
 	
@@ -42,7 +45,7 @@ const Page = () => {
 	const [crushBack,setCrushBack] = useState(false)
 	const [confirm,setConfirm]= useState(event.initial)
 	const [liked_back, setLiked_back] = useState()
-	const [matchesEmpty, setMatchesEmpty] = useState(true)
+	const [matchesExist, setMatchesExist] = useState(true)
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
 	const [occupations, setOccupations] = useState([]);
@@ -80,11 +83,13 @@ const Page = () => {
 			setHobbies(hobbies);
 			setPosts(posts);
 			setLocation(location);
-			setLiked_back(liked_back);
-			setMatchesEmpty(!matches);
+			setLiked_back(Number(liked_back));
+			setMatchesExist(matches);
 			setCrushBack(crushExist)
 			
-			console.log(matchesEmpty)
+			console.log(liked_back)
+			
+		
 
            
 				setSlide(slide?event.action:event.initial)
@@ -94,10 +99,19 @@ const Page = () => {
 			 if (likes){
 			 	setFavorite(event.action)
 			 }
-			 if(crushExist){
-			//	hideEnableSlide('none')
-				//hideEnableChoice('block')
+			 if(liked_back){
+				if(liked_back===1){
+				setSlide(event.accept)
 			 }
+			 if(liked_back===0){
+				setSlide(event.reject)
+			 }
+			 }
+			 if(crushExist){
+				setSlide(event.bonus)
+				//setConfirm(event.bonus)
+			 }
+			 
 			//  if(!isNull){
 			// 	hideEnableChangeMind('flex')
 			// 	hideEnableChoice('none')
@@ -205,15 +219,15 @@ const Page = () => {
 				const {message} = await slide_onUser.json()
 				
 				if (message==='slideInitiated'){
-					setSlide(event.initial)
+					//setSlide(event.initial)
 					
 				}
-			  }else if(slide==event.reaction){
+			  }else if(slide===event.reaction){
 				const slideCancel = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,cancelSlide)
-			  }else if(slide==event.bonus){
-				const declineSlide =await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,decline)
-				setSlide(initial)
-			  }
+			  }//else if(slide===event.reject){
+				//const declineSlide =await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,decline)
+				//setSlide(event.bonus)
+			 // }
 
 			
 		};
@@ -236,7 +250,7 @@ const Page = () => {
 				update:'confirmMatch',
 				crushee: id,
 				crush: user.stem,
-				totalMatches:confirm===event.action?++totalMatches:totalMatches===0?0:--totalMatches 
+				totalMatches:confirm===event.accept?++totalMatches:totalMatches===0?0:--totalMatches 
 			}),
 		}
 
@@ -261,20 +275,20 @@ const Page = () => {
 				update:'nullify',
 				crushee: id,
 				crush: user.stem,
-				totalMatches: confirm===event.action?++totalMatches:totalMatches===0?0:--totalMatches
+				totalMatches: confirm===event.accept?++totalMatches:totalMatches===0?0:--totalMatches
 			}),
 		}
 
-		if(confirm===event.action){
-			setConfirm(event.initial)
+		if(confirm===event.accept){
+			
 			const acceptMatch =await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,confirmMatch)
 		}
-		if(confirm===event.reaction){
-			setConfirm(event.initial)
+		if(confirm===event.reject){
+			
 			const declineMatch= await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,denyMatch)
 		}
 		if(confirm===event.bonus){
-			setConfirm(event.initial)
+			
 			const negate = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,nullify)
 		}
 	  };
@@ -446,17 +460,17 @@ const Page = () => {
 									</button>
 								
 									{
-										crushBack&&(
-											<button id='slide' onClick={()=>{if(slide==event.initial||slide==event.reaction&&!matchesEmpty){
+										(slide===event.initial||slide===event.reaction||slide===event.action)&&(
+											<button id='slide' onClick={()=>{if(!matchesExist){
 												setSlide(event.action)
-												setMatchesEmpty(true)
+												setMatchesExist(true)
 											}
-											else if(slide===event.action&&matchesEmpty){
+											else if(slide===event.action){
 											  setSlide(event.reaction)
-											  matchesEmpty(false)
+											  setMatchesExist(false)
 											}}}
-											 className={(slide===event.reaction||slide===event.initial)&&liked_back===4?styles.match_button:styles.match_button_clicked}>
-											 {(slide===event.reaction||slide===event.initial&&liked_back===4) ? 
+											 className={(!matchesExist)?styles.match_button:styles.match_button_clicked}>
+											 {(!matchesExist) ? 
 												<p style={{ fontSize: '12pt' }}>Slide</p>:<p 
 												style={{ fontSize: '12pt' }}>Gwababa</p>} 
 												<PeopleAlt />
@@ -465,11 +479,12 @@ const Page = () => {
 										
 									}
 								{
-									slide===event.action&&liked_back===4&&(
+									(slide===event.bonus&&crushBack&&liked_back===null)&&(
 										<div id='choice'><p style={{fontSize: '12pt'}}><b>This Person has already initiated to match with you </b></p>
 								       <div className={styles.choice_buttons}>
 									   <button onClick={()=>{
-									   setConfirm(event.action)
+									   setConfirm(event.accept)
+									   setSlide(event.accept)
 									   //hideEnableChangeMind('flex')
 									   //hideEnableChoice('none')
 									   
@@ -477,7 +492,8 @@ const Page = () => {
 									}
 									    className={styles.match_button_accept}><p style={{fontSize: '12pt'}}>Accept</p></button>
 									    <button onClick={()=>{
-											setConfirm(event.reaction)
+											setConfirm(event.reject)
+											setSlide(event.reject)
 										 //   hideEnableChoice('none')
 										//	hideEnableChangeMind('flex')
 											
@@ -490,11 +506,10 @@ const Page = () => {
 								}
 									
 									{
-										liked_back===0||liked_back===1 && (
+										(liked_back===1||liked_back===0) && (
 											<button id='changeMind' onClick={()=>{
 												setConfirm(event.bonus)
-										//		hideEnableChangeMind('none')
-										//	hideEnableChoice('block')
+												setSlide(event.bonus)
 											}} className={styles.change_mind} ><p style={{fontSize: '12pt'}}>Change Mind</p></button>
 										)
 									}

@@ -55,12 +55,13 @@ export default async function handler(req, res) {
 		})
 
 		const liked_back_array = await query({
-			query: 'SELECT liked_back FROM matches WHERE crush = ? AND crushee = ?;',
-			values: [crushee,stem]
+			query: 'SELECT liked_back FROM matches WHERE (crush = ? AND crushee = ?) OR (crush = ? AND crushee = ?);',
+			values: [crushee,stem,stem,crushee]
 		})
 
 		//console.log(user, posts, occupations, hobbies, location, message ,likes,matches,crushExist);
-         console.log(matches.length===0?false:true)
+         
+		 console.log(liked_back_array.length===0?4: liked_back_array[0].liked_back);
 		res.status(200).json({
 			user: user[0],
 			posts: posts,
@@ -70,7 +71,7 @@ export default async function handler(req, res) {
 			message: message,
 			likes: likes[0],
 			matches:matches.length===0?false:true,
-			crushExist:crushExist.length===0?true:false,
+			crushExist:crushExist.length===0?false:true,
 			liked_back:liked_back_array.length===0?4: liked_back_array[0].liked_back,
 			slide:matches.length===0?false:true
 		});
