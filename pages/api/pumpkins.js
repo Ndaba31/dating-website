@@ -38,12 +38,36 @@ export default async function handler(req, res) {
 	if (req.method === 'PUT') {
 		const { like, update, crush, crushee, like_count, hicky, hickie_count } = req.body;
 
-		// const tiny = like === 1 ? true : false;
+		console.log(`Like Count: ${like_count}`);
 
 		if (update === 'like') {
-			const updateLike = await query({
-				query: `UPDATE matches SET likes = ? WHERE matches.crushee = ? AND matches.crush = ?`,
-				values: [like, crushee, crush],
+			console.log('Update is equal to like');
+			const checkPreviousLike = await query({
+				query: 'SELECT * FROM likes WHERE crushee = ? AND crush = ?',
+				values: [crushee, crush],
+			});
+
+			console.log(`Previous Like: ${checkPreviousLike}`);
+
+			if (checkPreviousLike.length === 0) {
+				const updatePumpkin = await query({
+					query: `UPDATE user_details SET pumpkins = ? WHERE stem = ?`,
+					values: [like_count, crush],
+				});
+
+				const likeProfile = await query({
+					query: 'INSERT into likes (crushee,crush) values (?,?)',
+					values: [crushee, crush],
+				});
+
+				message =
+					updatePumpkin && likeProfile ? 'Liked profile!' : 'Error with Like Button';
+			}
+		} else if (update === 'dislike') {
+			console.log('Update is equal to DISLIKE');
+			const dislike = await query({
+				query: 'DELETE from likes where crushee = ? AND crush = ?',
+				values: [crushee, crush],
 			});
 
 			const updatePumpkin = await query({
@@ -51,8 +75,7 @@ export default async function handler(req, res) {
 				values: [like_count, crush],
 			});
 
-			console.log(like, update, crush, crushee, like_count);
-			message = updateLike && updatePumpkin ? 'Liked profile!' : 'Error with Like Button';
+			message = dislike && updatePumpkin ? 'Removed Like' : 'Error';
 		}
 
 		if (update === 'hicky') {

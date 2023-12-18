@@ -15,15 +15,16 @@ const Page = () => {
 
 	const { user, isAuth, setError, error } = useDateContext();
 
+	const currentUser = user;
 	// const temp = allMatches.find(({ crushee, crush }) => crushee === user.stem && crush === id);
 
 	// const pumpkin = allUsers.find(({ stem }) => stem === id);
 
 	console.log(id);
 
-	const [favorite, setFavorite] = useState(false);
+	const [favorite, setFavorite] = useState();
 	const [slide, setSlide] = useState(false);
-	// const [hickies, setHickies] = useState([]);
+	const [liked_back, setLiked_back] = useState(false);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
 	const [occupations, setOccupations] = useState([]);
@@ -33,9 +34,6 @@ const Page = () => {
 	const maxChar = 150;
 	const [showAll, setShowAll] = useState(false);
 
-	// console.log(temp);
-	// setFavorite();
-
 	const toggleReadMore = () => {
 		setShowAll(!showAll);
 	};
@@ -43,20 +41,37 @@ const Page = () => {
 	useEffect(() => {
 		const getPumpkin = async () => {
 			const getData = {
-				method: 'GET',
+				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
 				},
+				body: JSON.stringify({
+					crushee: currentUser.stem,
+				}),
 			};
 
 			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumkins/${id}`, getData);
-			const { user, occupations, hobbies, posts, location, message } = await res.json();
+			const {
+				user,
+				occupations,
+				hobbies,
+				posts,
+				location,
+				message,
+				likes,
+				slide,
+				liked_back,
+			} = await res.json();
 
 			setPumpkin(user);
 			setOccupations(occupations);
 			setHobbies(hobbies);
 			setPosts(posts);
 			setLocation(location);
+			setFavorite(likes);
+			setSlide(slide);
+			setLiked_back(liked_back);
+			console.log(`Likes: ${likes}\nSlide: ${slide}\nLiked Back: ${liked_back}`);
 
 			if (message === 'User Not Found') {
 				setError(message);
@@ -65,6 +80,116 @@ const Page = () => {
 
 		getPumpkin();
 	}, []);
+
+	useEffect(() => {
+		const toggleLike = async () => {
+			let like_count = pumpkin.pumpkins === 0 ? 0 : pumpkin.pumpkins;
+
+			const updateData = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					like: favorite ? 1 : 0,
+					update: 'like',
+					crushee: user.stem,
+					crush: id,
+					like_count: favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
+				}),
+			};
+
+			const removeData = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					like: favorite ? 1 : 0,
+					update: 'dislike',
+					crushee: user.stem,
+					crush: id,
+					like_count: favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
+				}),
+			};
+
+			if (favorite) {
+				const likeUser = await fetch(
+					`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+					updateData
+				);
+				const { message } = await likeUser.json();
+			} else {
+				const removeLike = await fetch(
+					`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+					removeData
+				);
+			}
+
+			// if (message === 'Liked profile!') setFavorite(!favorite);
+		};
+
+		toggleLike();
+	}, [favorite]);
+
+	useEffect(() => {
+		const slideApproach = async () => {
+			const slideData = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					update: 'slide',
+					crushee: user.stem,
+					crush: id,
+				}),
+			};
+
+			const cancelSlide = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					update: 'slideout',
+					crushee: user.stem,
+					crush: id,
+				}),
+			};
+
+			const decline = {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					update: 'slideout',
+					crushee: id,
+					crush: user.stem,
+				}),
+			};
+
+			if (slide) {
+				const slide_onUser = await fetch(
+					`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+					slideData
+				);
+				const { message } = await slide_onUser.json();
+
+				if (message === 'slideInitiated') {
+					//setSlide(event.initial)
+				}
+			} else {
+				const slideCancel = await fetch(
+					`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+					cancelSlide
+				);
+			}
+		};
+
+		slideApproach();
+	}, [slide]);
 
 	console.log(pumpkin);
 	let age;
@@ -208,9 +333,9 @@ const Page = () => {
 										onClick={() => setSlide(!slide)}
 										className={styles.match_button}
 									>
-										{slide && temp.liked_back ? (
+										{slide && liked_back ? (
 											<p style={{ fontSize: '12pt' }}>Unmatch</p>
-										) : slide && !temp.liked_back ? (
+										) : slide && !liked_back ? (
 											<p style={{ fontSize: '12pt' }}>Pending</p>
 										) : (
 											<p style={{ fontSize: '12pt' }}>Slide</p>

@@ -35,6 +35,7 @@ export default function Home() {
 		setAllUsers(users);
 
 		setAllOccupations(occupations);
+		// console.log(`Occupations: ${occupations[0].title}`);
 
 		setConnectedUsers(socials);
 

@@ -1,46 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import React from 'react';
 import Image from 'next/legacy/image';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from '@/styles/Home.module.css';
-import { faArrowAltCircleRight } from '@fortawesome/free-regular-svg-icons';
-import { useDateContext } from '@/context/dateContext';
 import { ArrowForwardIos, Facebook, Instagram, WhatsApp } from '@mui/icons-material';
+import { useDateContext } from '@/context/dateContext';
+import Link from 'next/link';
 
-// TODO DESIGN FOR PROFILE
-// TODO EDIT DESIGN FOR [STEM] PROFILE
-
-const DiscoverCard = ({ id }) => {
-	const {
-		allUsers,
-		allOccupations,
-		isAuth,
-		hobbyUsers,
-		locatedUsers,
-		postedUsers,
-		connectedUsers,
-	} = useDateContext();
-
-	const [locations, setLocations] = useState([]);
-	const [hobbies, setHobbies] = useState([]);
-	const [posts, setPosts] = useState([]);
+const MatchCard = ({ id }) => {
+	const { allUsers, allOccupations, isAuth, connectedUsers } = useDateContext();
 
 	const maxChar = 100;
 
 	const user = allUsers.find(({ stem }) => stem === id);
 	const occupationArrays = allOccupations.filter(({ stem }) => stem === id);
 	const socialArrays = connectedUsers.filter(({ stem }) => stem === id);
-	// console.log(`OccupationArrays: ${occupationArrays[0].title}`);
 
 	return (
 		<div className={styles.discover_container}>
 			<div className={styles.discover_card}>
 				<div className={styles.discover_image}>
 					<Image
-						width={500}
-						height={500}
+						width='80%'
+						height='80%'
 						layout='responsive'
-						// objectFit='cover'
+						objectFit='cover'
 						quality={100}
 						alt={user.profile_photo === null ? 'No profile photo' : user.profile_photo}
 						src={
@@ -61,13 +43,11 @@ const DiscoverCard = ({ id }) => {
 						</h1>
 						<div>
 							{occupationArrays.length !== 0 &&
-								occupationArrays.map(({ title, company }, i) => {
-									title !== '' && (
-										<h3 key={i}>
-											{title} {company === '' ? '' : 'at ' + company}
-										</h3>
-									);
-								})}
+								occupationArrays.map(({ title, company }, i) => (
+									<h3 key={i}>
+										{title} at {company}
+									</h3>
+								))}
 							{user.bio !== null && (
 								<p style={{ fontSize: '14pt' }}>{user.bio.slice(0, maxChar)}</p>
 							)}
@@ -114,13 +94,13 @@ const DiscoverCard = ({ id }) => {
 								socialArrays.map(({ social, visible }) => {
 									if (visible) {
 										if (social === 'facebook') {
-											return <Facebook key={social} />;
+											return <Facebook />;
 										} else if (social === 'instagram') {
-											return <Instagram key={social} />;
+											return <Instagram />;
 										} else if (social === 'whatsapp') {
-											return <WhatsApp key={social} />;
+											return <WhatsApp />;
 										} else {
-											return <Twitter key={social} />;
+											return <Twitter />;
 										}
 									}
 								})}
@@ -132,4 +112,4 @@ const DiscoverCard = ({ id }) => {
 	);
 };
 
-export default DiscoverCard;
+export default MatchCard;

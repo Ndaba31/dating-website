@@ -51,12 +51,12 @@ const Navbar = ({ page }) => {
 							>
 								Discover
 							</Link>
-							<Link
+							{/* <Link
 								href={`${page !== 'home' ? '../redroom' : 'redroom'}`}
 								className={styles.link}
 							>
 								Redroom
-							</Link>
+							</Link> */}
 							<Link
 								href={`${page !== 'home' ? '../matches' : 'matches'}`}
 								className={styles.link}
