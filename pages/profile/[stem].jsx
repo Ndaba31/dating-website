@@ -84,56 +84,53 @@ const Page = () => {
 		getPumpkin();
 	}, []);
 
-	useEffect(() => {
-		const toggleLike = async () => {
-			let like_count = pumpkin.pumpkins === 0 ? 0 : pumpkin.pumpkins;
+	const toggleLike = async () => {
+		console.log('Toggle like acivated');
+		let like_count = pumpkin.pumpkins === 0 ? 0 : pumpkin.pumpkins;
+		console.log(`Like Count: ${like_count}`);
 
-			const updateData = {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					like: favorite ? 1 : 0,
-					update: 'like',
-					crushee: user.stem,
-					crush: id,
-					like_count: favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
-				}),
-			};
-
-			const removeData = {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					like: favorite ? 1 : 0,
-					update: 'dislike',
-					crushee: user.stem,
-					crush: id,
-					like_count: favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
-				}),
-			};
-
-			if (favorite) {
-				const likeUser = await fetch(
-					`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
-					updateData
-				);
-				const { message } = await likeUser.json();
-			} else {
-				const removeLike = await fetch(
-					`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
-					removeData
-				);
-			}
-
-			// if (message === 'Liked profile!') setFavorite(!favorite);
+		const updateData = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				like: favorite ? 1 : 0,
+				update: 'like',
+				crushee: user.stem,
+				crush: id,
+				like_count: !favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
+			}),
 		};
 
-		toggleLike();
-	}, [favorite]);
+		const removeData = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				like: favorite ? 1 : 0,
+				update: 'dislike',
+				crushee: user.stem,
+				crush: id,
+				like_count: !favorite ? ++like_count : like_count === 0 ? 0 : --like_count,
+			}),
+		};
+
+		if (!favorite) {
+			const likeUser = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, updateData);
+			setFavorite(true);
+			console.log('Liked User');
+			const { message } = await likeUser.json();
+		} else {
+			const removeLike = await fetch(
+				`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+				removeData
+			);
+			setFavorite(false);
+			console.log('Unliked User');
+		}
+	};
 
 	useEffect(() => {
 		const slideApproach = async () => {
@@ -322,7 +319,7 @@ const Page = () => {
 							{isAuth && (
 								<div style={{ display: 'flex', justifyContent: 'space-around' }}>
 									<button
-										onClick={() => setFavorite(!favorite)}
+										onClick={toggleLike}
 										style={{ backgroundColor: 'transparent', border: 0 }}
 									>
 										{favorite ? (
