@@ -4,9 +4,9 @@ import HickyAvatar from './HickyAvatar';
 
 const Hickies = ({ hickies }) => {
 	return (
-		<div>
+		<div style={{ padding: '4px' }}>
 			<h1>Hickies</h1>
-			<div style={styles.hicky_container}>
+			<div className={styles.hicky_container}>
 				{hickies.map((hicky) => (
 					<HickyAvatar key={hicky.stem} hicky={hicky} />
 				))}

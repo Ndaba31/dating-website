@@ -149,6 +149,25 @@
 .hicky_container {
 	display: grid;
 	gird-template-columns: 1fr 1fr;
+	padding: 4px;
+}
+
+.hicky_div {
+	display: flex;
+	justify-content: flex-start;
+}
+
+.hicky {
+	position: relative;
+	height: 200px;
+	width: 200px;
+	border-radius: 50%;
+}
+
+.hicky * {
+	height: auto;
+	width: auto;
+	border-radius: 50%;
 }
 
 .link {

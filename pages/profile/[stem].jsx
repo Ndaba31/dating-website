@@ -30,6 +30,7 @@ const Page = () => {
 	const [occupations, setOccupations] = useState([]);
 	const [location, setLocation] = useState({});
 	const [pumpkin, setPumpkin] = useState({});
+	const [hickies, setHickies] = useState([]);
 
 	const maxChar = 150;
 	const [showAll, setShowAll] = useState(false);
@@ -61,6 +62,7 @@ const Page = () => {
 				likes,
 				slide,
 				liked_back,
+				hickies,
 			} = await res.json();
 
 			setPumpkin(user);
@@ -68,6 +70,7 @@ const Page = () => {
 			setHobbies(hobbies);
 			setPosts(posts);
 			setLocation(location);
+			setHickies(hickies);
 			setFavorite(likes);
 			setSlide(slide);
 			setLiked_back(liked_back);
@@ -191,7 +194,6 @@ const Page = () => {
 		slideApproach();
 	}, [slide]);
 
-	console.log(pumpkin);
 	let age;
 
 	if (pumpkin === undefined || pumpkin.dob === undefined || pumpkin.dob === null) {
@@ -348,8 +350,7 @@ const Page = () => {
 					</article>
 				)}
 			</div>
-			{/* <Hickies hickies={hickies} /> */}
-			{/* {console.log(hickies)} */}
+			<Hickies hickies={hickies} />
 			<div style={{ padding: '16px', display: 'grid' }}>
 				{posts.length !== 0 ? (
 					<>

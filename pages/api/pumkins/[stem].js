@@ -43,6 +43,7 @@ export default async function handler(req, res) {
 			query: 'SELECT * FROM socials WHERE stem = ?;',
 			values: [stem],
 		});
+
 		console.log(user, posts, occupations, hobbies, location, message);
 
 		res.status(200).json({
@@ -88,6 +89,22 @@ export default async function handler(req, res) {
 			values: [stem],
 		});
 
+		const hickies_crushees = await query({
+			query: 'SELECT user_details.profile_photo, stem FROM matches, user_details WHERE user_details.stem = crushee AND slide = 1 AND liked_back = 1 AND crush = ?;',
+			values: [stem],
+		});
+
+		console.log(hickies_crushees);
+
+		const hickies_crushes = await query({
+			query: 'SELECT user_details.profile_photo, stem FROM matches, user_details WHERE user_details.stem = crush AND slide = 1 AND liked_back = 1 AND crushee = ?;',
+			values: [stem],
+		});
+
+		console.log(hickies_crushes);
+
+		const hickies = hickies_crushees.concat(hickies_crushes);
+
 		const socials = await query({
 			query: 'SELECT * FROM socials WHERE stem = ?;',
 			values: [stem],
@@ -108,7 +125,7 @@ export default async function handler(req, res) {
 			values: [crushee, stem, stem, crushee],
 		});
 
-		console.log(user, posts, occupations, hobbies, location, message);
+		console.log(user, posts, occupations, hobbies, location, message, hickies);
 
 		res.status(200).json({
 			user: user[0],
@@ -116,6 +133,7 @@ export default async function handler(req, res) {
 			occupations: occupations,
 			hobbies: hobbies,
 			location: location[0],
+			hickies: hickies,
 			socials: socials,
 			message: message,
 			likes: likes.length === 0 ? false : true,
