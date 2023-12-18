@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 		const { count } = req.body;
 		const allUsers = await query({
 			query:
-				'SELECT users.stem AS stem, first_name, last_name, bio, hickies, pumpkins, profile_photo FROM users, user_details WHERE users.stem = user_details.stem LIMIT ' +
+				'SELECT users.stem AS stem, first_name, last_name, bio, hickies, pumpkins, profile_photo FROM users, user_details WHERE users.stem = user_details.stem ORDER BY pumpkins DESC LIMIT ' +
 				count,
 			values: [],
 		});
@@ -27,11 +27,17 @@ export default async function handler(req, res) {
 			values: [],
 		});
 
+		const allMatches = await query({
+			query: 'SELECT * FROM matches WHERE slide = 1 AND liked_back = 1;',
+			values: [],
+		});
+
 		res.status(200).json({
 			message: message,
 			users: allUsers,
 			occupations: allOccupations,
 			socials: allSocials,
+			matches: allMatches,
 		});
 	}
 

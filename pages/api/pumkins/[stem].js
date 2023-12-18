@@ -120,7 +120,7 @@ export default async function handler(req, res) {
 			message: message,
 			likes: likes.length === 0 ? false : true,
 			slide: slide_array.length === 0 ? false : true,
-			liked_back: liked_back_array[0].liked_back,
+			liked_back: liked_back_array.length === 0 ? undefined : liked_back_array[0].liked_back,
 		});
 	}
 }
