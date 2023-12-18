@@ -2,23 +2,26 @@ import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { useDateContext } from '@/context/dateContext';
 import styles from '@/styles/Navbar.module.css';
+import Sidebar from '../Sidebar';
+import { Logout, Menu } from '@mui/icons-material';
+import { useRouter } from 'next/router';
 
 const Navbar = ({ page }) => {
 	const { isAuth, setIsAuth, user } = useDateContext();
+	const [showSidebar, setShowSidebar] = useState(false);
+	const router = useRouter();
 
-	// if (user !== undefined)
-	//     setIsAuth(true)
+	const toggleSidebar = () => {
+		setShowSidebar(!showSidebar);
+	};
 
 	return (
 		<header className={styles.header}>
 			<nav className={styles.nav}>
 				<Link href='/' className={styles.logo} style={{ textDecoration: 'none' }}>
-					{/* <div className="border-2 rounded-full w-6 h-6 bg-transparent border-white flex justify-center items-center">
-                        <div className='bg-white w-[70%] h-[70%] rounded-full'></div>
-                    </div> */}
 					<Image
 						width={75}
 						height={75}
@@ -31,9 +34,6 @@ const Navbar = ({ page }) => {
 					</h2>
 				</Link>
 				<div className={styles.options}>
-					{/* <button onClick={() => { setSidebar(!sidebar) }} className='md:hidden'>
-                        <FontAwesomeIcon icon={faCircleUser} size='xl' />
-                    </button> */}
 					{!isAuth ? (
 						<>
 							<Link href='login' className={styles.link}>
@@ -51,12 +51,6 @@ const Navbar = ({ page }) => {
 							>
 								Discover
 							</Link>
-							{/* <Link
-								href={`${page !== 'home' ? '../redroom' : 'redroom'}`}
-								className={styles.link}
-							>
-								Redroom
-							</Link> */}
 							<Link
 								href={`${page !== 'home' ? '../matches' : 'matches'}`}
 								className={styles.link}
@@ -69,10 +63,32 @@ const Navbar = ({ page }) => {
 							>
 								Profile
 							</Link>
+							<button
+								className={styles.link}
+								style={{
+									backgroundColor: 'transparent',
+									border: '0',
+									fontSize: '12pt',
+									display: 'flex',
+									alignItems: 'center',
+									border: '2px solid white',
+								}}
+								onClick={() => {
+									setIsAuth(false);
+									router.replace('/');
+								}}
+							>
+								<p>Logout</p>
+								<Logout />
+							</button>
 						</>
 					)}
 				</div>
+				<button className={styles.mobileMenu} onClick={toggleSidebar}>
+					<Menu />
+				</button>
 			</nav>
+			{showSidebar && <Sidebar closeSidebar={toggleSidebar} page={page} />}
 		</header>
 	);
 };

@@ -171,10 +171,6 @@
 	padding: 2px;
 }
 
-/* .discover_following * {
-	margin-left: 40px;
-} */
-
 @media only screen and (min-width: 930px) {
 	.hero_shadow {
 		min-height: 100vh;
