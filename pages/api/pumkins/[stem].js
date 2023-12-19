@@ -1,4 +1,5 @@
 import { query } from '@/lib/db';
+import { count } from 'console';
 
 export default async function handler(req, res) {
 	let message;
@@ -89,16 +90,22 @@ export default async function handler(req, res) {
 			values: [stem],
 		});
 
+		const isCrushee = await query({
+			query: 'SELECT * FROM matches WHERE crushee = ? AND crush = ?',
+			values: [crushee, stem],
+		});
+
+		const count = 5;
 		const hickies_crushees = await query({
-			query: 'SELECT user_details.profile_photo, stem FROM matches, user_details WHERE user_details.stem = crushee AND slide = 1 AND liked_back = 1 AND crush = ?;',
-			values: [stem],
+			query: 'SELECT user_details.profile_photo, stem FROM matches, user_details WHERE user_details.stem = crushee AND slide = 1 AND liked_back = 1 AND crush = ? ORDER BY pumpkins DESC LIMIT ?',
+			values: [stem, count],
 		});
 
 		console.log(hickies_crushees);
 
 		const hickies_crushes = await query({
-			query: 'SELECT user_details.profile_photo, stem FROM matches, user_details WHERE user_details.stem = crush AND slide = 1 AND liked_back = 1 AND crushee = ?;',
-			values: [stem],
+			query: 'SELECT user_details.profile_photo, stem FROM matches, user_details WHERE user_details.stem = crush AND slide = 1 AND liked_back = 1 AND crushee = ? ORDER BY pumpkins DESC LIMIT ?',
+			values: [stem, count],
 		});
 
 		console.log(hickies_crushes);
@@ -139,6 +146,7 @@ export default async function handler(req, res) {
 			likes: likes.length === 0 ? false : true,
 			slide: slide_array.length === 0 ? false : true,
 			liked_back: liked_back_array.length === 0 ? undefined : liked_back_array[0].liked_back,
+			isCrushee: isCrushee.length === 0 ? false : true,
 		});
 	}
 }

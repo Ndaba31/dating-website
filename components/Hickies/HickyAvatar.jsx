@@ -12,7 +12,7 @@ const HickyAvatar = ({ hicky }) => {
 					{profile_photo ? (
 						<Image
 							layout='fill'
-							objectFit='contain'
+							objectFit='cover'
 							src={'/' + profile_photo}
 							alt={profile_photo}
 							priority
@@ -20,7 +20,7 @@ const HickyAvatar = ({ hicky }) => {
 					) : (
 						<Image
 							layout='fill'
-							objectFit='contain'
+							objectFit='cover'
 							src='/no_photo.png'
 							alt='No Photo'
 							priority

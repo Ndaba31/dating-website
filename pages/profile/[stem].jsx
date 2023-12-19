@@ -16,6 +16,7 @@ const Page = () => {
 	const { user, isAuth, setError, error } = useDateContext();
 
 	const currentUser = user;
+	console.log(currentUser);
 	// const temp = allMatches.find(({ crushee, crush }) => crushee === user.stem && crush === id);
 
 	// const pumpkin = allUsers.find(({ stem }) => stem === id);
@@ -23,7 +24,9 @@ const Page = () => {
 	console.log(id);
 
 	const [favorite, setFavorite] = useState();
+	const [isSlider, setIsSlider] = useState(true);
 	const [slide, setSlide] = useState(false);
+	const [acceptSlide, setAcceptSlide] = useState(null);
 	const [liked_back, setLiked_back] = useState(false);
 	const [hobbies, setHobbies] = useState([]);
 	const [posts, setPosts] = useState([]);
@@ -31,6 +34,8 @@ const Page = () => {
 	const [location, setLocation] = useState({});
 	const [pumpkin, setPumpkin] = useState({});
 	const [hickies, setHickies] = useState([]);
+
+	let totalMatches = pumpkin.hickies === 0 ? 0 : pumpkin.hickies;
 
 	const maxChar = 150;
 	const [showAll, setShowAll] = useState(false);
@@ -63,6 +68,7 @@ const Page = () => {
 				slide,
 				liked_back,
 				hickies,
+				isCrushee,
 			} = await res.json();
 
 			setPumpkin(user);
@@ -74,7 +80,15 @@ const Page = () => {
 			setFavorite(likes);
 			setSlide(slide);
 			setLiked_back(liked_back);
-			console.log(`Likes: ${likes}\nSlide: ${slide}\nLiked Back: ${liked_back}`);
+			setAcceptSlide(
+				slide && liked_back === 1 ? true : slide && liked_back === 0 ? false : null
+			);
+			setIsSlider(
+				liked_back === null || liked_back === 0 || liked_back === 1 ? isCrushee : true
+			);
+			console.log(
+				`Likes: ${likes}\nSlide: ${slide}\nLiked Back: ${liked_back}\nisSlider: ${isCrushee}\nAccept Slide: ${acceptSlide}`
+			);
 
 			if (message === 'User Not Found') {
 				setError(message);
@@ -132,64 +146,182 @@ const Page = () => {
 		}
 	};
 
-	useEffect(() => {
-		const slideApproach = async () => {
-			const slideData = {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					update: 'slide',
-					crushee: user.stem,
-					crush: id,
-				}),
-			};
-
-			const cancelSlide = {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					update: 'slideout',
-					crushee: user.stem,
-					crush: id,
-				}),
-			};
-
-			const decline = {
-				method: 'PUT',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					update: 'slideout',
-					crushee: id,
-					crush: user.stem,
-				}),
-			};
-
-			if (slide) {
-				const slide_onUser = await fetch(
-					`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
-					slideData
-				);
-				const { message } = await slide_onUser.json();
-
-				if (message === 'slideInitiated') {
-					//setSlide(event.initial)
-				}
-			} else {
-				const slideCancel = await fetch(
-					`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
-					cancelSlide
-				);
-			}
+	const toggleSlide = async () => {
+		const slideData = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update: 'slide',
+				crushee: user.stem,
+				crush: id,
+			}),
 		};
 
-		slideApproach();
-	}, [slide]);
+		const cancelSlide = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update: 'slideout',
+				matched: false,
+				crushee: user.stem,
+				crush: id,
+			}),
+		};
+
+		const decline = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update: 'slideout',
+				crushee: id,
+				crush: user.stem,
+			}),
+		};
+
+		if (!slide && liked_back === undefined) {
+			const slide_onUser = await fetch(
+				`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+				slideData
+			);
+			setSlide(true);
+			setLiked_back(null);
+			const { message } = await slide_onUser.json();
+
+			// if (message === 'slideInitiated') {
+			// 	setSlide(event.initial)
+			// }
+		} else if (slide && liked_back === null) {
+			const slideCancel = await fetch(
+				`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+				cancelSlide
+			);
+			setSlide(false);
+			setLiked_back(undefined);
+		} else if (slide && liked_back === 1) {
+			const slideCancel = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					update: 'slideout',
+					matched: true,
+					crushee: user.stem,
+					crush: id,
+				}),
+			});
+			setSlide(false);
+			setLiked_back(undefined);
+		}
+	};
+
+	const toggleLikedBack = async () => {
+		const denyMatch = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update: 'denyMatch',
+				crushee: id,
+				crush: user.stem,
+			}),
+		};
+
+		const nullify = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update: 'nullify',
+				crushee: id,
+				crush: user.stem,
+				totalMatches: !liked_back
+					? ++totalMatches
+					: totalMatches === 0
+					? 0
+					: --totalMatches,
+			}),
+		};
+
+		if (acceptSlide === false) {
+			console.log('Declined Slide');
+			const declineMatch = await fetch(
+				`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+				denyMatch
+			);
+			setLiked_back(0);
+		}
+
+		if (acceptSlide === null) {
+			console.log('Changed Mind');
+			const negate = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, nullify);
+			setLiked_back(null);
+		}
+	};
+
+	const approve = async () => {
+		setAcceptSlide(true);
+		console.log('toggle Approve Started');
+
+		const confirmMatch = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update: 'confirmMatch',
+				crushee: id,
+				crush: user.stem,
+				totalMatches: !liked_back
+					? ++totalMatches
+					: totalMatches === 0
+					? 0
+					: --totalMatches,
+			}),
+		};
+
+		console.log('Approved Slide');
+		const acceptMatch = await fetch(
+			`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`,
+			confirmMatch
+		);
+		setLiked_back(1);
+	};
+
+	const decline = async () => {
+		setAcceptSlide(false);
+		console.log('toggle Decline Started');
+
+		const denyMatch = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				update: 'denyMatch',
+				crushee: id,
+				crush: user.stem,
+			}),
+		};
+
+		console.log('Declined Slide');
+		const declineMatch = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, denyMatch);
+		setLiked_back(0);
+	};
+
+	const changeMind = () => {
+		setAcceptSlide(null);
+		console.log(acceptSlide);
+		toggleLikedBack();
+	};
 
 	let age;
 
@@ -328,26 +460,66 @@ const Page = () => {
 											<FavoriteBorder className={styles.favorite} />
 										)}
 									</button>
-									<button
-										onClick={() => setSlide(!slide)}
-										className={styles.match_button}
-									>
-										{slide && liked_back ? (
-											<p style={{ fontSize: '12pt' }}>Unmatch</p>
-										) : slide && !liked_back ? (
-											<p style={{ fontSize: '12pt' }}>Pending</p>
-										) : (
-											<p style={{ fontSize: '12pt' }}>Slide</p>
-										)}
-										<PeopleAltOutlined />
-									</button>
+									{isSlider ? (
+										<button
+											onClick={toggleSlide}
+											className={`${styles.match_button} ${
+												liked_back === 0 ? styles.rejected_match : ''
+											} ${
+												slide && liked_back === 1
+													? styles.accepted_match
+													: ''
+											} ${liked_back === null ? styles.pending_match : ''}`}
+											disabled={liked_back === 0}
+										>
+											{!slide && liked_back === undefined ? (
+												<p style={{ fontSize: '12pt' }}>Slide</p>
+											) : slide && liked_back === null ? (
+												<p style={{ fontSize: '12pt' }}>Gwababa</p>
+											) : slide && liked_back === 0 ? (
+												<p style={{ fontSize: '12pt' }}>Rejected</p>
+											) : (
+												<p style={{ fontSize: '12pt' }}>Unmatch</p>
+											)}
+											<PeopleAltOutlined />
+										</button>
+									) : acceptSlide === null ? (
+										<div id='choice'>
+											<p style={{ fontSize: '12pt' }}>
+												<b>
+													This Person has already initiated to match with
+													you{' '}
+												</b>
+											</p>
+											<div className={styles.choice_buttons}>
+												<button
+													onClick={approve}
+													className={styles.match_button_accept}
+												>
+													<p style={{ fontSize: '12pt' }}>Accept</p>
+												</button>
+												<button
+													onClick={decline}
+													className={styles.match_button_decline}
+												>
+													<p style={{ fontSize: '12pt' }}>Decline</p>
+												</button>
+											</div>
+										</div>
+									) : acceptSlide === true || acceptSlide === false ? (
+										<button onClick={changeMind} className={styles.change_mind}>
+											<p style={{ fontSize: '12pt' }}>Change Mind</p>
+										</button>
+									) : (
+										<p>No Button to display</p>
+									)}
 								</div>
 							)}
 						</section>
 					</article>
 				)}
 			</div>
-			<Hickies hickies={hickies} />
+			{hickies.length !== 0 && <Hickies hickies={hickies} />}
 			<div style={{ padding: '16px', display: 'grid' }}>
 				{posts.length !== 0 ? (
 					<>
