@@ -21,7 +21,7 @@ export default async function handler(req, res) {
 		}
 
 		const posts = await query({
-			query: 'SELECT posts FROM posts WHERE stem = ?;',
+			query: 'SELECT posts, id FROM posts WHERE stem = ?;',
 			values: [stem],
 		});
 

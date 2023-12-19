@@ -229,7 +229,7 @@ const Profile = () => {
 						>
 							Gallery
 						</h1>
-						<Posts posts={posts} />
+						<Posts posts={posts} isUser={true} />
 					</>
 				) : (
 					<h1 style={{ textAlign: 'center' }}>No Posts Yet</h1>

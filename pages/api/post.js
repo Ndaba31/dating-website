@@ -1,5 +1,5 @@
 import { query } from '@/lib/db';
-import { createUserFolder } from '@/lib/directories';
+import { createUserFolder, deleteUserFolder } from '@/lib/directories';
 import { log } from 'console';
 import { IncomingForm } from 'formidable-serverless';
 import fs from 'fs/promises';
@@ -37,9 +37,16 @@ export default async function handler(req, res) {
 				createUserFolder(stem);
 			}
 
+			const num_posts_array = await query({
+				query: 'SELECT COUNT(posts) AS num_posts FROM posts WHERE stem = ?;',
+				values: [stem],
+			});
+
+			const num_posts = Number(num_posts_array[0].num_posts) + 1;
+
 			const addPost = await query({
-				query: 'INSERT INTO posts (stem, posts) VALUES (?, ?)',
-				values: [stem, dbImg],
+				query: 'INSERT INTO posts (id, stem, posts) VALUES (?, ?, ?)',
+				values: [num_posts, stem, dbImg],
 			});
 
 			if (addPost) {
@@ -53,6 +60,80 @@ export default async function handler(req, res) {
 			} catch (error) {
 				res.status(500).json({ error: 'Error moving file' });
 			}
+		});
+	}
+
+	if (req.method === 'PUT') {
+		const form = new IncomingForm();
+
+		form.parse(req, async (err, fields) => {
+			const tag = fields.tag;
+			const post_id = fields.post_id;
+
+			const post_array = await query({
+				query: 'SELECT posts AS post FROM posts WHERE id = ? AND stem = ?;',
+				values: [post_id, tag],
+			});
+
+			if (post_array.length !== 0) {
+				res.status(200).json({ post: post_array[0].post });
+			} else {
+				res.status(200).json({ error: 'Post not found' });
+			}
+		});
+	}
+
+	if (req.method === 'DELETE') {
+		const form = new IncomingForm();
+
+		form.parse(req, async (err, fields) => {
+			const tag = fields.tag;
+			const post_id = fields.post_id;
+			const post_path = fields.post_path;
+			const uploadDir = `./public/${post_path}`;
+
+			// check if it exists
+			const fileExists = await doesFileExist(uploadDir);
+
+			if (!fileExists) {
+				res.status(500).json({ error: 'File Not Found' });
+			}
+
+			// check if it is the last one in the database
+			const num_posts_array = await query({
+				query: 'SELECT COUNT(posts) AS num_posts FROM posts WHERE stem = ?;',
+				values: [tag],
+			});
+
+			const num_posts = Number(num_posts_array[0].num_posts);
+
+			if (num_posts <= 1) {
+				deleteUserFolder(tag);
+
+				const deletePost = await query({
+					query: 'DELETE FROM posts WHERE id = ? AND stem = ?;',
+					values: [post_id, tag],
+				});
+
+				res.status(200).json({ success: 'Removed whole folder' });
+			} else {
+				try {
+					await fs.unlink(uploadDir);
+
+					const deletePost = await query({
+						query: 'DELETE FROM posts WHERE id = ? AND stem = ?;',
+						values: [post_id, tag],
+					});
+
+					res.status(200).json({ success: 'Removed post', num: num_posts });
+				} catch (error) {
+					res.status(500).json({ error: 'Error deleting existing file' });
+				}
+			}
+
+			// delete image
+
+			// delete row on database
 		});
 	}
 }
