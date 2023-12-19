@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import styles from '@/styles/Signup.module.css';
 import { useDateContext } from '@/context/dateContext';
-import { AddCircle } from '@mui/icons-material';
+import { AddCircle, ArrowBack } from '@mui/icons-material';
 
 const Questions = ({
 	count,
@@ -92,6 +92,7 @@ const Questions = ({
 		<div className={styles.question_container}>
 			<div
 				className={styles.question_navigators}
+				// style={{ justifyContent: 'flex-end' }}
 				style={{ justifyContent: count === 1 ? 'flex-end' : 'space-between' }}
 			>
 				{count !== 1 && (
@@ -102,19 +103,21 @@ const Questions = ({
 							router.back();
 						}}
 						className={styles.back}
-						style={{ backgroundColor: 'transparent', border: '0' }}
+						style={{
+							backgroundColor: 'transparent',
+							border: '2px solid #ccc',
+							borderRadius: '10px',
+							color: '#ccc',
+						}}
 					>
-						<FontAwesomeIcon
-							icon={faCircleLeft}
-							style={{ transform: 'scale(3)', color: '#ccc' }}
-						/>
+						<ArrowBack />
 					</button>
 				)}
-				{count < total && (
+				{/* {count < total && (
 					<Link href={`${count + 1}`} className={styles.skip}>
 						Skip
 					</Link>
-				)}
+				)} */}
 			</div>
 			<h1 style={{ marginTop: '40px', textAlign: 'center' }}>{question}</h1>
 			<form onSubmit={handleSubmit} style={{ textAlign: 'center' }}>

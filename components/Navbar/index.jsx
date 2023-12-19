@@ -45,6 +45,9 @@ const Navbar = ({ page }) => {
 						</>
 					) : (
 						<>
+							<Link href={`${page !== 'home' ? '../' : '/'}`} className={styles.link}>
+								Home
+							</Link>
 							<Link
 								href={`${page !== 'home' ? '../discover' : 'discover'}`}
 								className={styles.link}

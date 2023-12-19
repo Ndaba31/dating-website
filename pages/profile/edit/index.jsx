@@ -62,19 +62,23 @@ const EditProfile = () => {
 
 	const [socialMedia, setSocialMedia] = useState({
 		whatsapp:
-			socials.length !== 0
+			socials.length !== 0 &&
+			socials.find(({ social }) => social.toLowerCase() === 'whatsapp') !== undefined
 				? socials.find(({ social }) => social.toLowerCase() === 'whatsapp').contact
 				: '',
 		instagram:
-			socials.length !== 0
+			socials.length !== 0 &&
+			socials.find(({ social }) => social.toLowerCase() === 'instagram') !== undefined
 				? socials.find(({ social }) => social.toLowerCase() === 'instagram').contact
 				: '',
 		facebook:
-			socials.length !== 0
+			socials.length !== 0 &&
+			socials.find(({ social }) => social.toLowerCase() === 'facebook') !== undefined
 				? socials.find(({ social }) => social.toLowerCase() === 'facebook').contact
 				: '',
 		twitter:
-			socials.length !== 0
+			socials.length !== 0 &&
+			socials.find(({ social }) => social.toLowerCase() === 'twitter') !== undefined
 				? socials.find(({ social }) => social.toLowerCase() === 'twitter').contact
 				: '',
 	});
@@ -210,7 +214,7 @@ const EditProfile = () => {
 				setSuccess(message);
 			}
 
-			router.replace('/profile');
+			router.push('/profile');
 		} catch (error) {
 			setError(error);
 		}
@@ -440,7 +444,13 @@ const EditProfile = () => {
 										<option
 											className={styles.edit_select_opt}
 											key={region}
-											selected={region === location.region ? true : false}
+											selected={
+												region ===
+												(location !== undefined &&
+												location.region !== undefined
+													? location.region
+													: '')
+											}
 											value={region}
 										>
 											{region}

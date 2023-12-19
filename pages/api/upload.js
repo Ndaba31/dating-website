@@ -302,46 +302,52 @@ export default async function handler(req, res) {
 			//UPLOADING IMAGE
 			const uploadedFile = files?.file;
 
-			const dbImgPath = fields.temp_photo
-				? fields.temp_photo
-				: `uploads/${uploadedFile.name}`;
-
-			const oldPath = files.file.path;
-			const newPath = path.join(form.uploadDir, uploadedFile.name);
-			const prevProfilePhotoPath = path.join('./public/', fields.profile_photo);
-			console.log(`Previous file path: ${prevProfilePhotoPath}\nNew Image Path: ${newPath}`);
-
-			// Check if the file with the same filename already exists
-			const fileExists = await doesFileExist(newPath);
-			const prevFileExists = await doesFileExist(prevProfilePhotoPath);
-			console.log(`New Photo exists: ${fileExists}\nOld Photo exists: ${prevFileExists}`);
-			console.log(`value of profile photo: ${fields.profile_photo}`);
-
-			if (fileExists) {
-				res.status(400).json({ error: 'Please rename the image file' });
+			if (!uploadedFile) {
+				res.status(200).json({ success: true });
 			} else {
-				if (prevFileExists) {
-					// Delete the existing file before moving the new one
-					try {
-						await fs.unlink(prevProfilePhotoPath);
-					} catch (error) {
-						res.status(500).json({ error: 'Error deleting existing file' });
-						return;
+				const dbImgPath = fields.temp_photo
+					? fields.temp_photo
+					: `uploads/${uploadedFile.name}`;
+
+				const oldPath = files.file.path;
+				const newPath = path.join(form.uploadDir, uploadedFile.name);
+				const prevProfilePhotoPath = path.join('./public/', fields.profile_photo);
+				console.log(
+					`Previous file path: ${prevProfilePhotoPath}\nNew Image Path: ${newPath}`
+				);
+
+				// Check if the file with the same filename already exists
+				const fileExists = await doesFileExist(newPath);
+				const prevFileExists = await doesFileExist(prevProfilePhotoPath);
+				console.log(`New Photo exists: ${fileExists}\nOld Photo exists: ${prevFileExists}`);
+				console.log(`value of profile photo: ${fields.profile_photo}`);
+
+				if (fileExists) {
+					res.status(400).json({ error: 'Please rename the image file' });
+				} else {
+					if (prevFileExists) {
+						// Delete the existing file before moving the new one
+						try {
+							await fs.unlink(prevProfilePhotoPath);
+						} catch (error) {
+							res.status(500).json({ error: 'Error deleting existing file' });
+							return;
+						}
 					}
 				}
-			}
 
-			try {
-				await fs.rename(oldPath, newPath);
+				try {
+					await fs.rename(oldPath, newPath);
 
-				const updatePhoto = query({
-					query: 'UPDATE user_details SET profile_photo = ? WHERE stem = ?;',
-					values: [dbImgPath, user.stem],
-				});
+					const updatePhoto = query({
+						query: 'UPDATE user_details SET profile_photo = ? WHERE stem = ?;',
+						values: [dbImgPath, user.stem],
+					});
 
-				res.status(200).json({ message: 'Profile updated successfully' });
-			} catch (error) {
-				res.status(500).json({ error: 'Error moving file' });
+					res.status(200).json({ message: 'Profile updated successfully' });
+				} catch (error) {
+					res.status(500).json({ error: 'Error moving file' });
+				}
 			}
 		});
 	}
