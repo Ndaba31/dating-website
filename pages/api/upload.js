@@ -339,7 +339,7 @@ export default async function handler(req, res) {
 				try {
 					await fs.rename(oldPath, newPath);
 
-					const updatePhoto = query({
+					const updatePhoto = await query({
 						query: 'UPDATE user_details SET profile_photo = ? WHERE stem = ?;',
 						values: [dbImgPath, user.stem],
 					});

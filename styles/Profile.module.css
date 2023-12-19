@@ -624,6 +624,16 @@
 	margin-bottom: 16px;
 	width: 300px;
 	height: 400px;
+	position: relative;
+}
+
+.error {
+	background-color: red;
+	color: white;
+	padding: 10px;
+	border-radius: 5px;
+	text-transform: capitalize;
+	text-align: center;
 }
 
 .flex_center {
