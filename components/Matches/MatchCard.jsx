@@ -33,7 +33,7 @@ const MatchCard = ({ match }) => {
 
 				<div style={{ margin: '20px 0' }}>
 					<Link
-						href={`#`}
+						href={`couple-match`}
 						style={{
 							color: '#9D6200',
 							backgroundColor: 'transparent',

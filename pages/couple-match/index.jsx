@@ -10,8 +10,8 @@ const coupleMatch = () => {
     const [matchee, setMatchee] = useState(false)
     const [editBio, setEditBio] = useState(false)
     const [open, setOpen] = useState(false)
-    const [bioValue, setBioValue] = useState('')
     const {user,specificMatch} = useDateContext();
+    const [bioValue, setBioValue] = useState(specificMatch.blog_post?specificMatch.blog_post:"")
     
 
    const checkUser = () => {
@@ -70,10 +70,10 @@ const coupleMatch = () => {
 						layout='responsive'
 						priority
 					/>{
-                       (!editBio) &&(<>
+                       (!editBio) &&(<div className={styles.bg}>
                         <h1 className={styles.headingText}>Read Our Biography</h1>
-                        <p>{specificMatch.blog_post}</p>
-                        </>)
+                        <h2 className={styles.readBio}>{bioValue}</h2>
+                        </div>)
                     }
                     
                     {
@@ -103,18 +103,24 @@ const coupleMatch = () => {
 							name='bio'
 							id='bio'
 							// rows={10}
-                            ref={fetchBio}
-							defaultValue={specificMatch.blog_post}>
+                           // ref={fetchBio}
+                           onChange={(e)=>{
+                            setBioValue(e.target.value)
+                            console.log(bioValue);
+                           }}
+							value={bioValue}>
 						</textarea>
                             </div>
 						<div className={styles.save_button}>
                         <button 
                         onClick={(e)=> {
                             e.preventDefault(),
-                            captureBio(),
+                           // captureBio(),
+                           
                         setEditBio(false),
                         updateBio(),
                         setOpen(true)
+                       // ,location.reload()
                              }
                         }
                         className={styles.save}>Save</button>

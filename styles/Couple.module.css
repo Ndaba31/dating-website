@@ -3,6 +3,9 @@
 	font-weight: bold;
 	margin: 20px 0;
 	text-align: center;
+	font-family: 'Brush Script MT', cursive;
+	font-family: 'Arial', sans-serif;
+	font-style: italic;
 }
 
 .edit_textarea {
@@ -23,12 +26,29 @@
 .headingText {
 	display: flex;
 	justify-content: center;
+	color: azure;
+}
+
+.readBio{
+	display: flex;
+	justify-content: center;
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	color: aqua;
+	margin: 20px;
+}
+
+.bg{
+	background-color: black;
+	padding-top: 20px;
+	padding-bottom: 20px;
 }
 
 .buttons{
 	display: flex;
 	justify-content: center;
 	gap: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .edit {
@@ -62,3 +82,4 @@
 	display: flex;
 	justify-content: center;
 }
+

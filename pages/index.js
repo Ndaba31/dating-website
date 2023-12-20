@@ -19,6 +19,9 @@ export default function Home() {
 		setConnectedUsers,
 		setError,
 		setSuccess,
+		connectedUsers,
+		allOccupations,
+		allUsers,
 	} = useDateContext();
 	let num = 25;
 
