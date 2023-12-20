@@ -12,9 +12,17 @@ import Navbar from '@/components/Navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-	const { setAllUsers, connectedUsers, setAllOccupations, setConnectedUsers, setError } =
-		useDateContext();
-	let num = 20;
+	const {
+		setAllUsers,
+		setAllOccupations,
+		setAllMatches,
+		setConnectedUsers,
+		setError,
+		setSuccess,
+	} = useDateContext();
+	let num = 25;
+
+	setSuccess('');
 
 	const getInfo = async () => {
 		const getData = {
@@ -28,13 +36,16 @@ export default function Home() {
 		};
 
 		const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, getData);
-		const { message, users, occupations, socials } = await res.json();
+		const { message, users, occupations, socials, matches } = await res.json();
 
 		setAllUsers(users);
 
 		setAllOccupations(occupations);
+		// console.log(`Occupations: ${occupations[0].title}`);
 
 		setConnectedUsers(socials);
+
+		setAllMatches(matches);
 
 		if (message === 'No users found') {
 			setError(message);

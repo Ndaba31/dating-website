@@ -11,12 +11,25 @@ import { faPenToSquare, faPlusSquare } from '@fortawesome/free-regular-svg-icons
 import { AddBoxOutlined, EditNoteSharp } from '@mui/icons-material';
 
 const Profile = () => {
-	const { user, setUser, setHobbies, hobbies, setOccupations, occupations, posts, setPosts } =
-		useDateContext();
+	const {
+		user,
+		setUser,
+		setHobbies,
+		hobbies,
+		setOccupations,
+		occupations,
+		posts,
+		setPosts,
+		location,
+		setLocation,
+		socials,
+		setSocials,
+		setError,
+	} = useDateContext();
 	// const [hobbies, setHobbies] = useState([]);
 	// const [posts, setPosts] = useState([]);
 	// const [occupations, setOccupations] = useState([]);
-	const [location, setLocation] = useState({});
+	// const [location, setLocation] = useState({});
 	const [pumpkin, setPumpkin] = useState({});
 
 	const current_user = user;
@@ -40,7 +53,8 @@ const Profile = () => {
 				`${process.env.NEXT_PUBLIC_URL}/api/pumkins/${current_user.stem}`,
 				getData
 			);
-			const { user, occupations, hobbies, posts, location, message } = await res.json();
+			const { user, occupations, hobbies, posts, location, socials, message } =
+				await res.json();
 
 			setPumpkin(user);
 			setUser(user);
@@ -48,6 +62,7 @@ const Profile = () => {
 			setHobbies(hobbies);
 			setPosts(posts);
 			setLocation(location);
+			setSocials(socials);
 
 			if (message === 'User Not Found') {
 				setError(message);
@@ -62,7 +77,7 @@ const Profile = () => {
 	if (pumpkin === undefined || pumpkin.dob === undefined || pumpkin.dob === null) {
 		age = '';
 	} else {
-		age = new Date().getFullYear() - new Date(pumpkin.dob).getFullYear();
+		age = ', ' + String(new Date().getFullYear() - new Date(pumpkin.dob).getFullYear());
 	}
 
 	return (
@@ -102,20 +117,22 @@ const Profile = () => {
 							<p>{pumpkin.hickies} Hickies</p>
 						</section>
 						<section className={styles.top_section}>
-							{pumpkin.nick_name !== null && (
+							{pumpkin.nick_name !== '' && (
 								<h1 style={{ fontSize: '24pt', lineHeight: '24px' }}>
 									{pumpkin.nick_name}
 								</h1>
 							)}
 							<p className={styles.heading}>
-								{pumpkin.first_name + ' ' + pumpkin.last_name + ', ' + age}
+								{pumpkin.first_name + ' ' + pumpkin.last_name + age}
 							</p>
 							{occupations.length !== 0 &&
-								occupations.map(({ title, company }, i) => (
-									<p key={i} style={{ fontSize: '14pt' }}>
-										{title} at {company}
-									</p>
-								))}
+								occupations.map(({ title, company }, i) => {
+									title !== '' && (
+										<p key={i} style={{ fontSize: '14pt' }}>
+											{title} {company === '' ? '' : 'at ' + company}
+										</p>
+									);
+								})}
 							{pumpkin.sex &&
 								pumpkin.sex !== 'X' &&
 								(pumpkin.sex === 'M' ? (
@@ -212,7 +229,7 @@ const Profile = () => {
 						>
 							Gallery
 						</h1>
-						<Posts posts={posts} />
+						<Posts posts={posts} isUser={true} />
 					</>
 				) : (
 					<h1 style={{ textAlign: 'center' }}>No Posts Yet</h1>

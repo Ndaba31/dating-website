@@ -11,6 +11,7 @@
 	justify-content: space-between;
 	align-items: center;
 	padding: 16px 64px;
+	gap: 30px;
 }
 
 .logo {
@@ -23,12 +24,7 @@
 }
 
 .options {
-	display: flex;
-	align-items: center;
-}
-
-.options * {
-	margin-left: 16px;
+	display: none;
 }
 
 .link,
@@ -54,4 +50,33 @@
 .signup_link:hover {
 	background-color: white;
 	color: purple;
+}
+
+.mobileMenu {
+	background-color: transparent;
+	color: white;
+	border: 0;
+}
+
+.mobileMenu:hover {
+	cursor: pointer;
+}
+
+@media only screen and (min-width: 930px) {
+	.nav {
+		gap: 0;
+	}
+
+	.mobileMenu {
+		display: none;
+	}
+
+	.options {
+		display: flex;
+		align-items: center;
+	}
+
+	.options * {
+		margin-left: 16px;
+	}
 }
