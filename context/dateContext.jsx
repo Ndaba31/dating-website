@@ -28,6 +28,7 @@ const DateContextProvider = ({ children }) => {
 	const [posts, setPosts] = useState([]);
 	const [connectedUsers, setConnectedUsers] = useState([]);
 	const [allMatches, setAllMatches] = useState([]);
+	const [specificMatch, setSpecificMatch] = useState({})
 
 	return (
 		<DateContext.Provider
@@ -60,6 +61,8 @@ const DateContextProvider = ({ children }) => {
 				setIsAuth,
 				isBusy,
 				setIsBusy,
+				specificMatch,
+				setSpecificMatch
 			}}
 		>
 			{children}

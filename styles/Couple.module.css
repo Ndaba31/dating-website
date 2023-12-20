@@ -1,0 +1,64 @@
+.heading {
+	font-size: 2rem;
+	font-weight: bold;
+	margin: 20px 0;
+	text-align: center;
+}
+
+.edit_textarea {
+	background-color: transparent;
+	border: 2px solid white;
+	width: 90%;
+	height: 200px;
+	padding: 8px;
+	border-radius: 18px;
+}
+
+.texta {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 50px;
+}
+
+.headingText {
+	display: flex;
+	justify-content: center;
+}
+
+.buttons{
+	display: flex;
+	justify-content: center;
+	gap: 20px;
+}
+
+.edit {
+	background-color: #a238ff;
+	color: white;
+	padding: 8px 16px;
+	border-radius: 10px;
+	font-size: 14pt;
+	border: 2px solid white;
+}
+
+.upload {
+	background-color: #f9129d;
+	color: white;
+	padding: 8px 16px;
+	border-radius: 10px;
+	font-size: 14pt;
+	border: 2px solid white;
+	text-decoration: none;
+}
+
+.save {
+	background-color: #a238ff;
+	border: 2px solid #bd8383;
+	padding: 8px 16px;
+	border-radius: 10px;
+	font-size: 14pt;
+}
+
+.save_button {
+	display: flex;
+	justify-content: center;
+}

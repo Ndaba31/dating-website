@@ -513,6 +513,14 @@ const Page = () => {
 											}} className={styles.change_mind} ><p style={{fontSize: '12pt'}}>Change Mind</p></button>
 										)
 									}
+
+									{
+										(matchesExist&&liked_back===1)&&(
+											<button id='changeMind' onClick={()=>{
+												setSlide(event.action)
+											}} className={styles.change_mind} ><p style={{fontSize: '12pt'}}>Change Mind</p></button>
+										)
+									}
 									
 								</div>
 							)}

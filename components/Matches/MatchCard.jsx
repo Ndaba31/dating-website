@@ -3,10 +3,16 @@ import Image from 'next/legacy/image';
 import styles from '@/styles/Home.module.css';
 import { ArrowForwardIos } from '@mui/icons-material';
 import Link from 'next/link';
+import { useDateContext } from '@/context/dateContext';
 
 const MatchCard = ({ match }) => {
 	const { blog_post, couple_photo, date_accepted, crush, crushee } = match;
+	const { setSpecificMatch } = useDateContext();
 	const maxChar = 60;
+
+	const handleLinkClick=()=>{
+		setSpecificMatch(match)
+	}
 
 	return (
 		<div className={styles.matchCard}>
@@ -32,6 +38,7 @@ const MatchCard = ({ match }) => {
 							color: '#9D6200',
 							backgroundColor: 'transparent',
 						}}
+						onClick={handleLinkClick}
 					>
 						<ArrowForwardIos
 							style={{
