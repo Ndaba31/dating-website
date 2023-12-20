@@ -32,7 +32,7 @@ const Signup = () => {
 		setError('');
 		setSuccess('');
 		const { firstName, lastName, email, stem, password } = formData;
-		let stem_edited = stem.trim().split(' ').join('_');
+		const stem_edited = stem.trim().split(' ').join('_').toLowerCase();
 
 		// Password Error handling
 		setError(

@@ -27,7 +27,7 @@ export const questions = [
 	},
 	{
 		id: 5,
-		question: 'Your streets are in which region of the kingdom?',
+		question: 'Where your streets at?',
 		type: 'region',
 		inpName: 'region',
 	},
@@ -90,7 +90,7 @@ export const sexes = [
 	},
 ];
 
-export const social_media = [
+export let social_media = [
 	{
 		icon: <WhatsApp />,
 		social: 'WhatsApp',
@@ -113,7 +113,22 @@ export const social_media = [
 	},
 ];
 
-export const regions = ['Manzini', 'Hhohho', 'Lobamba', 'Shiselweni'];
+export const regions = [
+	'Eastern Cape',
+	'Free State',
+	'KZN',
+	'Western Cape',
+	'Gauteng',
+	'Northern Cape',
+	'Limpopo',
+	'Mpumalanga',
+	'North West',
+	'Manzini',
+	'Hhohho',
+	'Lobamba',
+	'Shiselweni',
+	'Other',
+];
 
 export const relationship_status = [
 	'Married',
@@ -122,6 +137,7 @@ export const relationship_status = [
 	'Widowed',
 	"It's Complicated",
 	'Dating Exclusively',
+	'Other',
 ];
 
 export const ethinicities = [
@@ -143,4 +159,5 @@ export const religions = [
 	'Bahai Faith',
 	'Not Sure',
 	'Nothing Really',
+	'Other',
 ];

@@ -23,10 +23,11 @@ const DateContextProvider = ({ children }) => {
 	const [allUsers, setAllUsers] = useState([]);
 	const [occupations, setOccupations] = useState([]);
 	const [allOccupations, setAllOccupations] = useState([]);
-	const [hobbies, setHobbies] = useState([]);
-	const [locatedUsers, setLocatedUsers] = useState([]);
-	const [posts, setPosts] = useState([]);
 	const [connectedUsers, setConnectedUsers] = useState([]);
+	const [hobbies, setHobbies] = useState([]);
+	const [location, setLocation] = useState({});
+	const [posts, setPosts] = useState([]);
+	const [socials, setSocials] = useState([]);
 	const [allMatches, setAllMatches] = useState([]);
 	const [specificMatch, setSpecificMatch] = useState({})
 
@@ -51,10 +52,12 @@ const DateContextProvider = ({ children }) => {
 				setAllOccupations,
 				hobbies,
 				setHobbies,
-				locatedUsers,
-				setLocatedUsers,
+				location,
+				setLocation,
 				posts,
 				setPosts,
+				socials,
+				setSocials,
 				connectedUsers,
 				setConnectedUsers,
 				isAuth,

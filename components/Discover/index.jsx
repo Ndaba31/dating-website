@@ -5,7 +5,7 @@ import DiscoverCard from './DiscoverCard';
 
 const Discover = () => {
 	const { isAuth, user, allUsers, error } = useDateContext();
-	console.log(error);
+	// console.log(error);
 
 	return (
 		<div>

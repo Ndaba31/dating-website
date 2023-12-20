@@ -1,4 +1,4 @@
-import React ,{useEffect,useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDateContext } from '@/context/dateContext';
 import MatchCard from './MatchCard';
 import DiscoverCard from '@/components/Discover/DiscoverCard';
@@ -6,223 +6,318 @@ import Navbar from '@/components/Navbar';
 import Header from '@/components/Head';
 
 const Matches = () => {
-	const { isAuth, user, allUsers,setAllUsers, connectedUsers, allOccupations, setAllOccupations, setConnectedUsers, setError, error } = useDateContext();
+	const {
+		isAuth,
+		user,
+		allUsers,
+		setAllUsers,
+		connectedUsers,
+		allOccupations,
+		setAllOccupations,
+		setConnectedUsers,
+		setError,
+		error,
+	} = useDateContext();
 	console.log(error);
 
-	const [slideYou, setSlideYou] = useState([])
-	const [youAccept, setYouAccept] = useState([])
-	const [youReject, setYouReject] = useState([])
-	const [yourSlide, setYourSlide] = useState([])
-	const [acceptedRequest, setAcceptedRequest] = useState([])
-	const [rejectedRequest, setRejectedRequest] = useState([])
+	const [slideYou, setSlideYou] = useState([]);
+	const [youAccept, setYouAccept] = useState([]);
+	const [youReject, setYouReject] = useState([]);
+	const [yourSlide, setYourSlide] = useState([]);
+	const [acceptedRequest, setAcceptedRequest] = useState([]);
+	const [rejectedRequest, setRejectedRequest] = useState([]);
 
-    const getMatchesInfo = async ()=>{
-
-        const getMatches = {
-			method:'POST',
+	const getMatchesInfo = async () => {
+		const getMatches = {
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
 				update: 'getMatches',
-				user:user.stem
+				user: user.stem,
 			}),
-		}
+		};
 
-        const myMatches = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/matches`, getMatches);
-		const { message ,users,occupations,socials,
+		const myMatches = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/matches`, getMatches);
+		const {
+			message,
+			users,
+			occupations,
+			socials,
 			slideForYou,
-            youAcceptedMatch,
-            youRejectedMatch,
-            slideForCrush,
-            crushAccepted,
-            crushRejected, } = await myMatches.json();
-		
-		setSlideYou(slideForYou)
+			youAcceptedMatch,
+			youRejectedMatch,
+			slideForCrush,
+			crushAccepted,
+			crushRejected,
+		} = await myMatches.json();
+
+		setSlideYou(slideForYou);
 		setYouAccept(youAcceptedMatch);
 		setYouReject(youRejectedMatch);
 		setAcceptedRequest(crushAccepted);
 		setRejectedRequest(crushRejected);
 		setYourSlide(slideForCrush);
-        setAllOccupations(occupations);
-        setConnectedUsers(socials);
+		setAllOccupations(occupations);
+		setConnectedUsers(socials);
 
 		console.log(slideYou);
 		console.log(youAccept);
-		
 
-
-        if (message === 'No users found') {
+		if (message === 'No users found') {
 			setError(message);
 		}
-    }
+	};
 
-    useEffect(() => {
-           getMatchesInfo();
+	useEffect(() => {
+		getMatchesInfo();
 	}, []);
 
-    
-   
 	return (
 		<div>
-            <Header title='Matches' />
-            <Navbar />
-			
-			{/* <div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'orangered'}}>
-			<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
-				Meet Your Matches
-			</h1>
-			</div>
-			
-			{error === '' ? (
-				isAuth ? (
-					allUsers
-						.filter(({ slide,liked_back }) => slide === 1 && liked_back===1)
-						.map(({ stem }) => <MatchCard key={stem} id={stem} />)
-				) : (
-					allUsers.map(({ stem }) => <MatchCard key={stem} id={stem} />)
-				)
-			) : (
-				<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>{error}</h1>
-			)} */}
+			<Header title='Matches' />
+			<Navbar page='matches' />
 
-			{
-				slideYou.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'pink'}}>
-				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
-				These Personalities want to be in touch with you
-				</h1>
-				</div>
-				
-				{ error === '' ? (
-					isAuth ? (
-						slideYou
-							.filter(({ slide,liked_back }) => slide === 1 && liked_back === null)
-							.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+			{slideYou.length !== 0 && (
+				<>
+					<div
+						style={{
+							position: 'relative',
+							top: '10px',
+							height: '45px',
+							padding: '60px',
+							backgroundColor: 'pink',
+						}}
+					>
+						<p
+							style={{
+								textAlign: 'center',
+								textTransform: 'capitalize',
+								margin: '40px 0',
+								fontSize: '14pt',
+							}}
+						>
+							Folks who slid in your dMs
+						</p>
+					</div>
+
+					{error === '' ? (
+						isAuth ? (
+							slideYou
+								.filter(
+									({ slide, liked_back }) => slide === 1 && liked_back === null
+								)
+								.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						) : (
+							slideYou.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						)
 					) : (
-						slideYou.map(({ stem }) => <MatchCard key={stem} id={stem} />)
-					)
-				) : (
-					<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>{error}</h1>
-				)}
+						<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>
+							{error}
+						</h1>
+					)}
 				</>
-				)
-			}
+			)}
 
-{
-				youAccept.length!==0 && (<div><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'limegreen'}}>
-				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
-				These Are People who you have matched with
-				</h1>
-				</div>
-				
-				{ error === '' ? (
-					isAuth ? (
-						youAccept
-							.filter(({ slide,liked_back }) => slide === 1 && liked_back===1)
-							.map(({ stem }) => <MatchCard key={stem} id={stem} />)
-					) : (
-						youAccept.map(({ stem }) => <MatchCard key={stem} id={stem} />)
-					)
-				) : (
-					<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>{error}</h1>
-				)}
-				</div>
-				)
-			}
+			{youAccept.length !== 0 && (
+				<div>
+					<div
+						style={{
+							position: 'relative',
+							top: '10px',
+							height: '45px',
+							padding: '60px',
+							backgroundColor: 'limegreen',
+						}}
+					>
+						<p
+							style={{
+								textAlign: 'center',
+								textTransform: 'capitalize',
+								margin: '40px 0',
+								fontSize: '14pt',
+							}}
+						>
+							Pumpkins you matched with
+						</p>
+					</div>
 
-{
-				youReject.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'orangered'}}>
-				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
-				These Are People who you have rejected
-				</h1>
-				</div>
-				
-				{ error === '' ? (
-					isAuth ? (
-						youReject
-							.filter(({ slide,liked_back }) => slide === 1 && liked_back===0)
-							.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+					{error === '' ? (
+						isAuth ? (
+							youAccept
+								.filter(({ slide, liked_back }) => slide === 1 && liked_back === 1)
+								.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						) : (
+							youAccept.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						)
 					) : (
-						youReject.map(({ stem }) => <MatchCard key={stem} id={stem} />)
-					)
-				) : (
-					<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>{error}</h1>
-				)}
+						<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>
+							{error}
+						</h1>
+					)}
+				</div>
+			)}
+
+			{youReject.length !== 0 && (
+				<>
+					<div
+						style={{
+							position: 'relative',
+							top: '10px',
+							height: '45px',
+							padding: '60px',
+							backgroundColor: 'orangered',
+						}}
+					>
+						<p
+							style={{
+								textAlign: 'center',
+								textTransform: 'capitalize',
+								margin: '40px 0',
+								fontSize: '14pt',
+							}}
+						>
+							Folks you rejected
+						</p>
+					</div>
+
+					{error === '' ? (
+						isAuth ? (
+							youReject
+								.filter(({ slide, liked_back }) => slide === 1 && liked_back === 0)
+								.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						) : (
+							youReject.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						)
+					) : (
+						<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>
+							{error}
+						</h1>
+					)}
 				</>
-				)
-			}
+			)}
 
-{
-				yourSlide.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'pink'}}>
-				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
-				These Are The Profiles you have sent a request to
-				</h1>
-				</div>
-				
-				{ error === '' ? (
-					isAuth ? (
-						yourSlide
-							.filter(({ slide,liked_back }) => slide === 1&&liked_back === null)
-							.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+			{yourSlide.length !== 0 && (
+				<>
+					<div
+						style={{
+							position: 'relative',
+							top: '10px',
+							height: '45px',
+							padding: '60px',
+							backgroundColor: 'pink',
+						}}
+					>
+						<p
+							style={{
+								textAlign: 'center',
+								textTransform: 'capitalize',
+								margin: '40px 0',
+								fontSize: '14pt',
+							}}
+						>
+							Folks you shot your shot with
+						</p>
+					</div>
+
+					{error === '' ? (
+						isAuth ? (
+							yourSlide
+								.filter(
+									({ slide, liked_back }) => slide === 1 && liked_back === null
+								)
+								.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						) : (
+							yourSlide.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						)
 					) : (
-						yourSlide.map(({ stem }) => <MatchCard key={stem} id={stem} />)
-					)
-				) : (
-					<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>{error}</h1>
-				)}
+						<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>
+							{error}
+						</h1>
+					)}
 				</>
-				)
-			}
+			)}
 
-{
-				acceptedRequest.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'limegreen'}}>
-				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
-				These Are People who have accepted you
-				</h1>
-				</div>
-				
-				{ error === '' ? (
-					isAuth ? (
-						acceptedRequest
-							.filter(({ slide,liked_back }) => slide === 1 && liked_back===1)
-							.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+			{acceptedRequest.length !== 0 && (
+				<>
+					<div
+						style={{
+							position: 'relative',
+							top: '10px',
+							height: '45px',
+							padding: '60px',
+							backgroundColor: 'limegreen',
+						}}
+					>
+						<p
+							style={{
+								textAlign: 'center',
+								textTransform: 'capitalize',
+								margin: '40px 0',
+								fontSize: '14pt',
+							}}
+						>
+							Folks who are shooting their shot
+						</p>
+					</div>
+
+					{error === '' ? (
+						isAuth ? (
+							acceptedRequest
+								.filter(({ slide, liked_back }) => slide === 1 && liked_back === 1)
+								.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						) : (
+							acceptedRequest.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						)
 					) : (
-						acceptedRequest.map(({ stem }) => <MatchCard key={stem} id={stem} />)
-					)
-				) : (
-					<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>{error}</h1>
-				)}
+						<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>
+							{error}
+						</h1>
+					)}
 				</>
-				)
-			}
+			)}
 
-{
-				rejectedRequest.length!==0 && (<><div style={{position:'relative',top: '10px',height:'45px',padding:'60px',backgroundColor:'orangered'}}>
-				<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
-				These People have denied your request 
-				</h1>
-				</div>
-				
-				{ error === '' ? (
-					isAuth ? (
-						rejectedRequest
-							.filter(({ slide,liked_back }) => slide === 1 && liked_back===0)
-							.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+			{rejectedRequest.length !== 0 && (
+				<>
+					<div
+						style={{
+							position: 'relative',
+							top: '10px',
+							height: '45px',
+							padding: '60px',
+							backgroundColor: 'orangered',
+						}}
+					>
+						<p
+							style={{
+								textAlign: 'center',
+								textTransform: 'capitalize',
+								margin: '40px 0',
+								fontSize: '14pt',
+							}}
+						>
+							Folks who rejected you
+						</p>
+					</div>
+
+					{error === '' ? (
+						isAuth ? (
+							rejectedRequest
+								.filter(({ slide, liked_back }) => slide === 1 && liked_back === 0)
+								.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						) : (
+							rejectedRequest.map(({ stem }) => <MatchCard key={stem} id={stem} />)
+						)
 					) : (
-						rejectedRequest.map(({ stem }) => <MatchCard key={stem} id={stem} />)
-					)
-				) : (
-					<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>{error}</h1>
-				)}
+						<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>
+							{error}
+						</h1>
+					)}
 				</>
-				)
-			}
-
-			
-			
-			
+			)}
 		</div>
 	);
 };
 
-export default Matches
+export default Matches;

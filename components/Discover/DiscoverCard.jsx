@@ -30,16 +30,17 @@ const DiscoverCard = ({ id }) => {
 	const user = allUsers.find(({ stem }) => stem === id);
 	const occupationArrays = allOccupations.filter(({ stem }) => stem === id);
 	const socialArrays = connectedUsers.filter(({ stem }) => stem === id);
+	// console.log(`OccupationArrays: ${occupationArrays[0].title}`);
 
 	return (
 		<div className={styles.discover_container}>
 			<div className={styles.discover_card}>
 				<div className={styles.discover_image}>
 					<Image
-						// width={500}
-						// height={500}
-						layout='fill'
-						objectFit='cover'
+						width={500}
+						height={500}
+						layout='responsive'
+						// objectFit='cover'
 						quality={100}
 						alt={user.profile_photo === null ? 'No profile photo' : user.profile_photo}
 						src={
@@ -60,11 +61,13 @@ const DiscoverCard = ({ id }) => {
 						</h1>
 						<div>
 							{occupationArrays.length !== 0 &&
-								occupationArrays.map(({ title, company }, i) => (
-									<h3 key={i}>
-										{title} at {company}
-									</h3>
-								))}
+								occupationArrays.map(({ title, company }, i) => {
+									title !== '' && (
+										<h3 key={i}>
+											{title} {company === '' ? '' : 'at ' + company}
+										</h3>
+									);
+								})}
 							{user.bio !== null && (
 								<p style={{ fontSize: '14pt' }}>{user.bio.slice(0, maxChar)}</p>
 							)}
@@ -111,13 +114,13 @@ const DiscoverCard = ({ id }) => {
 								socialArrays.map(({ social, visible }) => {
 									if (visible) {
 										if (social === 'facebook') {
-											return <Facebook />;
+											return <Facebook key={social} />;
 										} else if (social === 'instagram') {
-											return <Instagram />;
+											return <Instagram key={social} />;
 										} else if (social === 'whatsapp') {
-											return <WhatsApp />;
+											return <WhatsApp key={social} />;
 										} else {
-											return <Twitter />;
+											return <Twitter key={social} />;
 										}
 									}
 								})}

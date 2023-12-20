@@ -1,37 +1,98 @@
 import { AddCircle, Cancel, DeleteForever } from '@mui/icons-material';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 import React, { useState } from 'react';
 import styles from '@/styles/Profile.module.css';
 import { useDateContext } from '@/context/dateContext';
 import { ethinicities, regions, relationship_status, religions, sexes, social_media } from '@/data';
 import Header from '@/components/Head';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const EditProfile = () => {
-	const { user, setUser, setHobbies, hobbies, occupations, setOccupations, error, setError } =
-		useDateContext();
-
-	const [hob, setHob] = useState('');
-	const [occ, setOcc] = useState();
-	const [photo, setPhoto] = useState(null);
+	const {
+		user,
+		setHobbies,
+		hobbies,
+		occupations,
+		setOccupations,
+		location,
+		socials,
+		isBusy,
+		setIsBusy,
+		setSuccess,
+		setError,
+	} = useDateContext();
 
 	const router = useRouter();
+	const [hob, setHob] = useState('');
+	const [occ, setOcc] = useState({
+		title: '',
+		company: '',
+		salary_min: 0,
+		salary_max: 0,
+	});
+	const [photo, setPhoto] = useState(user.profile_photo);
+	const [imagePreview, setImagePreview] = useState(null);
+	const [poppedOccupations, setPoppedOccupations] = useState([]);
+	const [poppedHobbies, setPoppedHobbies] = useState([]);
 
-	const separator = '/';
-	// const birthday =
-	// 	user.dob !== undefined && user.dob !== null
-	// 		? `${user.dob.getFullYear()}${separator}${
-	// 				user.dob.getMonth() + 1 < 10
-	// 					? `0${user.dob.getMonth() + 1}`
-	// 					: `${user.dob.getMonth() + 1}`
-	// 		  }${separator}${
-	// 				user.dob.getDate() < 10 ? `0${user.dob.getDate()}` : `${user.dob.getDate()}`
-	// 		  }`
-	// 		: '';
-	// setPhoto(userExtended.profile_photo?.media || null)
+	const birthday = user.dob !== undefined && user.dob !== null ? new Date(user.dob) : '';
 
-	const birthday = '';
+	if (birthday !== '') {
+		birthday.setDate(birthday.getDate() + 1);
+	}
+
+	const [formData, setFormData] = useState({
+		firstName: user.first_name,
+		lastName: user.last_name,
+		email: user.email,
+		stem: user.stem,
+		bio: user.bio,
+		sex: user.sex,
+		dob: birthday === '' ? '' : birthday.toISOString().substring(0, 10),
+		region:
+			location !== undefined ? (location.region === undefined ? '' : location.region) : '',
+		city: location !== undefined ? (location.city === undefined ? '' : location.city) : '',
+		nickName: user.nick_name,
+		phone: user.phone,
+		ethnicity: user.ethnicity,
+		religion: user.religion,
+		relationship_status: user.relationship_status,
+	});
+
+	const [socialMedia, setSocialMedia] = useState({
+		whatsapp:
+			socials.length !== 0 &&
+			socials.find(({ social }) => social.toLowerCase() === 'whatsapp') !== undefined
+				? socials.find(({ social }) => social.toLowerCase() === 'whatsapp').contact
+				: '',
+		instagram:
+			socials.length !== 0 &&
+			socials.find(({ social }) => social.toLowerCase() === 'instagram') !== undefined
+				? socials.find(({ social }) => social.toLowerCase() === 'instagram').contact
+				: '',
+		facebook:
+			socials.length !== 0 &&
+			socials.find(({ social }) => social.toLowerCase() === 'facebook') !== undefined
+				? socials.find(({ social }) => social.toLowerCase() === 'facebook').contact
+				: '',
+		twitter:
+			socials.length !== 0 &&
+			socials.find(({ social }) => social.toLowerCase() === 'twitter') !== undefined
+				? socials.find(({ social }) => social.toLowerCase() === 'twitter').contact
+				: '',
+	});
+
+	const handleSocialChange = (event) => {
+		const { name, value } = event.target;
+		setSocialMedia((prevFormData) => ({ ...prevFormData, [name]: value }));
+	};
+
+	const handleChange = (event) => {
+		const { name, value } = event.target;
+		setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
+	};
+
 	const onHobChange = (e) => {
 		setHob(e.target.value);
 	};
@@ -45,67 +106,162 @@ const EditProfile = () => {
 	};
 
 	const popHobbies = (hobby) => {
-		const hobs = hobbies.filter((interest) => interest !== hobby);
+		const hobs = hobbies.filter((interest) => interest.hobby !== hobby);
+		const popped_hobs = hobbies.find((interest) => interest.hobby === hobby);
 
-		console.log(`Temp Hobbies (POP): ${hobs}`);
 		setHobbies(hobs);
+		setPoppedHobbies((state) => [...state, popped_hobs]);
 	};
 
-	const pushHobbies = (hobby) => {
+	const pushHobbies = () => {
 		const hobs = hobbies;
-		hobs.push({ hobby: hobby });
-		console.log(`Temp Hobbies (PUSH): ${hobs}`);
 
+		const check = hobs.filter(({ hobby }) => hobby === hob);
+
+		if (check.length === 0) {
+			hobs.push({ hobby: hob });
+		}
+
+		setHob('');
 		setHobbies(hobs);
 	};
 
 	const pushOccupation = () => {
 		const occupation = occupations;
-		occupation.push(occ);
+
+		const check = occupation.filter(
+			({ company, title }) =>
+				company.toLowerCase() === occ.company.toLowerCase() &&
+				title.toLowerCase() === occ.title.toLowerCase()
+		);
+
+		if (check.length === 0 && occ.title !== '') {
+			occupation.push(occ);
+		}
+
+		setOcc({ company: '', title: '', salary_max: 0, salary_min: 0 });
 		setOccupations(occupation);
 	};
 
 	const popOccupation = (job) => {
+		const poppedJob = occupations.find(
+			(work) => work.company === job.company && work.title === job.title
+		);
+		setPoppedOccupations((state) => [...state, poppedJob]);
+
 		const occupation = occupations.filter(
 			(work) => work.company !== job.company && work.title !== job.title
 		);
 		setOccupations(occupation);
 	};
 
+	setIsBusy(photo ? false : true);
+
 	const onFileUploadChange = (e) => {
-		console.log('From onFileUploadChange');
+		const selectedFile = e.target.files[0];
+		setPhoto(selectedFile);
+
+		// Generate a preview of the selected image
+		if (selectedFile) {
+			const reader = new FileReader();
+			reader.onloadend = () => {
+				setImagePreview(reader.result);
+			};
+			reader.readAsDataURL(selectedFile);
+		} else {
+			setImagePreview(null);
+		}
 	};
 
-	const onCancelFile = (e) => {
+	const onCancelFile = () => {
+		setPhoto(null);
+		setImagePreview(null);
+	};
+
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		console.log('From onCancelFile');
+
+		try {
+			const data = new FormData();
+
+			data.append('user', JSON.stringify(formData));
+			data.append('socials', JSON.stringify(socialMedia));
+			data.append('occupations', JSON.stringify(occupations));
+			data.append('poppedOccupations', JSON.stringify(poppedOccupations));
+			data.append('hobbies', JSON.stringify(hobbies));
+			data.append('poppedHobbies', JSON.stringify(poppedHobbies));
+			data.append('stem', user.stem);
+
+			photo !== user.profile_photo
+				? data.append('file', photo)
+				: data.append('temp_photo', photo);
+
+			user.profile_photo
+				? data.append('profile_photo', user.profile_photo)
+				: data.append('profile_photo', null);
+
+			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/upload`, {
+				method: 'POST',
+				body: data,
+			});
+
+			if (!res.ok) {
+				const { error } = await res.json();
+				setError(error);
+				throw new Error(await res.text());
+			} else {
+				const { message } = await res.json();
+				setSuccess(message);
+			}
+
+			router.push('/profile');
+		} catch (error) {
+			setError(error);
+		}
 	};
 
-	const onUploadFile = (e) => {
-		e.preventDefault();
-		console.log('From onUploadFile');
-	};
+	for (let i = 0; i < social_media.length; i++) {
+		for (let j = 0; j < socials.length; j++) {
+			if (socials[j].social === social_media[i].social.toLowerCase())
+				social_media[i].link = socials[j].contact;
+		}
+	}
 
-	console.log(user);
+	const today = new Date().toISOString().split('T')[0];
 
 	return (
 		<main className={styles.edit_container}>
 			<Header title='Edit Profile' />
 			<h1 style={{ margin: '20px 0' }}>Edit Profile</h1>
 			<hr />
-			<form method='post' className={styles.edit_form}>
+			<form onSubmit={handleSubmit} className={styles.edit_form}>
 				<div className={styles.edit_left}>
 					<h3 style={{ margin: '8px 0' }}>Profile</h3>
 					<div className={styles.edit_img_container}>
-						{user.profile_photo ? (
+						{imagePreview ? (
 							<Image
-								width={150}
-								height={150}
-								src={'/' + user.profile_photo}
+								src={imagePreview}
+								layout='fill'
+								objectFit='contain'
+								alt='Profile Photo Preview'
+								priority
+							/>
+						) : photo ? (
+							<Image
+								layout='fill'
+								objectFit='contain'
+								src={'/' + photo}
 								alt={user.profile_photo}
+								priority
 							/>
 						) : (
-							<Image width={150} height={150} src='/no_photo.png' alt='No Photo' />
+							<Image
+								layout='fill'
+								objectFit='contain'
+								src='/no_photo.png'
+								alt='No Photo'
+								priority
+							/>
 						)}
 					</div>
 					<div className={styles.edit_names}>
@@ -131,7 +287,10 @@ const EditProfile = () => {
 						<button
 							type='button'
 							onClick={onCancelFile}
-							className={styles.edit_delete_button}
+							className={`${styles.edit_delete_button} ${
+								isBusy ? styles.edit_busy : ''
+							}`}
+							disabled={isBusy}
 						>
 							Delete Photo
 						</button>
@@ -156,7 +315,7 @@ const EditProfile = () => {
 								Cancel
 							</Link>
 							<button
-								type='button'
+								type='submit'
 								className={[styles.edit_options_buttons, styles.edit_save].join(
 									' '
 								)}
@@ -173,10 +332,10 @@ const EditProfile = () => {
 								type='text'
 								id='firstName'
 								name='firstName'
-								placeholder={user.first_name}
-								className={
-									styles.edit_text_input
-								} /*value={formData.firstName} onChange={handleChange}*/
+								className={styles.edit_text_input}
+								value={formData.firstName}
+								onChange={handleChange}
+								required
 							/>
 						</div>
 						<div>
@@ -185,10 +344,10 @@ const EditProfile = () => {
 								type='text'
 								id='lastName'
 								name='lastName'
-								placeholder={user.last_name}
-								className={
-									styles.edit_text_input
-								} /*value={formData.lastName} onChange={handleChange}*/
+								className={styles.edit_text_input}
+								value={formData.lastName}
+								onChange={handleChange}
+								required
 							/>
 						</div>
 					</div>
@@ -199,10 +358,10 @@ const EditProfile = () => {
 								type='email'
 								id='email'
 								name='email'
-								placeholder={user.email}
-								className={
-									styles.edit_text_input
-								} /*value={formData.firstName} onChange={handleChange}*/
+								className={styles.edit_text_input}
+								value={formData.email}
+								onChange={handleChange}
+								required
 							/>
 						</div>
 						<div>
@@ -211,10 +370,10 @@ const EditProfile = () => {
 								type='text'
 								id='stem'
 								name='stem'
-								placeholder={user.stem}
-								className={
-									styles.edit_text_input
-								} /*value={formData.lastName} onChange={handleChange}*/
+								className={styles.edit_text_input}
+								value={formData.stem}
+								onChange={handleChange}
+								required
 							/>
 						</div>
 					</div>
@@ -224,14 +383,20 @@ const EditProfile = () => {
 							className={styles.edit_textarea}
 							name='bio'
 							id='bio'
-							// rows={10}
-							defaultValue={user.bio}
+							value={formData.bio}
+							onChange={handleChange}
 						></textarea>
 					</div>
 					<div className={styles.edit_input_container}>
 						<div>
 							<label htmlFor='sex'>Sex</label>
-							<select name='sex' id='sex' className={styles.edit_text_input}>
+							<select
+								name='sex'
+								id='sex'
+								className={styles.edit_text_input}
+								onChange={handleChange}
+								value={formData.sex}
+							>
 								<option value='' style={{ backgroundColor: 'transparent' }}>
 									Please choose one
 								</option>
@@ -240,6 +405,7 @@ const EditProfile = () => {
 										className={styles.edit_select_opt}
 										key={value}
 										value={value}
+										selected={value === user.sex ? true : false}
 									>
 										{gender}
 									</option>
@@ -247,14 +413,15 @@ const EditProfile = () => {
 							</select>
 						</div>
 						<div>
-							<label htmlFor='dob'>Date of birth: {birthday}</label>
+							<label htmlFor='dob'>Date of birth:</label>
 							<input
-								type='text'
+								type='date'
 								id='dob'
 								name='dob'
-								className={
-									styles.edit_text_input
-								} /*value={formData.lastName} onChange={handleChange}*/
+								max={today}
+								className={styles.edit_text_input}
+								value={formData.dob}
+								onChange={handleChange}
 							/>
 						</div>
 					</div>
@@ -267,6 +434,8 @@ const EditProfile = () => {
 									name='region'
 									id='region'
 									className={styles.edit_text_input}
+									value={formData.region}
+									onChange={handleChange}
 								>
 									<option value='' style={{ backgroundColor: 'transparent' }}>
 										Please choose one
@@ -275,6 +444,13 @@ const EditProfile = () => {
 										<option
 											className={styles.edit_select_opt}
 											key={region}
+											selected={
+												region ===
+												(location !== undefined &&
+												location.region !== undefined
+													? location.region
+													: '')
+											}
 											value={region}
 										>
 											{region}
@@ -288,10 +464,9 @@ const EditProfile = () => {
 									type='text'
 									id='city'
 									name='city'
-									placeholder={user.city}
-									className={
-										styles.edit_text_input
-									} /*value={formData.lastName} onChange={handleChange}*/
+									className={styles.edit_text_input}
+									value={formData.city}
+									onChange={handleChange}
 								/>
 							</div>
 						</div>
@@ -305,7 +480,8 @@ const EditProfile = () => {
 								name='hobby'
 								placeholder='Add a hobby'
 								className={styles.edit_text_input}
-								onChange={onHobChange} /*value={formData.lastName}*/
+								onChange={onHobChange}
+								value={hob}
 							/>
 							<button
 								type='button'
@@ -341,10 +517,9 @@ const EditProfile = () => {
 									type='text'
 									id='nickName'
 									name='nickName'
-									placeholder={user.nick_name}
-									className={
-										styles.edit_text_input
-									} /*value={formData.lastName} onChange={handleChange}*/
+									className={styles.edit_text_input}
+									value={formData.nickName}
+									onChange={handleChange}
 								/>
 							</div>
 							<div
@@ -357,10 +532,9 @@ const EditProfile = () => {
 									id='phone'
 									min={0}
 									name='phone'
-									placeholder={user.phone}
-									className={
-										styles.edit_text_input
-									} /*value={formData.lastName} onChange={handleChange}*/
+									className={styles.edit_text_input}
+									value={formData.phone}
+									onChange={handleChange}
 								/>
 							</div>
 							<div
@@ -372,6 +546,8 @@ const EditProfile = () => {
 									name='ethnicity'
 									id='ethnicity'
 									className={styles.edit_text_input}
+									value={formData.ethnicity}
+									onChange={handleChange}
 								>
 									<option value='' style={{ backgroundColor: 'transparent' }}>
 										Please choose one
@@ -381,6 +557,7 @@ const EditProfile = () => {
 											className={styles.edit_select_opt}
 											key={ethnicity}
 											value={ethnicity}
+											selected={ethnicity === user.ethnicity ? true : false}
 										>
 											{ethnicity}
 										</option>
@@ -399,6 +576,7 @@ const EditProfile = () => {
 								placeholder='What company?'
 								className={styles.edit_text_input}
 								onChange={onOccChange}
+								value={occ.company}
 							/>
 							<input
 								type='text'
@@ -407,22 +585,27 @@ const EditProfile = () => {
 								placeholder='What position?'
 								className={styles.edit_text_input}
 								onChange={onOccChange}
+								value={occ.title}
 							/>
 							<input
-								type='text'
-								id='salary1'
-								name='salary1'
+								type='number'
+								id='salary_min'
+								name='salary_min'
+								min={0}
 								placeholder='Min income'
 								className={styles.edit_text_input}
 								onChange={onOccChange}
+								value={occ.salary_min}
 							/>
 							<input
-								type='text'
-								id='salary2'
-								name='salary2'
+								type='number'
+								id='salary_max'
+								name='salary_max'
+								min={0}
 								placeholder='Max income'
 								className={styles.edit_text_input}
 								onChange={onOccChange}
+								value={occ.salary_max}
 							/>
 							<button
 								type='button'
@@ -435,32 +618,72 @@ const EditProfile = () => {
 						</div>
 						{occupations.length !== 0 && (
 							<div className={styles.edit_occupations_display}>
-								{occupations.map(({ company, title, salary_min, salary_max }) => (
-									<button
-										type='button'
-										key={`${title} at ${company}`}
-										onClick={() =>
-											popOccupation({
-												company,
-												title,
-												salary_min,
-												salary_max,
-											})
+								{occupations.map(
+									({ company, title, salary_min, salary_max }, i) => {
+										if (title !== '') {
+											if (company !== '') {
+												return (
+													<button
+														type='button'
+														key={`${title} at ${company}`}
+														onClick={() =>
+															popOccupation({
+																company,
+																title,
+																salary_min,
+																salary_max,
+															})
+														}
+														className={styles.edit_pop_occupation}
+													>
+														<p>{title}</p>
+														<p>At {company}</p>
+														{salary_max !== null &&
+															salary_max !== 0 &&
+															salary_min !== null &&
+															salary_min !== 0 && (
+																<p>
+																	Earning between {salary_min} and{' '}
+																	{salary_max}
+																</p>
+															)}
+														<div style={{ textAlign: 'right' }}>
+															<Cancel />
+														</div>
+													</button>
+												);
+											} else {
+												return (
+													<button
+														type='button'
+														key={`${title}`}
+														onClick={() =>
+															popOccupation({
+																company,
+																title,
+																salary_min,
+																salary_max,
+															})
+														}
+														className={styles.edit_pop_occupation}
+													>
+														<p>{title}</p>
+														{salary_max !== null &&
+															salary_min !== null && (
+																<p>
+																	Earning between {salary_min} and{' '}
+																	{salary_max}
+																</p>
+															)}
+														<div style={{ textAlign: 'right' }}>
+															<Cancel />
+														</div>
+													</button>
+												);
+											}
 										}
-										className={styles.edit_pop_occupation}
-									>
-										<p>{title}</p>
-										<p>At {company}</p>
-										{salary_max !== null && salary_min !== null && (
-											<p>
-												Earning between {salary_min} and {salary_max}
-											</p>
-										)}
-										<div style={{ textAlign: 'right' }}>
-											<Cancel />
-										</div>
-									</button>
-								))}
+									}
+								)}
 							</div>
 						)}
 						<div>
@@ -472,6 +695,8 @@ const EditProfile = () => {
 										name='religion'
 										id='religion'
 										className={styles.edit_text_input}
+										value={formData.religion}
+										onChange={handleChange}
 									>
 										<option value='' style={{ backgroundColor: 'transparent' }}>
 											Please choose one
@@ -481,6 +706,7 @@ const EditProfile = () => {
 												className={styles.edit_select_opt}
 												key={religion}
 												value={religion}
+												selected={religion === user.religion ? true : false}
 											>
 												{religion}
 											</option>
@@ -490,9 +716,11 @@ const EditProfile = () => {
 								<div className={styles.edit_general_input_second}>
 									<label htmlFor='region'>Relationship Status</label>
 									<select
-										name='region'
-										id='region'
+										name='relationship_status'
+										id='relationship_status'
 										className={styles.edit_text_input}
+										value={formData.relationship_status}
+										onChange={handleChange}
 									>
 										<option value='' style={{ backgroundColor: 'transparent' }}>
 											Please choose one
@@ -502,6 +730,11 @@ const EditProfile = () => {
 												className={styles.edit_select_opt}
 												key={relation}
 												value={relation}
+												selected={
+													relation === user.relationship_status
+														? true
+														: false
+												}
 											>
 												{relation}
 											</option>
@@ -514,24 +747,28 @@ const EditProfile = () => {
 							<h1 className={styles.edit_heading}>Social Media</h1>
 							<div className={styles.edit_social_container}>
 								{social_media.map(({ link, social }, i) => (
-									<div key={1} className={styles.edit_socials}>
+									<div key={i} className={styles.edit_socials}>
 										<label htmlFor={social} style={{ textAlign: 'left' }}>
-											{social}
+											{social}{' '}
+											{social.toLowerCase() === 'whatsapp'
+												? 'Number'
+												: 'Link'}
 										</label>
 										<input
 											type='text'
-											id={social}
-											name={social}
-											placeholder={`${
-												link === ''
-													? social === 'WhatsApp'
-														? 'Add WhatsApp number'
-														: 'Add link'
-													: link
-											}`}
-											className={
-												styles.edit_text_input
-											} /*value={formData.lastName} onChange={handleChange}*/
+											id={social.toLowerCase()}
+											name={social.toLowerCase()}
+											onChange={handleSocialChange}
+											value={
+												social.toLowerCase() === 'whatsapp'
+													? socialMedia.whatsapp
+													: social.toLowerCase() === 'facebook'
+													? socialMedia.facebook
+													: social.toLowerCase() === 'instagram'
+													? socialMedia.instagram
+													: socialMedia.twitter
+											}
+											className={styles.edit_text_input}
 										/>
 									</div>
 								))}
@@ -552,7 +789,7 @@ const EditProfile = () => {
 									Cancel
 								</Link>
 								<button
-									type='button'
+									type='submit'
 									className={[styles.edit_options_buttons, styles.edit_save].join(
 										' '
 									)}

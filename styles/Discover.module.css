@@ -1,10 +1,60 @@
-.discover{
-	
-	background: linear-gradient(to right, #fc4041, #411554) ;
+.discover {
+	background: linear-gradient(to right, #fc4041, #411554);
 }
 
-.searchbuttons{
+.searchbuttons {
 	justify-content: space-between;
 	display: block;
 	margin: auto;
 }
+
+.form {
+	/* border: 2px solid white; */
+	padding: 2px;
+	text-align: center;
+	width: 90%;
+	margin: 20px auto;
+	border-radius: 10px;
+}
+
+.text_field {
+	border: 0;
+	border-bottom: 2px solid #ccc;
+	background-color: transparent;
+	width: 80%;
+	padding: 16px;
+	font-size: 14pt;
+	color: white;
+	margin: 10px 0;
+}
+
+.input_container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	margin: 10px 0;
+}
+
+.search_button {
+	background-color: transparent;
+	color: white;
+	padding: 8px;
+	border-radius: 10px;
+	border: 2px solid #ccc;
+}
+
+.search_button:hover {
+	cursor: pointer;
+}
+
+.radio {
+	text-align: center;
+}
+
+/* @media only screen and (min-width: 930px) {
+	.input_container {
+		flex-direction: row;
+	}
+} */

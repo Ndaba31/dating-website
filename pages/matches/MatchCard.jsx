@@ -1,17 +1,12 @@
 import React from 'react';
 import Image from 'next/legacy/image';
 import styles from '@/styles/Home.module.css';
-import { ArrowForwardIos, Facebook, Instagram, WhatsApp  } from '@mui/icons-material';
+import { ArrowForwardIos, Facebook, Instagram, WhatsApp } from '@mui/icons-material';
 import { useDateContext } from '@/context/dateContext';
 import Link from 'next/link';
 
 const MatchCard = ({ id }) => {
-	const {
-		allUsers,
-		allOccupations,
-		isAuth,
-		connectedUsers,
-	} = useDateContext();
+	const { allUsers, allOccupations, isAuth, connectedUsers } = useDateContext();
 
 	const maxChar = 100;
 
@@ -24,8 +19,8 @@ const MatchCard = ({ id }) => {
 			<div className={styles.discover_card}>
 				<div className={styles.discover_image}>
 					<Image
-						 width='80%'
-						 height='80%'
+						width='80%'
+						height='80%'
 						layout='responsive'
 						objectFit='cover'
 						quality={100}
