@@ -33,3 +33,6 @@ To_Do.txt
 
 # vercel
 .vercel
+
+# local database
+lib/db.js
