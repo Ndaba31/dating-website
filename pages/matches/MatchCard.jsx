@@ -8,11 +8,11 @@ import { useSession } from 'next-auth/react';
 
 const MatchCard = ({ id }) => {
 	const { data: session } = useSession();
-	const { allUsers, allOccupations, isAuth, connectedUsers } = useDateContext();
+	const { allUsers, allOccupations, user, connectedUsers } = useDateContext();
 
 	const maxChar = 100;
 
-	const user = allUsers.find(({ stem }) => stem === id);
+	// const user = allUsers.find(({ stem }) => stem === id);
 	const occupationArrays = allOccupations.filter(({ stem }) => stem === id);
 	const socialArrays = connectedUsers.filter(({ stem }) => stem === id);
 	console.log(occupationArrays);

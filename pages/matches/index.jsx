@@ -23,26 +23,6 @@ const Matches = () => {
 	const [acceptedRequest, setAcceptedRequest] = useState([]);
 	const [rejectedRequest, setRejectedRequest] = useState([]);
 
-	// const getInfo = async () => {
-	// 	const getData = {
-	// 		method: 'POST',
-	// 		headers: {
-	// 			'Content-Type': 'application/json',
-	// 		},
-	// 		body: JSON.stringify({
-	// 			count: 1,
-	// 			email: session ? session.user.email : '',
-	// 		}),
-	// 	};
-
-	// 	const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, getData);
-	// 	const { user } = await res.json();
-
-	// 	setUser(user);
-
-	// 	console.log(user);
-	// };
-
 	const getMatchesInfo = async () => {
 		const getData = {
 			method: 'POST',
