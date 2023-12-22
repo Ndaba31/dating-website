@@ -54,7 +54,7 @@ const Ask = () => {
 		console.log(message);
 
 		setIsBusy(false);
-		router.push('/');
+		router.push('/login');
 	};
 
 	return (

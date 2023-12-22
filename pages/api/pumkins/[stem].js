@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 		console.log(user, posts, occupations, hobbies, location, message);
 
 		res.status(200).json({
-			user: user[0],
+			pumpkin: user[0],
 			posts: posts,
 			occupations: occupations,
 			hobbies: hobbies,

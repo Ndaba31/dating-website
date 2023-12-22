@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '@/styles/Home.module.css';
 import { useDateContext } from '@/context/dateContext';
 import DiscoverCard from './DiscoverCard';
+import { useSession } from 'next-auth/react';
 
 const Discover = () => {
-	const { isAuth, user, allUsers, error } = useDateContext();
-	// console.log(error);
+	const { isAuth, user, allUsers, error, setIsAuth } = useDateContext();
+	const { data: session } = useSession();
 
 	return (
 		<div>
@@ -13,9 +14,9 @@ const Discover = () => {
 				Discover potential dates
 			</h1>
 			{error === '' ? (
-				isAuth ? (
+				session ? (
 					allUsers
-						.filter(({ stem }) => stem !== user.stem)
+						.filter(({ email }) => email !== session.user.email)
 						.map(({ stem }) => <DiscoverCard key={stem} id={stem} />)
 				) : (
 					allUsers.map(({ stem }) => <DiscoverCard key={stem} id={stem} />)

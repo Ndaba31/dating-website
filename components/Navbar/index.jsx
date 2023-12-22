@@ -2,15 +2,17 @@ import { faCircleUser } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDateContext } from '@/context/dateContext';
 import styles from '@/styles/Navbar.module.css';
 import Sidebar from '../Sidebar';
 import { Logout, Menu } from '@mui/icons-material';
 import { useRouter } from 'next/router';
+import { signOut, useSession } from 'next-auth/react';
 
 const Navbar = ({ page }) => {
-	const { isAuth, setIsAuth, user } = useDateContext();
+	const { isAuth, setIsBusy, user } = useDateContext();
+	const { data: session } = useSession();
 	const [showSidebar, setShowSidebar] = useState(false);
 	const router = useRouter();
 
@@ -34,7 +36,7 @@ const Navbar = ({ page }) => {
 					</h2>
 				</Link>
 				<div className={styles.options}>
-					{!isAuth ? (
+					{!session ? (
 						<>
 							<Link href='login' className={styles.link}>
 								Login
@@ -49,25 +51,26 @@ const Navbar = ({ page }) => {
 								Home
 							</Link>
 							<Link
-								href={`${page !== 'home' ? '../discover' : 'discover'}`}
+								href={`${process.env.NEXT_PUBLIC_URL}/discover`}
 								className={styles.link}
 							>
 								Discover
 							</Link>
 							<Link
-								href={`${page !== 'home' ? '../matches' : 'matches'}`}
+								href={`${process.env.NEXT_PUBLIC_URL}/matches`}
 								className={styles.link}
 							>
 								Matches
 							</Link>
 							<Link
-								href={`${page !== 'home' ? '../profile' : 'profile'}`}
+								href={`${process.env.NEXT_PUBLIC_URL}/profile`}
 								className={styles.link}
+								onClick={() => setIsBusy(true)}
 							>
 								Profile
 							</Link>
 							<button
-								className={styles.link}
+								className={`${styles.link} ${styles.login}`}
 								style={{
 									backgroundColor: 'transparent',
 									border: '0',
@@ -77,8 +80,8 @@ const Navbar = ({ page }) => {
 									border: '2px solid white',
 								}}
 								onClick={() => {
-									setIsAuth(false);
-									router.replace('/');
+									signOut();
+									// router.replace('/');
 								}}
 							>
 								<p>Logout</p>

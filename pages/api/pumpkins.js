@@ -3,10 +3,12 @@ import { query } from '@/lib/db';
 export default async function handler(req, res) {
 	let message;
 	if (req.method === 'POST') {
-		const { count } = req.body;
+		const { count, email } = req.body;
+		let user;
+
 		const allUsers = await query({
 			query:
-				'SELECT users.stem AS stem, first_name, last_name, bio, hickies, pumpkins, profile_photo FROM users, user_details WHERE users.stem = user_details.stem ORDER BY pumpkins DESC LIMIT ' +
+				'SELECT users.stem AS stem, email, first_name, last_name, sex, dob, nick_name, phone, ethnicity, religion, relationship_status, bio, hickies, pumpkins, profile_photo FROM users, user_details WHERE users.stem = user_details.stem ORDER BY pumpkins DESC LIMIT ' +
 				count,
 			values: [],
 		});
@@ -15,6 +17,15 @@ export default async function handler(req, res) {
 			message = count + ' users found';
 		} else {
 			message = 'No users found';
+		}
+
+		if (email === '') {
+			user = null;
+		} else {
+			user = await query({
+				query: 'SELECT users.stem AS stem, email, first_name, last_name, sex, dob, nick_name, phone, ethnicity, religion, relationship_status, bio, hickies, pumpkins, profile_photo FROM users, user_details WHERE users.stem = user_details.stem AND email = ?',
+				values: [email],
+			});
 		}
 
 		const allOccupations = await query({
@@ -28,7 +39,7 @@ export default async function handler(req, res) {
 		});
 
 		const allMatches = await query({
-			query: 'SELECT * FROM matches WHERE slide = 1 AND liked_back = 1;',
+			query: 'SELECT * FROM matches WHERE slide = 1 AND liked_back = 1 LIMIT 10;',
 			values: [],
 		});
 
@@ -38,6 +49,7 @@ export default async function handler(req, res) {
 			occupations: allOccupations,
 			socials: allSocials,
 			matches: allMatches,
+			user: user ? user[0] : null,
 		});
 	}
 
@@ -163,27 +175,27 @@ export default async function handler(req, res) {
 			});
 
 			const pumpkins1 = await query({
-				query: 'SELECT pumpkins FROM user_details WHERE stem = ?;',
+				query: 'SELECT hickies FROM user_details WHERE stem = ?;',
 				values: [crush],
 			});
 
-			const num_pumpkins1 = Number(pumpkins1[0].pumpkins);
+			const num_hickies1 = Number(pumpkins1[0].hickies);
 
 			const updateHicky1 = await query({
 				query: `UPDATE user_details SET hickies = ? WHERE stem = ?`,
-				values: [num_pumpkins1 + 1, crush],
+				values: [num_hickies1 + 1, crush],
 			});
 
 			const pumpkins2 = await query({
-				query: 'SELECT pumpkins FROM user_details WHERE stem = ?;',
+				query: 'SELECT hickies FROM user_details WHERE stem = ?;',
 				values: [crushee],
 			});
 
-			const num_pumpkin2 = Number(pumpkins2[0].pumpkins);
+			const num_hickies2 = Number(pumpkins2[0].hickies);
 
 			const updateHicky2 = await query({
 				query: `UPDATE user_details SET hickies = ? WHERE stem = ?`,
-				values: [num_pumpkin2 + 1, crushee],
+				values: [num_hickies2 + 1, crushee],
 			});
 
 			message =
@@ -201,9 +213,30 @@ export default async function handler(req, res) {
 				values: [crushee, crush],
 			});
 
-			const updateHicky = await query({
+			const hickies1 = await query({
+				query: 'SELECT hickies FROM user_details WHERE stem = ?;',
+				values: [crush],
+			});
+
+			const num_hickies1 =
+				Number(hickies1[0].hickies) === 0 ? 0 : Number(hickies1[0].hickies) - 1;
+
+			const updateHicky1 = await query({
 				query: `UPDATE user_details SET hickies = ? WHERE stem = ?`,
-				values: [totalMatches, crush],
+				values: [num_hickies1, crush],
+			});
+
+			const hickies2 = await query({
+				query: 'SELECT hickies FROM user_details WHERE stem = ?;',
+				values: [crushee],
+			});
+
+			const num_hickies2 =
+				Number(hickies2[0].hickies) === 0 ? 0 : Number(hickies2[0].hickies) - 1;
+
+			const updateHicky2 = await query({
+				query: `UPDATE user_details SET hickies = ? WHERE stem = ?`,
+				values: [num_hickies2, crushee],
 			});
 		}
 

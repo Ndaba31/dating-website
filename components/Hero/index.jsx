@@ -3,9 +3,11 @@ import styles from '@/styles/Home.module.css';
 import Image from 'next/legacy/image';
 import { useDateContext } from '@/context/dateContext';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 const Hero = () => {
 	const { isAuth } = useDateContext();
+	const { data: session } = useSession();
 
 	return (
 		<div className={styles.hero_container}>
@@ -33,7 +35,7 @@ const Hero = () => {
 							justifyContent: 'space-around',
 						}}
 					>
-						{isAuth ? (
+						{session ? (
 							<>
 								<Link className={styles.hero_buttons} href='/matches'>
 									My Matches

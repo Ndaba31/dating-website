@@ -4,21 +4,17 @@ import MatchCard from './MatchCard';
 import DiscoverCard from '@/components/Discover/DiscoverCard';
 import Navbar from '@/components/Navbar';
 import Header from '@/components/Head';
+import { useSession } from 'next-auth/react';
+import LoginUser from '@/components/Login';
 
 const Matches = () => {
-	const {
-		isAuth,
-		user,
-		allUsers,
-		setAllUsers,
-		connectedUsers,
-		allOccupations,
-		setAllOccupations,
-		setConnectedUsers,
-		setError,
-		error,
-	} = useDateContext();
-	console.log(error);
+	const { isAuth, user, setUser, setAllOccupations, setConnectedUsers, setError, error } =
+		useDateContext();
+	const { data: session } = useSession();
+
+	// if (!session) {
+	// 	return <LoginUser title='Matches' />;
+	// }
 
 	const [slideYou, setSlideYou] = useState([]);
 	const [youAccept, setYouAccept] = useState([]);
@@ -27,7 +23,45 @@ const Matches = () => {
 	const [acceptedRequest, setAcceptedRequest] = useState([]);
 	const [rejectedRequest, setRejectedRequest] = useState([]);
 
+	// const getInfo = async () => {
+	// 	const getData = {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			'Content-Type': 'application/json',
+	// 		},
+	// 		body: JSON.stringify({
+	// 			count: 1,
+	// 			email: session ? session.user.email : '',
+	// 		}),
+	// 	};
+
+	// 	const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, getData);
+	// 	const { user } = await res.json();
+
+	// 	setUser(user);
+
+	// 	console.log(user);
+	// };
+
 	const getMatchesInfo = async () => {
+		const getData = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				count: 1,
+				email: session ? session.user.email : '',
+			}),
+		};
+
+		const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, getData);
+		const { user } = await res.json();
+
+		setUser(user);
+
+		console.log(user);
+
 		const getMatches = {
 			method: 'POST',
 			headers: {
@@ -87,7 +121,7 @@ const Matches = () => {
 							top: '10px',
 							height: '45px',
 							padding: '60px',
-							backgroundColor: 'pink',
+							backgroundColor: 'orange',
 						}}
 					>
 						<p
@@ -103,7 +137,7 @@ const Matches = () => {
 					</div>
 
 					{error === '' ? (
-						isAuth ? (
+						session ? (
 							slideYou
 								.filter(
 									({ slide, liked_back }) => slide === 1 && liked_back === null
@@ -144,7 +178,7 @@ const Matches = () => {
 					</div>
 
 					{error === '' ? (
-						isAuth ? (
+						session ? (
 							youAccept
 								.filter(({ slide, liked_back }) => slide === 1 && liked_back === 1)
 								.map(({ stem }) => <MatchCard key={stem} id={stem} />)
@@ -167,7 +201,7 @@ const Matches = () => {
 							top: '10px',
 							height: '45px',
 							padding: '60px',
-							backgroundColor: 'orangered',
+							backgroundColor: 'red',
 						}}
 					>
 						<p
@@ -183,7 +217,7 @@ const Matches = () => {
 					</div>
 
 					{error === '' ? (
-						isAuth ? (
+						session ? (
 							youReject
 								.filter(({ slide, liked_back }) => slide === 1 && liked_back === 0)
 								.map(({ stem }) => <MatchCard key={stem} id={stem} />)
@@ -206,7 +240,7 @@ const Matches = () => {
 							top: '10px',
 							height: '45px',
 							padding: '60px',
-							backgroundColor: 'pink',
+							backgroundColor: 'orange',
 						}}
 					>
 						<p
@@ -222,7 +256,7 @@ const Matches = () => {
 					</div>
 
 					{error === '' ? (
-						isAuth ? (
+						session ? (
 							yourSlide
 								.filter(
 									({ slide, liked_back }) => slide === 1 && liked_back === null
@@ -258,12 +292,12 @@ const Matches = () => {
 								fontSize: '14pt',
 							}}
 						>
-							Folks who are shooting their shot
+							Folks who stand a chance with you
 						</p>
 					</div>
 
 					{error === '' ? (
-						isAuth ? (
+						session ? (
 							acceptedRequest
 								.filter(({ slide, liked_back }) => slide === 1 && liked_back === 1)
 								.map(({ stem }) => <MatchCard key={stem} id={stem} />)
@@ -286,7 +320,7 @@ const Matches = () => {
 							top: '10px',
 							height: '45px',
 							padding: '60px',
-							backgroundColor: 'orangered',
+							backgroundColor: 'red',
 						}}
 					>
 						<p
@@ -302,7 +336,7 @@ const Matches = () => {
 					</div>
 
 					{error === '' ? (
-						isAuth ? (
+						session ? (
 							rejectedRequest
 								.filter(({ slide, liked_back }) => slide === 1 && liked_back === 0)
 								.map(({ stem }) => <MatchCard key={stem} id={stem} />)

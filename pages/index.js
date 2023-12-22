@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import Discover from '@/components/Discover';
 import MatchesCard from '@/components/Matches';
 import Navbar from '@/components/Navbar';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,12 +20,20 @@ export default function Home() {
 		setConnectedUsers,
 		setError,
 		setSuccess,
+		setIsAuth,
+		isAuth,
+		setUser,
 	} = useDateContext();
-	let num = 25;
 
-	setSuccess('');
+	const { data: session, update } = useSession();
+	// const { session, accessToken } = data;
+
+	const num = 10;
 
 	const getInfo = async () => {
+		setSuccess('');
+		setError('');
+
 		const getData = {
 			method: 'POST',
 			headers: {
@@ -32,13 +41,18 @@ export default function Home() {
 			},
 			body: JSON.stringify({
 				count: num,
+				email: session ? session.user.email : '',
 			}),
 		};
 
 		const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, getData);
-		const { message, users, occupations, socials, matches } = await res.json();
+		const { message, users, occupations, socials, matches, user } = await res.json();
 
 		setAllUsers(users);
+
+		setUser(user);
+
+		console.log(users);
 
 		setAllOccupations(occupations);
 		// console.log(`Occupations: ${occupations[0].title}`);
@@ -56,6 +70,7 @@ export default function Home() {
 		getInfo();
 	}, []);
 
+	if (session) console.log(session);
 	return (
 		<div style={{ bacground: 'linear-gradient(to right, #200b33, #19171c, #19276b)' }}>
 			<Header title='Pumpkin' description='Where true love meets fortune' />

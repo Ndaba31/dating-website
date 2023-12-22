@@ -3,10 +3,18 @@ import Image from 'next/legacy/image';
 import styles from '@/styles/Home.module.css';
 import { ArrowForwardIos } from '@mui/icons-material';
 import Link from 'next/link';
+import { useDateContext } from '@/context/dateContext';
+import { useSession } from 'next-auth/react';
 
 const MatchCard = ({ match }) => {
 	const { blog_post, couple_photo, date_accepted, crush, crushee } = match;
+	const { setSpecificMatch } = useDateContext();
+	const { data: session } = useSession();
 	const maxChar = 60;
+
+	const handleLinkClick = () => {
+		setSpecificMatch(match);
+	};
 
 	return (
 		<div className={styles.matchCard}>
@@ -27,11 +35,12 @@ const MatchCard = ({ match }) => {
 
 				<div style={{ margin: '20px 0' }}>
 					<Link
-						href={`#`}
+						href={`${session ? `couple-match/${crushee}/${crush}` : 'login'}`}
 						style={{
 							color: '#9D6200',
 							backgroundColor: 'transparent',
 						}}
+						onClick={handleLinkClick}
 					>
 						<ArrowForwardIos
 							style={{

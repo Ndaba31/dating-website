@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Header from '@/components/Head';
+import { signIn } from 'next-auth/react';
 
 const Login = () => {
 	const { setUser, setIsAuth, error, setError, isBusy, setIsBusy, setSuccess } = useDateContext();
@@ -14,7 +15,7 @@ const Login = () => {
 		password: '',
 	});
 
-	// setError('');
+	// setIsBusy(false);
 
 	const router = useRouter();
 
@@ -32,40 +33,73 @@ const Login = () => {
 		if (error !== '') {
 			return;
 		} else {
-			const postData = {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					email: email,
-					password: password,
-				}),
-			};
-
 			setIsBusy(true);
 
 			try {
-				const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`, postData);
-				const { user, message } = await res.json();
+				const result = await signIn('credentials', {
+					redirect: false,
+					email,
+					password,
+				});
 
-				if (message === `Welcome back ${user.firstName}`) {
-					setSuccess(message);
-					setUser(user);
-					setIsAuth(true);
-					router.replace('/');
+				setIsBusy(false);
+
+				if (result.error) {
+					const err = 'Incorrect Email/Password';
+					setError(`Authentication Failed: ${err}`);
 				} else {
-					setError(message);
+					router.push('/');
 				}
-
-				console.log(user, message);
 			} catch (error) {
+				setIsBusy(false);
 				setError(error);
 			}
-
-			setIsBusy(false);
 		}
 	};
+
+	// const submitInfo = async (e) => {
+	// 	e.preventDefault();
+	// 	setError('');
+	// 	setSuccess('');
+	// 	const { email, password } = formData;
+
+	// 	if (error !== '') {
+	// 		return;
+	// 	} else {
+	// 		const postData = {
+	// 			method: 'POST',
+	// 			headers: {
+	// 				'Content-Type': 'application/json',
+	// 			},
+	// 			body: JSON.stringify({
+	// 				email: email,
+	// 				password: password,
+	// 			}),
+	// 		};
+
+	// 		setIsBusy(true);
+
+	// 		try {
+	// 			const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/user`, postData);
+	// 			const { user, message } = await res.json();
+
+	// 			if (message === `Welcome back ${user.firstName}`) {
+	// 				setSuccess(message);
+	// 				setUser(user);
+	// 				setIsAuth(true);
+	// 				router.replace('/');
+	// 			} else {
+	// 				setError(message);
+	// 			}
+
+	// 			console.log(user, message);
+	// 		} catch (error) {
+	// 			setError(error);
+	// 		}
+
+	// 		setIsBusy(false);
+	// 	}
+	// };
 
 	return (
 		<>

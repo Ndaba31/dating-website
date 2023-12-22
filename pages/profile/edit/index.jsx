@@ -1,16 +1,25 @@
 import { AddCircle, Cancel, DeleteForever } from '@mui/icons-material';
 import Image from 'next/legacy/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '@/styles/Profile.module.css';
 import { useDateContext } from '@/context/dateContext';
 import { ethinicities, regions, relationship_status, religions, sexes, social_media } from '@/data';
 import Header from '@/components/Head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
+import LoginUser from '@/components/Login';
 
 const EditProfile = () => {
+	const { data: session, status } = useSession();
+
+	if (!session) {
+		return <LoginUser title={'My Profile'} />;
+	}
+
 	const {
 		user,
+		setUser,
 		setHobbies,
 		hobbies,
 		occupations,
@@ -31,34 +40,13 @@ const EditProfile = () => {
 		salary_min: 0,
 		salary_max: 0,
 	});
-	const [photo, setPhoto] = useState(user.profile_photo);
+	const [photo, setPhoto] = useState(null);
 	const [imagePreview, setImagePreview] = useState(null);
 	const [poppedOccupations, setPoppedOccupations] = useState([]);
 	const [poppedHobbies, setPoppedHobbies] = useState([]);
+	const [formData, setFormData] = useState({});
 
-	const birthday = user.dob !== undefined && user.dob !== null ? new Date(user.dob) : '';
-
-	if (birthday !== '') {
-		birthday.setDate(birthday.getDate() + 1);
-	}
-
-	const [formData, setFormData] = useState({
-		firstName: user.first_name,
-		lastName: user.last_name,
-		email: user.email,
-		stem: user.stem,
-		bio: user.bio,
-		sex: user.sex,
-		dob: birthday === '' ? '' : birthday.toISOString().substring(0, 10),
-		region:
-			location !== undefined ? (location.region === undefined ? '' : location.region) : '',
-		city: location !== undefined ? (location.city === undefined ? '' : location.city) : '',
-		nickName: user.nick_name,
-		phone: user.phone,
-		ethnicity: user.ethnicity,
-		religion: user.religion,
-		relationship_status: user.relationship_status,
-	});
+	console.log(user);
 
 	const [socialMedia, setSocialMedia] = useState({
 		whatsapp:
@@ -82,6 +70,61 @@ const EditProfile = () => {
 				? socials.find(({ social }) => social.toLowerCase() === 'twitter').contact
 				: '',
 	});
+
+	const getInfo = async () => {
+		setSuccess('');
+		setError('');
+
+		const getData = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				count: 1,
+				email: session ? session.user.email : '',
+			}),
+		};
+
+		const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/pumpkins`, getData);
+		const { user } = await res.json();
+
+		setUser(user);
+		setIsBusy(user.profile_photo ? false : true);
+		const birthday = user.dob !== undefined && user.dob !== null ? new Date(user.dob) : '';
+
+		if (birthday !== '') {
+			birthday.setDate(birthday.getDate() + 1);
+		}
+
+		setFormData({
+			firstName: user.first_name,
+			lastName: user.last_name,
+			email: user.email,
+			stem: user.stem,
+			bio: user.bio,
+			sex: user.sex,
+			dob: birthday === '' ? '' : birthday.toISOString().substring(0, 10),
+			region:
+				location !== undefined
+					? location.region === undefined
+						? ''
+						: location.region
+					: '',
+			city: location !== undefined ? (location.city === undefined ? '' : location.city) : '',
+			nickName: user.nick_name,
+			phone: user.phone,
+			ethnicity: user.ethnicity,
+			religion: user.religion,
+			relationship_status: user.relationship_status,
+		});
+
+		setPhoto(user.profile_photo);
+	};
+
+	useEffect(() => {
+		getInfo();
+	}, []);
 
 	const handleSocialChange = (event) => {
 		const { name, value } = event.target;
@@ -154,8 +197,6 @@ const EditProfile = () => {
 		);
 		setOccupations(occupation);
 	};
-
-	setIsBusy(photo ? false : true);
 
 	const onFileUploadChange = (e) => {
 		const selectedFile = e.target.files[0];

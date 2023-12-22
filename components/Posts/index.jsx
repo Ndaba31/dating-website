@@ -19,7 +19,7 @@ const Posts = ({ posts, isUser }) => {
 						<PostDetail key={id} post={posts} />
 					</Link>
 				) : (
-					<PostDetail key={i} post={posts} />
+					<PostDetail key={id} post={posts} />
 				)
 			)}
 		</div>

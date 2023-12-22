@@ -15,9 +15,11 @@ import { style } from '@mui/system';
 import styles from '@/styles/Discover.module.css';
 import DiscoverCard from '@/components/Discover/DiscoverCard';
 import { Search } from '@mui/icons-material';
+import { useSession } from 'next-auth/react';
 
 const Discover = () => {
 	const ref = useRef();
+	const { data: session } = useSession();
 	const [search, setSearch] = useState('');
 	const [allDiscoveredUsers, setallDiscoveredUsers] = useState([]);
 	const [button, setButton] = useState(
@@ -33,12 +35,13 @@ const Discover = () => {
 		'job',
 		'company'
 	);
+
 	const readRefvalue = () => {
 		setSearch(ref.current.value);
 		console.log(search);
 	};
-	const { isAuth, user, allUsers, error } = useDateContext();
-	console.log(error);
+	const { setError, allUsers, error, setUser, setAllUsers } = useDateContext();
+	console.log(allUsers);
 
 	console.log(button);
 	const handleChange = (event) => {
@@ -55,6 +58,8 @@ const Discover = () => {
 	};
 
 	const getAllUsers = async () => {
+		setError('');
+
 		const getUsers = {
 			method: 'PUT',
 			headers: {
@@ -78,18 +83,25 @@ const Discover = () => {
 		};
 
 		console.log(button + ' ' + search);
+		console.log();
 
 		if (button !== '') {
 			const users = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/matches`, getUsersby);
 			const { discoverAllUsers } = await users.json();
-			setallDiscoveredUsers(discoverAllUsers);
+			setAllUsers(discoverAllUsers);
+
+			if (discoverAllUsers.length === 0) {
+				setError('No Users Found');
+			}
 		} else {
 			const users = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/matches`, getUsers);
 			const { discoverAllUsers } = await users.json();
-			setallDiscoveredUsers(discoverAllUsers);
-		}
+			setAllUsers(discoverAllUsers);
 
-		console.log(allDiscoveredUsers);
+			if (discoverAllUsers.length === 0) {
+				setError('No Users Found');
+			}
+		}
 	};
 
 	useEffect(() => {
@@ -196,12 +208,12 @@ const Discover = () => {
 			</div>
 
 			{error === '' ? (
-				isAuth ? (
-					allDiscoveredUsers
-						.filter(({ stem }) => stem !== user.stem)
+				session ? (
+					allUsers
+						.filter(({ email }) => email !== session.user.email)
 						.map(({ stem }) => <DiscoverCard key={stem} id={stem} />)
 				) : (
-					allDiscoveredUsers.map(({ stem }) => <DiscoverCard key={stem} id={stem} />)
+					allUsers.map(({ stem }) => <DiscoverCard key={stem} id={stem} />)
 				)
 			) : (
 				<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>{error}</h1>

@@ -18,7 +18,6 @@ export default async function handler(req, res) {
 			values: [email],
 		});
 
-		// SELECT DISTINCT * FROM users, user_details WHERE users.stem = user_details.stem AND email = 'admin@mail.com'
 		if (!userDB.length) {
 			message = 'Email not correct';
 		} else {

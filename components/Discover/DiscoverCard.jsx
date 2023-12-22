@@ -6,11 +6,14 @@ import styles from '@/styles/Home.module.css';
 import { faArrowAltCircleRight } from '@fortawesome/free-regular-svg-icons';
 import { useDateContext } from '@/context/dateContext';
 import { ArrowForwardIos, Facebook, Instagram, WhatsApp } from '@mui/icons-material';
+import { useSession } from 'next-auth/react';
 
 // TODO DESIGN FOR PROFILE
 // TODO EDIT DESIGN FOR [STEM] PROFILE
 
 const DiscoverCard = ({ id }) => {
+	const { data: session } = useSession();
+
 	const {
 		allUsers,
 		allOccupations,
@@ -30,7 +33,7 @@ const DiscoverCard = ({ id }) => {
 	const user = allUsers.find(({ stem }) => stem === id);
 	const occupationArrays = allOccupations.filter(({ stem }) => stem === id);
 	const socialArrays = connectedUsers.filter(({ stem }) => stem === id);
-	// console.log(`OccupationArrays: ${occupationArrays[0].title}`);
+	console.log(occupationArrays);
 
 	return (
 		<div className={styles.discover_container}>
@@ -59,15 +62,14 @@ const DiscoverCard = ({ id }) => {
 						<h1>
 							{user.first_name} {user.last_name}
 						</h1>
+						<h2>@{user.stem}</h2>
 						<div>
 							{occupationArrays.length !== 0 &&
-								occupationArrays.map(({ title, company }, i) => {
-									title !== '' && (
-										<h3 key={i}>
-											{title} {company === '' ? '' : 'at ' + company}
-										</h3>
-									);
-								})}
+								occupationArrays.map(({ title, company }, i) => (
+									<h3 key={i}>
+										{title} {company === '' ? '' : 'at ' + company}
+									</h3>
+								))}
 							{user.bio !== null && (
 								<p style={{ fontSize: '14pt' }}>{user.bio.slice(0, maxChar)}</p>
 							)}
@@ -77,7 +79,7 @@ const DiscoverCard = ({ id }) => {
 						<div className={styles.discover_following} style={{ alignItems: 'center' }}>
 							<h2>Check out my profile</h2>
 							<Link
-								href={isAuth ? `profile/${user.stem}` : 'login'}
+								href={session ? `profile/${user.stem}` : 'login'}
 								style={{
 									color: '#9D6200',
 									backgroundColor: 'transparent',

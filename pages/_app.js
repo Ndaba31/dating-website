@@ -1,10 +1,13 @@
 import { DateContextProvider } from '@/context/dateContext';
+import { SessionProvider } from 'next-auth/react';
 import '@/styles/globals.css';
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps: { session, ...pageProps } }) {
 	return (
-		<DateContextProvider>
-			<Component {...pageProps} />
-		</DateContextProvider>
+		<SessionProvider session={session}>
+			<DateContextProvider>
+				<Component {...pageProps} />
+			</DateContextProvider>
+		</SessionProvider>
 	);
 }

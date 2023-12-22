@@ -1,10 +1,12 @@
 // First, create a context
+import { useSession } from 'next-auth/react';
 import { createContext, useContext, useState } from 'react';
 
 const DateContext = createContext(undefined);
 
 // Create a custom provider component that wraps your date
 const DateContextProvider = ({ children }) => {
+	const { data: session } = useSession();
 	const [sidebar, setSidebar] = useState(false);
 	const [user, setUser] = useState({
 		stem: '',
@@ -16,7 +18,7 @@ const DateContextProvider = ({ children }) => {
 		hickies: 0,
 		pumpkins: 0,
 	});
-	const [isAuth, setIsAuth] = useState(false);
+	const [isAuth, setIsAuth] = useState(session ? true : false);
 	const [isBusy, setIsBusy] = useState(false);
 	const [error, setError] = useState('');
 	const [success, setSuccess] = useState('');
@@ -29,6 +31,7 @@ const DateContextProvider = ({ children }) => {
 	const [posts, setPosts] = useState([]);
 	const [socials, setSocials] = useState([]);
 	const [allMatches, setAllMatches] = useState([]);
+	const [specificMatch, setSpecificMatch] = useState({});
 
 	return (
 		<DateContext.Provider
@@ -63,6 +66,8 @@ const DateContextProvider = ({ children }) => {
 				setIsAuth,
 				isBusy,
 				setIsBusy,
+				specificMatch,
+				setSpecificMatch,
 			}}
 		>
 			{children}

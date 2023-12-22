@@ -130,10 +130,6 @@ export default async function handler(req, res) {
 					res.status(500).json({ error: 'Error deleting existing file' });
 				}
 			}
-
-			// delete image
-
-			// delete row on database
 		});
 	}
 }

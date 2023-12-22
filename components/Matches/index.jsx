@@ -10,7 +10,7 @@ const MatchesCard = () => {
 		({ slide, liked_back }) => slide === 1 && liked_back === 1
 	);
 
-	console.log(filteredMatches);
+	// console.log(filteredMatches);
 
 	return (
 		<>

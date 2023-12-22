@@ -4,8 +4,10 @@ import styles from '@/styles/Home.module.css';
 import { ArrowForwardIos, Facebook, Instagram, WhatsApp } from '@mui/icons-material';
 import { useDateContext } from '@/context/dateContext';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 const MatchCard = ({ id }) => {
+	const { data: session } = useSession();
 	const { allUsers, allOccupations, isAuth, connectedUsers } = useDateContext();
 
 	const maxChar = 100;
@@ -13,6 +15,7 @@ const MatchCard = ({ id }) => {
 	const user = allUsers.find(({ stem }) => stem === id);
 	const occupationArrays = allOccupations.filter(({ stem }) => stem === id);
 	const socialArrays = connectedUsers.filter(({ stem }) => stem === id);
+	console.log(occupationArrays);
 
 	return (
 		<div className={styles.discover_container}>
@@ -57,7 +60,7 @@ const MatchCard = ({ id }) => {
 						<div className={styles.discover_following} style={{ alignItems: 'center' }}>
 							<h2>Check out my profile</h2>
 							<Link
-								href={isAuth ? `profile/${user.stem}` : 'login'}
+								href={session ? `profile/${user.stem}` : 'login'}
 								style={{
 									color: '#9D6200',
 									backgroundColor: 'transparent',
