@@ -17,6 +17,10 @@ const MatchCard = ({ id }) => {
 	const socialArrays = connectedUsers.filter(({ stem }) => stem === id);
 	console.log(occupationArrays);
 
+	if (user === undefined) {
+		return <p></p>;
+	}
+
 	return (
 		<div className={styles.discover_container}>
 			<div className={styles.discover_card}>

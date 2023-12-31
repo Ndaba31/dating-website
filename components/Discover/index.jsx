@@ -17,9 +17,10 @@ const Discover = () => {
 				session ? (
 					allUsers
 						.filter(({ email }) => email !== session.user.email)
+						.slice(0, 5)
 						.map(({ stem }) => <DiscoverCard key={stem} id={stem} />)
 				) : (
-					allUsers.map(({ stem }) => <DiscoverCard key={stem} id={stem} />)
+					allUsers.slice(0, 5).map(({ stem }) => <DiscoverCard key={stem} id={stem} />)
 				)
 			) : (
 				<h1 style={{ textAlign: 'center', textTransform: 'capitalize' }}>{error}</h1>

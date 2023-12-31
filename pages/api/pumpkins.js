@@ -7,9 +7,7 @@ export default async function handler(req, res) {
 		let user;
 
 		const allUsers = await query({
-			query:
-				'SELECT users.stem AS stem, email, first_name, last_name, sex, dob, nick_name, phone, ethnicity, religion, relationship_status, bio, hickies, pumpkins, profile_photo FROM users, user_details WHERE users.stem = user_details.stem ORDER BY pumpkins DESC LIMIT ' +
-				count,
+			query: 'SELECT users.stem AS stem, email, first_name, last_name, sex, dob, nick_name, phone, ethnicity, religion, relationship_status, bio, hickies, pumpkins, profile_photo FROM users, user_details WHERE users.stem = user_details.stem ORDER BY pumpkins DESC',
 			values: [],
 		});
 
