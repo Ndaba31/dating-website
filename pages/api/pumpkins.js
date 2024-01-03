@@ -1,9 +1,9 @@
-import { runMiddleware } from '@/lib/cors';
+import { cors, runMiddleware } from '@/lib/cors';
 import { query } from '@/lib/db';
 
 export default async function handler(req, res) {
 	let message;
-	await runMiddleware(req, res);
+	await runMiddleware(req, res, cors);
 
 	if (req.method === 'POST') {
 		const { count, email } = req.body;

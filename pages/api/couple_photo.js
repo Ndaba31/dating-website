@@ -1,4 +1,4 @@
-import { runMiddleware } from '@/lib/cors';
+import { cors, runMiddleware } from '@/lib/cors';
 import { query } from '@/lib/db';
 import { createUserFolder, deleteUserFolder } from '@/lib/directories';
 import { log } from 'console';
@@ -13,7 +13,7 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-	await runMiddleware(req, res);
+	await runMiddleware(req, res, cors);
 
 	if (req.method === 'POST') {
 		const form = new IncomingForm();

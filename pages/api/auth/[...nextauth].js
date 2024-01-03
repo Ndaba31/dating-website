@@ -2,9 +2,9 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import NextAuth from 'next-auth';
 import { query } from '@/lib/db';
 import isSamePass from '@/lib/hash';
-import { runMiddleware } from '@/lib/cors';
+import { cors, runMiddleware } from '@/lib/cors';
 
-const cors = runMiddleware;
+const cors_ = runMiddleware;
 
 export const authOptions = {
 	session: {
@@ -55,7 +55,7 @@ export const authOptions = {
 
 export default async function handler(req, res) {
 	// Run the CORS middleware
-	await cors(req, res);
+	await cors_(req, res, cors);
 
 	// Pass the request and response to NextAuth.js
 	await NextAuth(req, res, authOptions);

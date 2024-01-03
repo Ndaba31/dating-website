@@ -1,11 +1,11 @@
-import { runMiddleware } from '@/lib/cors';
+import { cors, runMiddleware } from '@/lib/cors';
 import { query } from '@/lib/db';
 
 export default async function handler(req, res) {
 	let message;
 	let getData = null;
 	let user = null;
-	await runMiddleware(req, res);
+	await runMiddleware(req, res, cors);
 
 	if (req.method === 'POST') {
 		const { newbio, crushee, crush, getMatch, email } = req.body;
