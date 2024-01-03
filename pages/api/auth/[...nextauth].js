@@ -51,6 +51,7 @@ export const authOptions = {
 	pages: {
 		signIn: '/login', // Customize the sign-in page URL
 	},
+	secret: process.env.NEXTAUTH_SECRET,
 };
 
 export default async function handler(req, res) {
