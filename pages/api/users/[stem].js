@@ -1,6 +1,9 @@
+import { runMiddleware } from '@/lib/cors';
 import { query } from '@/lib/db';
 
 export default async function products(req, res) {
+	await runMiddleware(req, res);
+
 	if (req.method === 'GET') {
 		const query_result = req.query;
 		const { stem } = query_result;

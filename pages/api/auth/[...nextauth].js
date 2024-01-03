@@ -2,6 +2,9 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import NextAuth from 'next-auth';
 import { query } from '@/lib/db';
 import isSamePass from '@/lib/hash';
+import { runMiddleware } from '@/lib/cors';
+
+const cors = runMiddleware;
 
 export const authOptions = {
 	session: {
@@ -9,12 +12,7 @@ export const authOptions = {
 	},
 	providers: [
 		CredentialsProvider({
-			// The name to display on the sign in form (e.g. 'Sign in with...')
 			name: 'Credentials',
-			// The credentials is used to generate a suitable form on the sign in page.
-			// You can specify whatever fields you are expecting to be submitted.
-			// e.g. domain, username, password, 2FA token, etc.
-			// You can pass any HTML attribute to the <input> tag through the object.
 			credentials: {
 				email: { label: 'email', type: 'email' },
 				password: { label: 'password', type: 'password' },
@@ -53,20 +51,12 @@ export const authOptions = {
 	pages: {
 		signIn: '/login', // Customize the sign-in page URL
 	},
-	// callbacks: {
-	// 	async jwt({ token, account }) {
-	// 		// Persist the OAuth access_token to the token right after signin
-	// 		if (account) {
-	// 			token.accessToken = account.access_token;
-	// 		}
-	// 		return token;
-	// 	},
-	// 	async session({ session, token, user }) {
-	// 		// Send properties to the client, like an access_token from a provider.
-	// 		session.accessToken = token.accessToken;
-	// 		return session;
-	// 	},
-	// },
 };
 
-export default NextAuth(authOptions);
+export default async function handler(req, res) {
+	// Run the CORS middleware
+	await cors(req, res);
+
+	// Pass the request and response to NextAuth.js
+	await NextAuth(req, res, authOptions);
+}

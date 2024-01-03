@@ -1,3 +1,4 @@
+import { runMiddleware } from '@/lib/cors';
 import { query } from '@/lib/db';
 import { log } from 'console';
 import { IncomingForm } from 'formidable-serverless';
@@ -11,6 +12,8 @@ export const config = {
 };
 
 export default async function handler(req, res) {
+	await runMiddleware(req, res);
+
 	if (req.method === 'POST') {
 		const form = new IncomingForm();
 		form.uploadDir = './public/uploads';

@@ -1,7 +1,10 @@
+import { runMiddleware } from '@/lib/cors';
 import { query } from '@/lib/db';
-import { count } from 'console';
 
 export default async function handler(req, res) {
+	// Run the CORS middleware
+	await runMiddleware(req, res);
+
 	let message;
 	const query_result = req.query;
 	const { stem } = query_result;

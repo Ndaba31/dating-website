@@ -1,7 +1,10 @@
+import { runMiddleware } from '@/lib/cors';
 import { query } from '@/lib/db';
 
 export default async function handler(req, res) {
+	await runMiddleware(req, res);
 	let message;
+
 	if (req.method === 'POST') {
 		const { user } = req.body;
 
