@@ -90,19 +90,18 @@ const Signup = () => {
 			<div className={styles.container}>
 				{/* Left Half with Next Image */}
 				<div className={styles.left_half}>
-					<Image
-						src='/lady.webp'
-						alt='Left Image'
-						width={500}
-						height={500}
-						layout='responsive'
-					/>
+
 				</div>
 
 				{/* Right Half with Content */}
 				<div className={styles.right_half}>
-					<h1 /*className={styles.heading}*/>Welcome to Pumpkin</h1>
-					<h3>Where true love meets fortune.</h3>
+					<div className={styles.heading}>
+						<h1>Register Here</h1>
+						</div>
+						<div className={styles.heading_sml}>
+						<h3>Where true love meets fortune.</h3>
+						</div>
+					
 					{error !== '' && <p className={styles.error}>{error}</p>}
 
 					{/* Form Container */}
@@ -170,9 +169,6 @@ const Signup = () => {
 							<Link className={styles.link} href='/login'>
 								Already have an account? Login
 							</Link>
-							<Link className={styles.link} href='/'>
-								Back to home page
-							</Link>
 						</div>
 
 						{/* Submit Button */}
@@ -184,17 +180,6 @@ const Signup = () => {
 							Sign Up
 						</button>
 					</form>
-				</div>
-
-				{/* Circular Image at the Top Center */}
-				<div className={styles.circular_image}>
-					<Image
-						src='/pumpkin.png'
-						alt='Circular Image'
-						width={100}
-						height={100}
-						layout='responsive'
-					/>
 				</div>
 			</div>
 		</>
