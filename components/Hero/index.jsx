@@ -27,7 +27,7 @@ const Hero = () => {
 				</div>
 				<div className={styles.hero_content}>
 					<h1 className={styles.hero_heading}>Pumpkin</h1>
-					<p className={styles.hero_subheading}>Where true love meets fortune</p>
+					<p className={styles.hero_subheading}>Where true love meets us</p>
 					<div
 						style={{
 							display: 'flex',
