@@ -107,21 +107,17 @@ const Login = () => {
 			<div className={styles.container}>
 				{/* Left Half with Next Image */}
 				<div className={styles.left_half}>
-					<Image
-						src='/lady.webp'
-						alt='Left Image'
-						width={500}
-						height={500}
-						layout='responsive'
-						priority
-					/>
+					
 				</div>
 
 				{/* Right Half with Content */}
 				<div className={styles.right_half}>
-					<div className={styles.heading}>
-						Welcome back to Pumpkin. Where true love meets fortune.
-					</div>
+				<div className={styles.heading}>
+						<h1>Welcome back to Pumpkin.</h1>
+						</div>
+						<div className={styles.heading_sml}>
+						<h3>Where true love meets fortune.</h3>
+						</div>
 					{error !== '' && <p className={styles.error}>{error}</p>}
 
 					{/* Form Container */}
@@ -152,9 +148,7 @@ const Login = () => {
 							<Link className={styles.link} href='/signup'>
 								Don&apos;t have an account? Sign Up
 							</Link>
-							<Link className={styles.link} href='/'>
-								Back to home page
-							</Link>
+						
 						</div>
 
 						{/* Submit Button */}

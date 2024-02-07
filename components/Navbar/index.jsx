@@ -38,7 +38,7 @@ const Navbar = ({ page }) => {
 				<div className={styles.options}>
 					{!session ? (
 						<>
-							<Link href='login' className={styles.link}>
+							<Link href='login' className={styles.login_link}>
 								Login
 							</Link>
 							<Link href='signup' className={styles.signup_link}>
