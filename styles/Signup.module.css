@@ -41,15 +41,28 @@
 	padding: 20px;
 }
 
+.form_input:focus{
+	outline: #ff9b49;
+	outline-style: dotted;
+	border-bottom: 2px solid #f10b0b; 
+	color: #000000;
+}
+
 .form_input {
 	font-family: "Poppins", sans-serif;
 	width: 100%;
 	margin-bottom: 30px;
 	padding: 10px;
-	border-bottom: 1px solid #272727;
-	border-radius: 10px;
-	color: #1b1b1b;
+	border-bottom: 2px solid #1d1d1d;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 0px;
+	color: #111111;
 	font-size: 12pt;
+}
+
+.form_input:focus{
+	border-bottom: 2px #000000;
 }
 
 
