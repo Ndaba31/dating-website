@@ -9,6 +9,7 @@ const cors_ = runMiddleware;
 export const authOptions = {
 	session: {
 		strategy: 'jwt',
+		maxAge: 30 * 24 * 60 * 60, // 30 days
 	},
 	providers: [
 		CredentialsProvider({
@@ -49,8 +50,30 @@ export const authOptions = {
 		}),
 	],
 	pages: {
-		signIn: '/login', // Customize the sign-in page URL
+		signIn: '/login',
+        signOut: '/auth/signout',
+        error: '/auth/error', // Error code passed in query string as ?error=
+        newUser: '/register' // New users will be directed here on first sign in (leave the property out if not of interest) // Customize the sign-in page URL
 	},
+	callbacks: {
+		async jwt({ token, user }) {
+		  // Persist the OAuth access_token to the token right after signin
+		  if (user) {
+			  token.id = user.id;
+			  token.name = user.name
+		  }
+		  return token;
+		},
+			  async session({ session, token, user }) {
+			
+		  // Send properties to the client, like an access_token from a provider.
+			if (session || user) {
+				session.user = token;
+			}
+	  
+		  return session;
+		},
+	  },
 	secret: process.env.NEXTAUTH_SECRET,
 };
 

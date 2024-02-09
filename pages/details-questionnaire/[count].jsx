@@ -23,6 +23,7 @@ const Ask = () => {
 	const [relationshipStatus, setRelationshipStatus] = useState('');
 	const [religion, setReligion] = useState('');
 
+	
 	const submitInfo = async (e) => {
 		e.preventDefault();
 
