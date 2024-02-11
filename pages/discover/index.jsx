@@ -115,14 +115,14 @@ const Discover = () => {
 			<div
 				className={styles.discover}
 				style={{
-					position: 'relative',
+					
 					top: '10px',
 					height: '45px',
-					padding: '60px',
+					padding: '30px',
 				}}
 			></div>
-			<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
-				Discover potential dates
+			<h1 className={styles.discover_head}>
+				Discover Potential Dates
 			</h1>
 			<div class='searchbuttons'>
 				<form
@@ -135,6 +135,7 @@ const Discover = () => {
 					<div className={styles.input_container}>
 						<input
 							type='text'
+							prefix=''
 							placeholder='...Search For Love'
 							ref={ref}
 							className={styles.text_field}
@@ -152,52 +153,52 @@ const Discover = () => {
 							value={button}
 							className={styles.radio}
 						>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='name'
 								control={<Radio onClick={handleClick} />}
 								label='Name'
 							/>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='age'
 								control={<Radio onClick={handleClick} />}
 								label='Min Age'
 							/>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='city'
 								control={<Radio onClick={handleClick} />}
 								label='City'
 							/>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='region'
 								control={<Radio onClick={handleClick} />}
 								label='Region'
 							/>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='hobbies'
 								control={<Radio onClick={handleClick} />}
 								label='Hobbies'
 							/>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='relationship'
 								control={<Radio onClick={handleClick} />}
 								label='Relationship Status'
 							/>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='ethnicity'
 								control={<Radio onClick={handleClick} />}
 								label='Ethnicity'
 							/>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='religion'
 								control={<Radio onClick={handleClick} />}
 								label='Religion'
 							/>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='job'
 								control={<Radio onClick={handleClick} />}
 								label='Job Title'
 							/>
-							<FormControlLabel
+							<FormControlLabel className={styles.filter_search}
 								value='company'
 								control={<Radio onClick={handleClick} />}
 								label='Company'

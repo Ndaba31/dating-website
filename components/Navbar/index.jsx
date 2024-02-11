@@ -25,11 +25,11 @@ const Navbar = ({ page }) => {
 			<nav className={styles.nav}>
 				<Link href='/' className={styles.logo} style={{ textDecoration: 'none' }}>
 					<Image
-						width={75}
-						height={75}
+						width={45}
+						height={45}
 						src='/logo.svg'
 						alt='Pumpkin Logo'
-						style={{ color: 'white' }}
+						style={{ color: 'black' }}
 					/>
 					<h2 className={styles.link} style={{ fontSize: '16pt' }}>
 						Pumpkin
