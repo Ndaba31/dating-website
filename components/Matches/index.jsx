@@ -14,9 +14,9 @@ const MatchesCard = () => {
 
 	return (
 		<>
-			<h1 style={{ textAlign: 'center', margin: '50px 0' }}>Matches</h1>
+			<h1 className={styles.matches}>Matches</h1>
 			{allMatches.length === 0 ? (
-				<h1>No Matches Yet</h1>
+				<h1 className={styles.matches}>No Matches Yet</h1>
 			) : (
 				<div className={styles.match_container}>
 					{filteredMatches.map((match, i) => (

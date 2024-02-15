@@ -21,18 +21,25 @@ const Hero = () => {
 					<div>
 						{session ? (
 							<>
+							<div className={styles.two_buttons}>
 								<Link className={styles.hero_buttons} href='/matches'>
 									My Matches
 								</Link>
 								<Link className={styles.hero_buttons} href='/profile'>
 									My Profile
 								</Link>
+								</div>
 							</>
 						) : (
 							<>
+							<div className={styles.two_buttons}>
 								<Link className={styles.hero_buttons} href='/signup'>
 									Create Account
 								</Link>
+
+							
+
+								</div>
 							</>
 						)}
 					</div>

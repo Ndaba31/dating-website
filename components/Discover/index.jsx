@@ -10,8 +10,8 @@ const Discover = () => {
 
 	return (
 		<div>
-			<h1 style={{ textAlign: 'center', textTransform: 'capitalize', margin: '32px 0' }}>
-				Discover potential dates
+			<h1 className={styles.sub_title}>
+				Discover Potential Dates
 			</h1>
 			{error === '' ? (
 				session ? (

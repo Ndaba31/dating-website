@@ -115,7 +115,6 @@ const Discover = () => {
 			<div
 				className={styles.discover}
 				style={{
-					
 					top: '10px',
 					height: '45px',
 					padding: '30px',
@@ -141,17 +140,33 @@ const Discover = () => {
 							className={styles.text_field}
 						/>
 						<button type='submit' className={styles.search_button}>
-							<Search />
+							<Search 
+								sx={{
+									
+										fontSize: 35,
+										color: '#242424'
+									
+								}}
+							/>
 						</button>
 					</div>
 
 					<FormControl>
-						<FormLabel style={{ color: '#ccc', margin: '10px 0' }}>Search By</FormLabel>
-						<RadioGroup
+						<FormLabel style={{ color: '#ccc', margin: '10px 0' }}>Search By:</FormLabel>
+						<RadioGroup color="secondary"
 							row
 							onChange={handleChange}
 							value={button}
 							className={styles.radio}
+							style={{
+								color: '#181818'
+							}}
+							sx={{
+								'& .MuiSvgIcon-root': {
+									fontSize: 22,
+									color: '#242424'
+								}
+							}}
 						>
 							<FormControlLabel className={styles.filter_search}
 								value='name'

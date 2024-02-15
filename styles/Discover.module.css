@@ -7,7 +7,7 @@
 	text-align: center;
 	text-transform: capitalize;
 	margin: 32px 0;
-	color: #000000;
+	color: #181818;
 }
 
 .searchbuttons {
@@ -26,14 +26,16 @@
 }
 
 .text_field {
+	font-family: 'Poppins', sans-serif;
 	border: 0;
-	background-color: #ff4242;
+	background-color: #ffffff;
 	width: 47%;
 	padding: 16px;
 	font-size: 14pt;
-	color: rgb(0, 0, 0);
+	color: #181818;
 	margin: 10px 0;
 	border-radius: 10px;
+	
 }
 
 
@@ -47,13 +49,12 @@
 }
 
 .search_button {
-	background-color: transparent;
-	color: rgb(255, 0, 0);
-	height: 57px;
+	background-color: #fff;
+	height: 60px;
 	width: 60px;
 	padding: 8px;
 	border-radius: 10px;
-	border: 2px solid #ccc;
+	border: 2px solid #242424;
 }
 
 .search_button:hover {
@@ -61,23 +62,26 @@
 }
 
 .radio{
+	font-family: 'Poppins', sans-serif;
 	text-align: center;
 	color: #1b1b1b;
-	background-color: #ff4242;
-}
-
-.radio[type='radio']::after{
-	accent-color: #f48451;
+	gap: 10px;
 }
 
 .filter_search {
-	background-color: aqua;
-	padding: 5px;
-	border-radius: 10px;
+	background-color: #ffffff;
+	padding-right: 15px;
+	border-radius: 30px;
+	border: 2px;
+	border-style:dotted;
+	border-color: #242424;
+	
 }
 .filter_search:hover{
-	background-color: black;
-	color: #ffffff;
+	background-color: white;
+	border: 2px;
+	border-style:double;
+	border-color: #242424;
 }
 
 /* @media only screen and (min-width: 930px) {
