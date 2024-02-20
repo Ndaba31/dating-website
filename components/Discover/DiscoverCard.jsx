@@ -37,7 +37,7 @@ const DiscoverCard = ({ id }) => {
 
 	return (
 	
-		<div className={styles.discover_container}>
+		<div className={styles.discover_container} style={{textAlign: 'center'}}>
 			<div className={styles.card}>
         <div className={styles.profile_image} style={{ borderRadius: '50px', overflow:'hidden'}}>
 		<Image

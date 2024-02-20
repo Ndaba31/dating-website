@@ -72,8 +72,9 @@
 }
 
 .discover_container {
- display:inline-block;
- padding: 10px;
+	
+ 	display:inline-block;
+ 	padding: 10px;
 }
 
 
@@ -84,8 +85,9 @@
 	display: flex;
 	align-items: center;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-	min-width:min-content;
-	max-width:max-content;
+	min-width:400px;
+	max-width:400px;
+	border-radius: 10px;
 }
 
 .card:hover {
@@ -122,16 +124,6 @@
 
 .contact-button:hover {
 	opacity: 0.7;
-}
-
-.card {
-	display: flex;
-	align-items: center;
-	box-shadow: 0 4px 8px 0 rgba(46, 46, 46, 0.2);
-	max-width: 1000px;
-	min-height: 100px;
-	border-radius: 10px;
-	
 }
 
 .contact_button {
@@ -209,6 +201,14 @@
 	.hero_shadow {
 		min-height: 100vh;
 		flex-direction: row-reverse;
+	}
+
+	.card {
+		display: flex;
+		align-items: center;
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+		min-width:min-content;
+	max-width:max-content;
 	}
 
 	.hero_image,
